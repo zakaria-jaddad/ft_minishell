@@ -2,7 +2,10 @@
 
 #include "includes/minishell.h"
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
-	return (0);
+  (void) argc;
+  (void) argv;
+  ft_fprintf(STDOUT_FILENO, "Hello Shell\n");
+	return (EXIT_SUCCESS);
 }
