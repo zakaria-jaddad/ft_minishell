@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/04/21 15:37:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/04/29 14:22:58 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,13 @@ int					ft_fprintf(int fd, const char *format, ...);
 #  define BUFFER_SIZE 1
 # endif
 
+# ifndef OPEN_MAX
+#  define OPEN_MAX 1024
+# endif
+
+
 char				*ft_gnl(int fd);
+
 // -------- FT_GNL --------
 
 #endif

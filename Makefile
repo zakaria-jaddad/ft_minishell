@@ -12,10 +12,10 @@ all : $(NAME)
 
 
 $(NAME): libft_all $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -o $(NAME) 
+	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME) 
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< -MMD
+	$(CC) $(CFLAGS) -c $< -o $@ -MMD
 
 clean: libft_clean
 	rm -f $(OBJS) $(OBJS:.o=.d)
@@ -23,7 +23,7 @@ clean: libft_clean
 fclean: libft_fclean clean
 	rm -f $(NAME) $(OBJS) 
 
-re: libft_re fclean all
+re: fclean all
 
 libft_all : 
 	$(MAKE) libft
