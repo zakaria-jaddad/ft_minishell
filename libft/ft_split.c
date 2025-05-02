@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:27:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/04/21 16:05:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/01 19:06:46 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,12 @@ static char	*get_next_word(char const *s, char c, int index, int *word_length)
 	return (NULL);
 }
 
-static void	*free_leaks(char **ptr, int index)
+void	*ft_split_free(char **ptr)
 {
 	int	i;
 
 	i = 0;
-	while (i < index)
+	while (ptr[i])
 		free(ptr[i++]);
 	free(ptr);
 	return (NULL);
@@ -92,7 +92,7 @@ char	**ft_split(char const *s, char c)
 		word = get_next_word(s, c, (i + 1), &word_length);
 		ptr[i] = (char *) ft_calloc(1, word_length + 1);
 		if (ptr[i] == NULL)
-			return (free_leaks(ptr, i));
+			return (ft_split_free(ptr));
 		ft_strlcpy(ptr[i++], word, word_length + 1);
 	}
 	return (ptr);
