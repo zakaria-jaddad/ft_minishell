@@ -5,7 +5,7 @@ NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 EXECUTION = execution/execution.c
-PARCING = parsing/parsing.c ./parsing/env.c
+PARCING = parsing/parsing.c ./parsing/envs_init.c ./parsing/env_utils.c
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 
 LIBFT = libft/libft.a
