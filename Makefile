@@ -5,19 +5,21 @@ NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 EXECUTION = execution/execution.c
-PARCING = parsing/parsing.c
+PARCING = parsing/parsing.c ./parsing/env.c
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 
-all : $(NAME)
+LIBFT = libft/libft.a
+INCLUDE = includes/minishell.h libft/libft.h
 
+all : $(LIBFT) $(NAME)
 
-$(NAME): libft_all $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME) 
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME)
 
-%.o: %.c
+%.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ -MMD
 
-clean: libft_clean
+clean: libft_clean 
 	rm -f $(OBJS) $(OBJS:.o=.d)
 
 fclean: libft_fclean clean
@@ -25,7 +27,9 @@ fclean: libft_fclean clean
 
 re: fclean all
 
-libft_all : 
+$(LIBFT): libft_make
+
+libft_make :
 	$(MAKE) libft
 
 libft_clean : 
