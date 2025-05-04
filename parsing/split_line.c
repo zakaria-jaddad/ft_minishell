@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 20:04:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/04 15:21:43 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/04 16:57:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ t_list	*split_line(char *line)
 	while (line[i])
 		split_line_escaping_norms_1(&lst, line, &i, &prev);
 	if (line[i] == 0)
-		(append_prev_word(&lst, &line[prev], i, prev), append_special(&lst,
-				"\0", &i, &prev));
+		(append_prev_word(&lst, &line[prev], i, prev));
 	return ((t_list *)lst);
 }
