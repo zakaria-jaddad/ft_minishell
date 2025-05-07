@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 20:04:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/04 16:57:10 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:05:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static void	append_prev_word(t_list **lst, char *line, int i, int prev)
 {
@@ -64,9 +64,6 @@ static void	split_line_escaping_norms_2(t_list **lst, char *line, int *i,
 	else if (line[*i] == '\t')
 		(append_prev_word(lst, &line[*prev], *i, *prev), append_special(lst,
 				"\t", i, prev));
-	else if (line[*i] == '*')
-		(append_prev_word(lst, &line[*prev], *i, *prev), append_special(lst,
-				"*", i, prev));
 	else
 		(*i)++;
 }
@@ -112,5 +109,5 @@ t_list	*split_line(char *line)
 		split_line_escaping_norms_1(&lst, line, &i, &prev);
 	if (line[i] == 0)
 		(append_prev_word(&lst, &line[prev], i, prev));
-	return ((t_list *)lst);
+	return (lst);
 }
