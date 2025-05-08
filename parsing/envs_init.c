@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 18:29:01 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 19:47:43 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+#include <stdlib.h>
 
 static int	locate_first_equale(char *line)
 {
@@ -28,24 +29,26 @@ static int	locate_first_equale(char *line)
 
 static char	**get_split_env(char *env)
 {
-	char	**current_env;
+	char	**_env;
 	int		equal_pos;
 
-	current_env = (char **)malloc(sizeof(char *) * 3);
-	if (current_env == NULL)
+        if (env == NULL)
+                return (NULL);
+	_env = (char **)malloc(sizeof(char *) * 3);
+	if (_env == NULL)
 		return (NULL);
+        ft_bzero(_env, sizeof(_env));
 	equal_pos = locate_first_equale(env);
 	if (equal_pos == -1)
 		return (NULL);
-	current_env[0] = ft_substr(env, 0, equal_pos);
-	if (current_env[0] == NULL)
-		return (NULL);
-	current_env[1] = ft_substr(env, equal_pos + 1, ft_strlen(env) - equal_pos
-			+ 1);
-	if (current_env[1] == NULL)
-		return (free(current_env[0]), NULL);
-	current_env[2] = NULL;
-	return (current_env);
+	_env[0] = ft_substr(env, 0, equal_pos);
+	if (_env[0] == NULL)
+		return (free(_env), _env = NULL, NULL);
+	_env[1] = ft_substr(env, equal_pos + 1, ft_strlen(env) - equal_pos + 1);
+	if (_env[1] == NULL)
+		return (free(_env[0]), _env[0] = NULL, free(_env), 
+                _env = NULL, NULL);
+	return (_env);
 }
 
 // TODO: update shell level
