@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/07 19:20:52 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 17:07:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	print_tokens(t_list *tokens)
 	for (t_list *tmp = tokens; tmp != NULL; tmp = tmp->next)
 	{
 		token = (t_token *)tmp->content;
-		fprintf(stderr, "data: \"%s\" %s ------> ", token->data,
+		fprintf(stdout, "data: \"%s\" %s\n", token->data,
 			get_token_type(token->type));
-		fflush(stdout);
+		/* fflush(stdout); */
 	}
 	printf("\n");
 }
@@ -33,9 +33,8 @@ t_cmd	*parsing(char *line, t_list *env_lst)
 	(void)env_lst;
 	tokens = get_tokens(line);
 	print_tokens(tokens);
-        free_tokens(&tokens);
+	ft_lstclear(&tokens, free_token);
 	if (tokens == NULL)
 		return (NULL);
-	tokens = (free_tokens(&tokens), NULL);
 	return ((t_cmd *)tokens);
 }

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/07 18:25:20 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:58:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	append_str(char **token_data, char *new_data)
 
 	if (token_data == NULL)
 		return ;
-        if (new_data == NULL)
-                return ;
+	if (new_data == NULL)
+		return ;
 	tmp = *token_data;
 	*token_data = ft_strjoin(tmp, new_data);
 	if (*token_data == NULL)

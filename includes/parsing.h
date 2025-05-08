@@ -54,13 +54,11 @@ void				clear_env(t_env *env);
 
 // Tokenizing
 t_list				*split_line(char *line);
-void				free_token(t_token *token);
-void				free_tokens(t_list **tokens);
+void				free_token(void *token);
 void				append_str(char **token_data, char *new_data);
 void				append_last_toke_data(t_list **tokens, char *new_data);
 bool				check_equal_in_last_token(t_list *tokens);
-bool				is_last_token_type_word(t_list *tokens);
-bool				is_token_type_word(t_list *node);
+bool				is_last_token_type_space(t_list *tokens);
 t_list				*create_token_node(t_token_type token_type,
 						char *token_data);
 t_list				*tokenize_quotes(char *quote_type, t_token_type token_type,

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:07:45 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/07 16:57:32 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 16:57:18 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,40 +36,22 @@ bool	check_equal_in_last_token(t_list *tokens)
 }
 
 /*
- * @brief Checks if the provided token node has a type of
- *      -> TOKEN_SINGLE_QUOTE_WORD
- *      -> TOKEN_DOUBLE_QUOTE_WORD
- *      -> TOKEN_WORD
- * @return: true if token type equal tokens false if not
- */
-bool	is_token_type_word(t_list *token_node)
-{
-	t_token	*token;
-
-	if (token_node == NULL)
-		return (false);
-	token = token_node->content;
-	if (token == NULL)
-		return (false);
-	if (token->type == TOKEN_DOUBLE_QUOTE_WORD
-		|| token->type == TOKEN_SINGLE_QUOTE_WORD || token->type == TOKEN_WORD)
-		return (true);
-	return (false);
-}
-
-/*
  * @brief Checks if last token has a type of:
- *      -> TOKEN_SINGLE_QUOTE_WORD
- *      -> TOKEN_DOUBLE_QUOTE_WORD
- *      -> TOKEN_WORD
+ *      -> TOKEN_WHITE_SPACE
  * @return: true if token type equal tokens false if not
  */
-bool	is_last_token_type_word(t_list *tokens)
+bool	is_last_token_type_space(t_list *tokens)
 {
 	t_list	*last_token_node;
+	t_token	*token;
 
 	last_token_node = ft_lstlast(tokens);
 	if (last_token_node == NULL)
 		return (NULL);
-	return (is_token_type_word(last_token_node));
+	token = last_token_node->content;
+	if (token == NULL)
+		return (NULL);
+	if (token->type == TOKEN_WHITE_SPACE)
+		return (true);
+	return (false);
 }
