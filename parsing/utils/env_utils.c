@@ -6,29 +6,19 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:11:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/05 16:11:59 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:39:22 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
 
-void	clear_env(t_env *env)
+void	free_env(void *env)
 {
-	env->key = (free(env->key), NULL);
-	env->value = (free(env->value), NULL);
-}
-
-void	clear_envs(t_list **env)
-{
-	t_list	*head;
-
-	head = *env;
-	while (*env)
-	{
-		clear_env((t_env *)(*env)->content);
-		*env = (*env)->next;
-	}
-	ft_lstclear(&head, free);
+	if (env == NULL)
+		return ;
+	((t_env *)env)->key = (free(((t_env *)env)->key), NULL);
+	((t_env *)env)->value = (free(((t_env *)env)->value), NULL);
+	free(env);
 }
 
 t_env	*get_env(t_list *env_lst, char *key)
@@ -74,7 +64,7 @@ t_list	*append_env(t_list **env_lst, char *key, char *value)
 		return (free(env_content->key), NULL);
 	env_node = ft_lstnew(env_content);
 	if (env_node == NULL)
-		return (free(env_content), clear_env(env_content), NULL);
+		return (free(env_content), free_env(env_content), NULL);
 	ft_lstadd_back(env_lst, env_node);
 	return (*env_lst);
 }

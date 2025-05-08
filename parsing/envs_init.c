@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/05 16:08:29 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:29:01 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ static t_list	*simple_env(t_list *env_lst)
 	if (append_env(&env_lst, "PWD", path_buff) == NULL)
 		return (NULL);
 	if (append_env(&env_lst, "SHLVL", "1") == NULL)
-		return (clear_envs(&env_lst), NULL);
+                return (ft_lstclear(&env_lst, free_env), NULL);
 	if (append_env(&env_lst, "_", "/usr/bin/env") == NULL)
-		return (clear_envs(&env_lst), NULL);
+                return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }
 
@@ -78,16 +78,16 @@ t_list	*envs_init(char **env)
 	{
 		split_env = get_split_env(*env);
 		if (split_env == NULL)
-			return (clear_envs(&env_lst), NULL);
+                        return (ft_lstclear(&env_lst, free_env), NULL);
 		env_content = (t_env *)malloc(sizeof(t_env));
 		if (env_content == NULL)
-			return (clear_envs(&env_lst), NULL);
+                        return (ft_lstclear(&env_lst, free_env), NULL);
 		env_content->key = split_env[0];
 		env_content->value = split_env[1];
 		free(split_env);
 		node = ft_lstnew(env_content);
 		if (node == NULL)
-			return (clear_envs(&env_lst), NULL);
+                        return (ft_lstclear(&env_lst, free_env), NULL);
 		(ft_lstadd_back(&env_lst, node), env++);
 	}
 	return (env_lst);

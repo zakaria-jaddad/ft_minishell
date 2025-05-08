@@ -49,8 +49,7 @@ t_list				*envs_init(char **env);
 t_list				*append_env(t_list **env_lst, char *key, char *value);
 t_env				*get_env(t_list *env_lst, char *key);
 t_env				*edit_env(t_env *env, char *new_value);
-void				clear_envs(t_list **env);
-void				clear_env(t_env *env);
+void				free_env(void *env);
 
 // Tokenizing
 t_list				*split_line(char *line);
