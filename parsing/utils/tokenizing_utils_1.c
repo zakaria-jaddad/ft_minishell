@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 17:07:57 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:38:44 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
+#include <stdlib.h>
 
 /*
  * @brief frees t_token object
@@ -21,6 +22,7 @@ void	free_token(void *token)
         if (token == NULL)
                 return ;
 	((t_token *) token)->data = (free(((t_token *) token)->data), NULL);
+        free(token);
 }
 
 /*

@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 17:07:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:32:21 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
+#include <stdlib.h>
 
 void	print_tokens(t_list *tokens)
 {
@@ -33,8 +34,9 @@ t_cmd	*parsing(char *line, t_list *env_lst)
 	(void)env_lst;
 	tokens = get_tokens(line);
 	print_tokens(tokens);
-	ft_lstclear(&tokens, free_token);
 	if (tokens == NULL)
 		return (NULL);
+	ft_lstclear(&tokens, free_token);
+        exit(0);
 	return ((t_cmd *)tokens);
 }

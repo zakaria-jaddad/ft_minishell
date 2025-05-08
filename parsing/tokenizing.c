@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:37:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 17:08:05 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/08 18:35:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 static void	*get_tokens_escaping_norms_2(t_list **line_lst,
 		t_list *line_lst_head, t_list **tokens)
 {
-	t_list	*node;
+	t_list	*token_node;
 
 	if (line_lst == NULL || *line_lst == NULL)
 		return (NULL);
 	if (tokens == NULL)
 		return (NULL);
-	node = get_token_node(*line_lst);
-	if (node == NULL)
+	token_node = get_token_node(*line_lst);
+	if (token_node == NULL)
 		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens, free_token), NULL);
-	if (((t_token *)node->content)->type == TOKEN_WHITE_SPACE
+	if (((t_token *)token_node->content)->type == TOKEN_WHITE_SPACE
 		&& is_last_token_type_space(*tokens) == true)
-		return (ft_lstdelone(node, free), NOTNULL);
-	ft_lstadd_back(tokens, node);
+		return (ft_lstdelone(token_node, free_token), NOTNULL);
+	ft_lstadd_back(tokens, token_node);
 	return (NOTNULL);
 }
 
