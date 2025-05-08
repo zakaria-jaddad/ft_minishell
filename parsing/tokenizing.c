@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:37:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/07 16:58:23 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:23:21 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 	if (ft_strcmp((*line_lst)->content, "\"") == 0)
 		node = tokenize_quotes("\"", TOKEN_DOUBLE_QUOTE_WORD, line_lst);
 	else
+                /* TODO:  don't add \ to $ if found qeep it the same */
 		node = tokenize_quotes("\'", TOKEN_SINGLE_QUOTE_WORD, line_lst);
 	if (node == NULL)
 		return (ft_lstclear(&line_lst_head, free), free_tokens(tokens), NULL);
@@ -64,6 +65,16 @@ static void	*get_tokens_escaping_norms_2(t_list **line_lst,
 	return (NOTNULL);
 }
 
+void	print_split(t_list *split)
+{
+
+	for (t_list *tmp = split; tmp != NULL; tmp = tmp->next)
+	{
+		fprintf(stderr, "\"%s\" ------> ", (char *) tmp->content);
+		fflush(stdout);
+	}
+	printf("\n");
+}
 t_list	*get_tokens(char *line)
 {
 	t_list	*line_lst;
@@ -74,6 +85,7 @@ t_list	*get_tokens(char *line)
 		line_lst_head = line_lst);
 	if (line_lst == NULL)
 		return (NULL);
+        print_split(line_lst);
 	while (line_lst != NULL)
 	{
 		if (ft_strcmp(line_lst->content, "\"") == 0

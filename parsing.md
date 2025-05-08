@@ -1,7 +1,6 @@
 ## TODO:
 
-- What is relative or an absolute path in unix shell
-- basic understanding or lexers
+- Create a Lexer
 
 ## Parts of a shell Program
 
@@ -68,9 +67,30 @@ There are other subsystems that complete the shell which are:
 
 ## Using Lex and Yacc to implement the Parser
 
-we will use two UNIX tools to implement a parser: **Lex** and **Yacc**. These tools are used to
+we will use two UNIX tools to implement a parser: **Flex** and **Yacc**. These tools are used to
 implement _compilers_, _interpreters_, and _preprocessors_.
 
 Lexer: _Lexical analysis_, _tockenization_ is the process of converting a sequence of _characters_ into a meaningful sequence of lexical tokens
 
 Yacc: yet another compiler compiler is a parser generator for compilers
+
+`cmd [arg]*`: each command can be represented as a _command_name + argument_
+
+- command name **cmd**
+- 0 or more argument for the command
+
+A simple pipe contains 2 or more commands:
+
+`cmd [arg]* [ | cmd [arg]* ]*`
+
+- a command with 0 or more arguments
+- a pipe `|`
+- othre command with 0 or more argument
+
+a command can have one or more input, output redirections
+
+`[[[> filename] [>> filename]] [< filename]]*`
+
+if there are one or more filenames, last file in the list will be used, since files overwrite each other
+
+if one of the files don't have permissions, file i/o stops.

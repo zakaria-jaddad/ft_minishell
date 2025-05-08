@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/07 16:58:01 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/07 19:20:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
-#include <stdlib.h>
 
 void	print_tokens(t_list *tokens)
 {

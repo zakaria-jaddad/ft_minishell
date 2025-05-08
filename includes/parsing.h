@@ -56,7 +56,7 @@ void				clear_env(t_env *env);
 t_list				*split_line(char *line);
 void				free_token(t_token *token);
 void				free_tokens(t_list **tokens);
-void				append_token_data(char **token_data, char *new_data);
+void				append_str(char **token_data, char *new_data);
 void				append_last_toke_data(t_list **tokens, char *new_data);
 bool				check_equal_in_last_token(t_list *tokens);
 bool				is_last_token_type_word(t_list *tokens);
