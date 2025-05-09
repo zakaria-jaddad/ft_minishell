@@ -6,12 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 11:28:54 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:42:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
-#include <stdlib.h>
+#include <stdio.h>
 
 /*
  * @brief frees t_token object
@@ -91,10 +91,11 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 	t_list	*node;
 	char	*token_data;
 
+
 	token_data = NULL;
-	*line_lst = (*line_lst)->next;
 	if (line_lst == NULL || *line_lst == NULL)
 		return (NULL);
+	*line_lst = (*line_lst)->next;
 	while (*line_lst != NULL && ft_strcmp((char *)(*line_lst)->content,
 			quote_type) != 0)
 	{
