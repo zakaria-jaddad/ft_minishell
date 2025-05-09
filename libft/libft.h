@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/02 12:37:02 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:22:48 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ void				ft_fprintf_putaddress_fd(int fd, size_t address,
 int					ft_fprintf_putchar_fd(int fd, char c);
 int					ft_fprintf_putstr_fd(int fd, char *s);
 int					ft_fprintf(int fd, const char *format, ...);
+void				ft_lst_rm_one(t_list *nodeToDel,
+						void clear_content(void *content));
 // -------- FT_FPRINTF --------
 
 // -------- FT_GNL --------

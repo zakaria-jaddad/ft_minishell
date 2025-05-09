@@ -40,6 +40,7 @@ SRC = ft_isalpha.c	\
 		  ft_lstadd_back_bonus.c	\
 		  ft_lstdelone_bonus.c	\
 		  ft_lstclear_bonus.c	\
+		  ft_lst_rm_one.c	\
 		  ft_fprintf/ft_fprintf.c \
 		  ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
 		  ft_fprintf/ft_fprintf_putaddress_fd.c \
