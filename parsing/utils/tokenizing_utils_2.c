@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 16:58:12 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 10:57:30 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
+#include <stdlib.h>
 
 /*
  * @return: returns a string of the given token
@@ -57,24 +58,8 @@ void	append_str(char **token_data, char *new_data)
 		return ;
 	tmp = *token_data;
 	*token_data = ft_strjoin(tmp, new_data);
-	if (*token_data == NULL)
-		return ;
-	tmp = (free(tmp), NULL);
-}
-
-/*
- * @brief append data to last token data
- */
-void	append_last_toke_data(t_list **tokens, char *new_data)
-{
-	t_list	*last_token;
-
-	if (tokens == NULL || *tokens == NULL)
-		return ;
-	last_token = ft_lstlast(*tokens);
-	if (last_token == NULL)
-		return ;
-	append_str(&((t_token *)(last_token->content))->data, new_data);
+        free(tmp);
+	tmp = NULL;
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 18:38:44 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 11:28:54 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
  */
 void	free_token(void *token)
 {
-        if (token == NULL)
-                return ;
-	((t_token *) token)->data = (free(((t_token *) token)->data), NULL);
-        free(token);
+	if (token == NULL)
+		return ;
+	((t_token *)token)->data = (free(((t_token *)token)->data), NULL);
+	free(token);
 }
 
 /*
@@ -96,12 +96,15 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 	if (line_lst == NULL || *line_lst == NULL)
 		return (NULL);
 	while (*line_lst != NULL && ft_strcmp((char *)(*line_lst)->content,
-		quote_type) != 0)
+			quote_type) != 0)
 	{
 		append_str(&token_data, (*line_lst)->content);
+		if (token_data == NULL)
+			return (free(token_data), token_data = NULL, NULL);
 		*line_lst = (*line_lst)->next;
 	}
 	token = create_token(token_type, token_data);
+	token_data = (free(token_data), NULL);
 	if (token == NULL)
 		return (NULL);
 	node = ft_lstnew(token);
