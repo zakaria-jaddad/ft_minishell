@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 12:42:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:43:49 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,12 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 	t_list	*node;
 	char	*token_data;
 
-
 	token_data = NULL;
 	if (line_lst == NULL || *line_lst == NULL)
 		return (NULL);
 	*line_lst = (*line_lst)->next;
 	while (*line_lst != NULL && ft_strcmp((char *)(*line_lst)->content,
-			quote_type) != 0)
+		quote_type) != 0)
 	{
 		append_str(&token_data, (*line_lst)->content);
 		if (token_data == NULL)
@@ -112,4 +111,19 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 	if (node == NULL)
 		return (free_token(token), token = NULL, NULL);
 	return (node);
+}
+
+void	print_tokens(t_list *tokens)
+{
+	t_token	*token;
+
+	if (tokens == NULL)
+		printf("(null)");
+	while (tokens)
+	{
+		token = (t_token *)tokens->content;
+		printf("data: %-10s %-30s\n", token->data, get_token_type(token->type));
+		tokens = tokens->next;
+	}
+	printf("\n");
 }

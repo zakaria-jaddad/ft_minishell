@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:37:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 18:35:20 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:43:01 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 	else
 		node = tokenize_quotes("\'", TOKEN_SINGLE_QUOTE_WORD, line_lst);
 	if (node == NULL)
-		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens, free_token), NULL);
+		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens,
+				free_token), NULL);
 	ft_lstadd_back(tokens, node);
 	return (NOTNULL);
 }
@@ -46,7 +47,8 @@ static void	*get_tokens_escaping_norms_2(t_list **line_lst,
 		return (NULL);
 	token_node = get_token_node(*line_lst);
 	if (token_node == NULL)
-		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens, free_token), NULL);
+		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens,
+				free_token), NULL);
 	if (((t_token *)token_node->content)->type == TOKEN_WHITE_SPACE
 		&& is_last_token_type_space(*tokens) == true)
 		return (ft_lstdelone(token_node, free_token), NOTNULL);

@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 10:57:30 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:43:27 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
-#include <stdlib.h>
 
 /*
  * @return: returns a string of the given token
@@ -58,7 +57,7 @@ void	append_str(char **token_data, char *new_data)
 		return ;
 	tmp = *token_data;
 	*token_data = ft_strjoin(tmp, new_data);
-        free(tmp);
+	free(tmp);
 	tmp = NULL;
 }
 

@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:07:45 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 16:57:18 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/09 15:44:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing.h"
-#include <stdbool.h>
 
 /*
  * @brief Checks if last token, it's last character is equal
@@ -54,4 +53,16 @@ bool	is_last_token_type_space(t_list *tokens)
 	if (token->type == TOKEN_WHITE_SPACE)
 		return (true);
 	return (false);
+}
+
+void	print_split(t_list *line_lst)
+{
+	if (line_lst == NULL)
+		printf("(null)");
+	while (line_lst)
+	{
+		ft_fprintf(STDOUT_FILENO, "\"%s\" --- > ", (char *)line_lst->content);
+		line_lst = line_lst->next;
+	}
+	ft_fprintf(STDOUT_FILENO, "\n");
 }
