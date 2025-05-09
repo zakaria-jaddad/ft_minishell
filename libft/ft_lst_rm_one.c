@@ -6,13 +6,13 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:05:21 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/08 02:13:59 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/05/09 09:21:01 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
 
-void	ft_lst_rm_one(t_list *nodeToDel, void clear_content(t_env *content))
+void	ft_lst_rm_one(t_list *nodeToDel, void clear_content(void *content))
 {
 	t_list	*prev;
 	t_list	*next;
