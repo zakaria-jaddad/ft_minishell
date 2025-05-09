@@ -53,6 +53,7 @@ void				free_env(void *env);
 
 // Tokenizing
 t_list				*split_line(char *line);
+void				print_split(t_list *line_lst);
 void				print_tokens(t_list *tokens);
 void				free_token(void *token);
 void				append_str(char **token_data, char *new_data);
