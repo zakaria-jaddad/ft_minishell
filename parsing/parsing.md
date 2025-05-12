@@ -1,6 +1,18 @@
+<!--toc:start-->
+
+- [TODO:](#todo)
+- [Parts of a shell Program](#parts-of-a-shell-program)
+  - [The Parser](#the-parser)
+  - [The Executor](#the-executor)
+- [Shell Subsystems](#shell-subsystems)
+- [Using Lex and Yacc to implement the Parser](#using-lex-and-yacc-to-implement-the-parser)
+- [Representing Code aka (Given Line)](#representing-code-aka-given-line)
+<!--toc:end-->
+
 ## TODO:
 
 - Create a Lexer
+- Generate Abstract Syntax Three based on the tokens given from the lexer
 
 ## Parts of a shell Program
 
@@ -94,3 +106,50 @@ a command can have one or more input, output redirections
 if there are one or more filenames, last file in the list will be used, since files overwrite each other
 
 if one of the files don't have permissions, file i/o stops.
+
+## Representing Code aka (Given Line)
+
+In The process of Parsing, We took the raw line and transformed it into a slightly higher-level representation: a series of tokens,
+then takes these tokens and transforms them yet again, into an even richer complex representation.
+
+NOTE: The main goal: the representation should be sipmle for the parser to produce and easy for the interpreter to consume.
+
+For example when evaluating `1 + 2 * 3 - 4`, we know that the multiplication is evaluated before the addition of subtraction,
+one way to visulaize that prcedence is using a tree Leaf nodes are numbers, and interior nodes are operators with branches for each of their operands.
+
+In order to evalure an arithmetic node, you need to know the numeric valuesof its subtrees, so you have to evaluate those first.
+That means working your way from the leaves up to the root, in a _post-order_ traversal:
+
+![post-order traversal](./media/tree-evaluate.png)
+
+A. Starting with the full tree, evaluate the bottom-most operation, `2 * 3`.
+
+B. Now we can evaluate the `+`.
+
+C. Next, the `-`.
+
+D. The final answer.
+
+### Generating the Abstract syntax tree
+
+When dealing with trees, specifically when debugging, we need to print the tree, that's called **pretty printin**
+
+When the goal is to produce a string of text that is valid syntax in the source language.
+
+We want the string to very explicitly show the nesting structure of the tree, Code that print `1 * 2 * 3` isn't helpful.
+
+For example:
+
+```bash
+ls -a && (echo "hello world" || cat filename)
+```
+
+Given the syntax tree like:
+
+![simple command tree representation](./media/representation-simple_command.png)
+
+Pretty printer produces:
+
+```
+(&& (ls -a) (group (echo "hello world") (cat filename)))
+```
