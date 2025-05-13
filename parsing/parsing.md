@@ -7,12 +7,15 @@
 - [Shell Subsystems](#shell-subsystems)
 - [Using Lex and Yacc to implement the Parser](#using-lex-and-yacc-to-implement-the-parser)
 - [Representing Code aka (Given Line)](#representing-code-aka-given-line)
-<!--toc:end-->
+  - [Generating the Abstract syntax tree](#generating-the-abstract-syntax-tree)
+  <!--toc:end-->
 
 ## TODO:
 
 - Create a Lexer
-- Generate Abstract Syntax Three based on the tokens given from the lexer
+- Expand "\*"
+  <!-- - Check Syntax Error -->
+  <!-- - Generate Abstract Syntax Three based on the tokens given from the lexer -->
 
 ## Parts of a shell Program
 
