@@ -56,7 +56,7 @@ t_list				*split_line(char *line);
 void				print_split(t_list *line_lst);
 void				print_tokens(t_list *tokens);
 void				free_token(void *token);
-void				append_str(char **token_data, char *new_data);
+void				append_str(char **current_data, char *to_append);
 bool				check_equal_in_last_token(t_list *tokens);
 bool				is_last_token_type_space(t_list *tokens);
 t_list				*create_token_node(t_token_type token_type,
