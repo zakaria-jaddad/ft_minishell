@@ -26,6 +26,7 @@ SRC = ft_isalpha.c	\
       ft_strjoin.c 	\
       ft_strtrim.c	\
       ft_split.c	\
+      ft_split_pro_max.c\
       ft_itoa.c		\
       ft_strmapi.c	\
       ft_striteri.c	\
@@ -33,28 +34,28 @@ SRC = ft_isalpha.c	\
       ft_putstr_fd.c	\
       ft_putendl_fd.c	\
       ft_putnbr_fd.c	\
-		  ft_lstnew_bonus.c	\
-		  ft_lstadd_front_bonus.c	\
-		  ft_lstsize_bonus.c	\
-		  ft_lstlast_bonus.c	\
-		  ft_lstadd_back_bonus.c	\
-		  ft_lstdelone_bonus.c	\
-		  ft_lstclear_bonus.c	\
-		  ft_lst_rm_one.c	\
-		  ft_fprintf/ft_fprintf.c \
-		  ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
-		  ft_fprintf/ft_fprintf_putaddress_fd.c \
-		  ft_fprintf/ft_fprintf_putchar_fd.c \
-		  ft_fprintf/ft_fprintf_puthex_fd.c \
-		  ft_fprintf/ft_fprintf_putnbr_fd.c \
-		  ft_fprintf/ft_fprintf_putstr_fd.c \
-		  ft_fprintf/ft_fprintf_strlen.c \
-			ft_gnl/ft_gnl.c
+      ft_lstnew_bonus.c	\
+      ft_lstadd_front_bonus.c	\
+      ft_lstsize_bonus.c	\
+      ft_lstlast_bonus.c	\
+      ft_lstadd_back_bonus.c	\
+      ft_lstdelone_bonus.c	\
+      ft_lstclear_bonus.c	\
+      ft_lst_rm_one.c	\
+      ft_fprintf/ft_fprintf.c \
+      ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
+      ft_fprintf/ft_fprintf_putaddress_fd.c \
+      ft_fprintf/ft_fprintf_putchar_fd.c \
+      ft_fprintf/ft_fprintf_puthex_fd.c \
+      ft_fprintf/ft_fprintf_putnbr_fd.c \
+      ft_fprintf/ft_fprintf_putstr_fd.c \
+      ft_fprintf/ft_fprintf_strlen.c \
+      ft_gnl/ft_gnl.c
 
 OBJS = $(SRC:.c=.o)
 
 NAME = libft.a
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra # -g
 INCLUDE = libft.h
 CC =  cc
 
