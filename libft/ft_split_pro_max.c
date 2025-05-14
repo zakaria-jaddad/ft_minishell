@@ -6,119 +6,62 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:27:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 16:15:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/14 16:52:26 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_strchar(char c, char *charset)
+static void	append_prev_word(t_list **lst, char *line, int i, int prev)
 {
-	int	i;
-
-	i = 0;
-	while (charset[i])
-	{
-		if (c == charset[i])
-			return (1);
-		i++;
-	}
-	if (c == charset[i])
-		return (1);
-	return (0);
-}
-
-static int	ft_count_words(char *str, char *charset)
-{
-	int	flag;
-	int	i;
-	int	counter;
-
-	i = 0;
-	flag = 1;
-	counter = 0;
-	while (str[i])
-	{
-		if (ft_strchar(str[i], charset) == 0 && flag == 1)
-		{
-			counter++;
-			flag = 0;
-		}
-		else if (ft_strchar(str[i], charset) == 1)
-			flag = 1;
-		else
-			flag = 0;
-		i++;
-	}
-	return (counter);
-}
-
-static char	*ft_get_current_word(int index, char *str, char *charset)
-{
-	int	flag;
-	int	i;
-	int	counter;
-
-	i = 0;
-	flag = 1;
-	counter = 0;
-	while (str[i] && index != 1)
-	{
-		if (ft_strchar(str[i], charset) == 0 && flag == 1)
-		{
-			counter++;
-			if (counter == index)
-				return (&str[i]);
-			flag = 0;
-		}
-		else if (ft_strchar(str[i], charset) == 1)
-			flag = 1;
-		else
-			flag = 0;
-		i++;
-	}
-	return (str);
-}
-
-static void	ft_strcpy(char *dest, char *src, char *charset)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (ft_strchar(src[i], charset) == 1)
-		i++;
-	while (src[i])
-	{
-		if (ft_strchar(src[i], charset) == 1)
-			break ;
-		dest[j++] = src[i];
-		i++;
-	}
-	dest[j] = '\0';
-}
-
-char	**ft_split_pro_max(char *str, char *charset)
-{
-	char	**double_ptr;
 	char	*word;
-	int		word_length;
+	t_list	*node;
+
+	if (i == prev)
+		return ;
+	word = ft_substr(line, 0, i - prev);
+	if (word == NULL)
+		return (ft_lstclear(lst, free));
+	node = ft_lstnew(word);
+	if (node == NULL)
+		return (ft_lstclear(lst, free));
+	ft_lstadd_back(lst, node);
+}
+
+static void	append_special(t_list **lst, char *special, int *i, int *prev)
+{
+	t_list	*node;
+
+	special = ft_strdup(special);
+	if (special == NULL)
+		return (ft_lstclear(lst, free));
+	node = ft_lstnew(special);
+	if (node == NULL)
+		return (ft_lstclear(lst, free));
+	ft_lstadd_back(lst, node);
+	*i += ft_strlen(special);
+	*prev = *i;
+}
+
+t_list	*ft_split_pro_max(char *str, char *charset)
+{
+	t_list	*lst;
 	int		i;
+	int		prev;
 
 	i = 0;
-	word_length = ft_count_words(str, charset);
-	double_ptr = (char **) malloc((sizeof(char *) * word_length) + 1);
-	if (double_ptr == NULL)
-		return (NULL);
-	while (i < word_length)
-	{
-		double_ptr[i] = (char *) malloc(sizeof(char) * 120000);
-		if (double_ptr[i] == NULL)
-			return (ft_split_free(double_ptr));
-		word = ft_get_current_word((i + 1), str, charset);
-		ft_strcpy(double_ptr[i++], word, charset);
-	}
-	double_ptr[i] = 0;
-	return (double_ptr);
+        prev = 0;
+	lst = NULL;
+
+	while (str[i])
+        {
+                if (ft_strchr(charset, str[i]) != NULL)
+                		(append_prev_word(&lst, &str[prev], i, prev), append_special(&lst,
+				ft_substr(&str[i], 0, 1), &i, &prev));
+                else
+                        i++;
+        }
+	if (str[i] == 0)
+		(append_prev_word(&lst, &str[prev], i, prev));
+	return (lst);
 }
