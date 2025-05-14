@@ -26,6 +26,7 @@ SRC = ft_isalpha.c	\
       ft_strjoin.c 	\
       ft_strtrim.c	\
       ft_split.c	\
+      ft_split_pro.c	\
       ft_split_pro_max.c\
       ft_itoa.c		\
       ft_strmapi.c	\
@@ -55,7 +56,7 @@ SRC = ft_isalpha.c	\
 OBJS = $(SRC:.c=.o)
 
 NAME = libft.a
-CFLAGS = -Wall -Werror -Wextra # -g
+CFLAGS = -Wall -Werror -Wextra -g
 INCLUDE = libft.h
 CC =  cc
 

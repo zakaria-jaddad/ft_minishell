@@ -5,63 +5,59 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 03:27:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 16:52:26 by zajaddad         ###   ########.fr       */
+/*   Created: 2025/05/14 17:48:03 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/05/14 18:22:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void	append_prev_word(t_list **lst, char *line, int i, int prev)
+static t_list	*remove_dup(t_list *lst, char *charset)
 {
-	char	*word;
+	t_list	*new_lst;
+	char	current_delim;
 	t_list	*node;
 
-	if (i == prev)
-		return ;
-	word = ft_substr(line, 0, i - prev);
-	if (word == NULL)
-		return (ft_lstclear(lst, free));
-	node = ft_lstnew(word);
-	if (node == NULL)
-		return (ft_lstclear(lst, free));
-	ft_lstadd_back(lst, node);
-}
-
-static void	append_special(t_list **lst, char *special, int *i, int *prev)
-{
-	t_list	*node;
-
-	special = ft_strdup(special);
-	if (special == NULL)
-		return (ft_lstclear(lst, free));
-	node = ft_lstnew(special);
-	if (node == NULL)
-		return (ft_lstclear(lst, free));
-	ft_lstadd_back(lst, node);
-	*i += ft_strlen(special);
-	*prev = *i;
+	if (lst == NULL || charset == NULL)
+		return (NULL);
+	new_lst = NULL;
+	while (lst)
+	{
+		if (ft_strchr(charset, *((char *)lst->content)) != NULL)
+		{
+			current_delim = *((char *)lst->content);
+			node = ft_lstnew(ft_strdup(lst->content));
+			if (node == NULL)
+				return (ft_lstclear(&new_lst, free), NULL);
+			ft_lstadd_back(&new_lst, node);
+			lst = lst->next;
+			while (lst != NULL && *((char *)lst->content) == current_delim)
+				lst = lst->next;
+			continue ;
+		}
+		node = ft_lstnew(ft_strdup(lst->content));
+		if (node == NULL)
+			return (ft_lstclear(&new_lst, free), NULL);
+		ft_lstadd_back(&new_lst, node);
+		if (lst == NULL)
+			break ;
+		lst = lst->next;
+	}
+	return (new_lst);
 }
 
 t_list	*ft_split_pro_max(char *str, char *charset)
 {
 	t_list	*lst;
-	int		i;
-	int		prev;
+	t_list	*new_lst;
 
-	i = 0;
-        prev = 0;
-	lst = NULL;
-
-	while (str[i])
-        {
-                if (ft_strchr(charset, str[i]) != NULL)
-                		(append_prev_word(&lst, &str[prev], i, prev), append_special(&lst,
-				ft_substr(&str[i], 0, 1), &i, &prev));
-                else
-                        i++;
-        }
-	if (str[i] == 0)
-		(append_prev_word(&lst, &str[prev], i, prev));
-	return (lst);
+	if (str == NULL || charset == NULL)
+		return (NULL);
+	lst = ft_split_pro(str, charset);
+	if (lst == NULL)
+		return (NULL);
+	new_lst = remove_dup(lst, charset);
+	if (new_lst == NULL)
+		return (ft_lstclear(&lst, free), NULL);
+	return (new_lst);
 }

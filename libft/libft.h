@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 16:29:40 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:47:42 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s1, char const *set);
 char				**ft_split(char const *s, char c);
+t_list				*ft_split_pro(char *str, char *charset);
 t_list				*ft_split_pro_max(char *str, char *charset);
 void				*ft_split_free(char **ptr);
 char				*ft_itoa(int n);
