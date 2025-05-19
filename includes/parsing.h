@@ -37,6 +37,17 @@ typedef struct s_env
 	char			*value;
 }					t_env;
 
+/*
+ * @brief hold file information
+ * s_file_info is used when expanding "*" wildcards
+ * file_name a string allocated in the heap memory
+ */
+typedef struct s_file_info
+{
+        unsigned char file_type;
+        char *file_name;
+} t_file_info;
+
 typedef struct s_cmd
 {
 	char			*foo;

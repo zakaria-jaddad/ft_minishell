@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 15:43:27 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/19 16:18:47 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,21 @@ char	*get_token_type(t_token_type token)
 /*
  * @brief append data to token data
  */
-void	append_str(char **token_data, char *new_data)
+void append_str(char **current_data,  char *to_append)
 {
-	char	*tmp;
+    char *tmp;
 
-	if (token_data == NULL)
-		return ;
-	if (new_data == NULL)
-		return ;
-	tmp = *token_data;
-	*token_data = ft_strjoin(tmp, new_data);
-	free(tmp);
-	tmp = NULL;
+    if (current_data == NULL || to_append == NULL)
+        return;
+    if (*current_data == NULL) {
+        *current_data = ft_strdup(to_append);
+        return;
+    }
+    tmp = ft_strjoin(*current_data, to_append);
+    if (tmp == NULL)
+        return;
+    free(*current_data);
+    *current_data = tmp;
 }
 
 /*
