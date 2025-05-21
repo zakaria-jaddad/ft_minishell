@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 17:47:42 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/18 18:23:42 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int					ft_fprintf_putstr_fd(int fd, char *s);
 int					ft_fprintf(int fd, const char *format, ...);
 void				ft_lst_rm_one(t_list *nodeToDel,
 						void clear_content(void *content));
+void				ft_add_node(t_list *node_before, t_list *add);
 // -------- FT_FPRINTF --------
 
 // -------- FT_GNL --------

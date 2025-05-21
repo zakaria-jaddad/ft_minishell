@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   _pwd_.c                                            :+:      :+:    :+:   */
+/*   ft_add_node.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/04 12:23:14 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/09 16:46:19 by mouait-e         ###   ########.fr       */
+/*   Created: 2025/05/18 18:11:10 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/05/18 18:22:25 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
 
-int	_pwd_(char *pwd)
+void	ft_add_node(t_list *node_before, t_list *add)
 {
-	if (!pwd)
-		pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (-1);
-	printf("%s\n", pwd);
-	return (0);
+	if (!node_before || !add)
+		return ;
+	if (node_before->next)
+		add->next = node_before->next;
+	add->prev = node_before;
+	node_before->next = add;
 }
