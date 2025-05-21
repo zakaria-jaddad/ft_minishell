@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/19 16:43:37 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:12:47 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ t_list	*get_dir_content(char *dirname)
 		dir_info = readdir(dir);
 		if (dir_info == NULL)
 			break ;
-		if (ft_strcmp(dir_info->d_name, ".") == 0 || ft_strcmp(dir_info->d_name,
-				"..") == 0)
-			continue ;
 		file_node = creat_file_node(dir_info->d_type, dir_info->d_name);
 		if (file_node == NULL)
 			return (ft_lstclear(&files, free_file_info), NULL);
@@ -239,64 +236,6 @@ int	get_backslash_pos(char *str)
 	return (0);
 }
 
-static void	append_file_name(t_list **matches, char *file_name)
-{
-	t_list	*node;
-
-	if (file_name == NULL || matches == NULL)
-		return ;
-	node = ft_lstnew((void *)ft_strdup(file_name));
-	if (node == NULL)
-		return ;
-	ft_lstadd_back(matches, node);
-}
-
-t_list	*shell_glob(char *path, t_list *patterns)
-{
-	t_list		*matches;
-	t_list		*new_matches;
-	t_file_info	*file_info;
-	char		*pattern;
-	char		*new_path;
-
-	matches = NULL;
-	new_matches = NULL;
-	file_info = NULL;
-	pattern = NULL;
-	new_path = NULL;
-	if (patterns == NULL || path == NULL)
-		return (NULL);
-	(void)!(pattern = patterns->content, matches = get_dir_content(path));
-	if (pattern == NULL || matches == NULL)
-		return (NULL);
-	while (matches)
-	{
-		(void)!(new_path = ft_strdup(path), file_info = matches->content);
-		if (file_info == NULL || new_path == NULL)
-			return (ft_lstclear(&new_matches, free), NULL);
-		if (glob(pattern, file_info->file_name) == true)
-		{
-			if (file_info->file_type == DT_DIR && patterns->next != NULL
-				&& ft_strcmp(patterns->next->content, "/") == 0)
-			{
-				if (patterns->next->next != NULL
-					&& patterns->next->next->content != NULL)
-					(void)!(append_str(&file_info->file_name, "/"),
-						append_str(&new_path, file_info->file_name),
-						ft_lstadd_back(&new_matches, shell_glob(new_path,
-								patterns->next->next)), 0);
-				else
-					append_file_name(&new_matches, file_info->file_name);
-			}
-			else if (!(file_info->file_type == DT_REG && patterns->next != NULL
-					&& ft_strcmp(patterns->next->content, "/") == 0))
-				append_file_name(&new_matches, file_info->file_name);
-		}
-		(void)!(free(new_path), new_path = NULL, matches = matches->next);
-	}
-	return (new_matches);
-}
-
 int	get_backslash_pos_before_wildcard(char *str)
 {
 	int	i;
@@ -315,47 +254,357 @@ int	get_backslash_pos_before_wildcard(char *str)
 	}
 	return (backslash_position);
 }
-void	expand_wildcard(t_list **tokens)
+
+static void	append_file_name(t_list **matches, char *file_name, char *path)
 {
-	t_token	*token;
+	t_list	*node;
+	char	*new_path;
+
+	if (file_name == NULL || matches == NULL || path == NULL)
+		return ;
+	new_path = ft_strdup(path);
+	if (new_path == NULL)
+		return ;
+	append_str(&new_path, file_name);
+	node = ft_lstnew((void *)new_path);
+	if (node == NULL)
+		return ;
+	ft_lstadd_back(matches, node);
+}
+
+static bool	is_dir_with_trailing_slash(t_file_info *file_info, t_list *patterns)
+{
+        if (file_info == NULL || patterns == NULL)
+                return false;
+	return (file_info->file_type == DT_DIR && patterns->next != NULL
+		&& ft_strcmp(patterns->next->content, "/") == 0);
+}
+
+static bool	is_regfile_with_slash(t_file_info *file_info, t_list *patterns)
+{
+	return (file_info->file_type == DT_REG && patterns->next != NULL
+		&& ft_strcmp(patterns->next->content, "/") == 0);
+}
+
+static bool	is_valid_next_pattern(t_list *patterns)
+{
+	return (patterns->next->next != NULL
+		&& patterns->next->next->content != NULL);
+}
+
+static void	append_path_to_file_name(char **path, char *file_name)
+{
+	append_str(&file_name, "/");
+	append_str(path, file_name);
+}
+static void	*init_pattern_and_matches(char **pattern, t_list **matches,
+		t_list *patterns, char *path, t_list **new_matches)
+{
+	if (patterns == NULL || path == NULL || new_matches == NULL)
+		return (NULL);
+	*new_matches = NULL;
+	*pattern = patterns->content;
+	if (*pattern == NULL)
+		return (NULL);
+	*matches = get_dir_content(path);
+	if (*matches == NULL)
+		return (NULL);
+	return (NOTNULL);
+}
+
+static void	*clear_new_matches_and_matches(t_list **new_matches,
+		t_list **matches)
+{
+	if (new_matches == NULL || matches == NULL)
+		return (NULL);
+	ft_lstclear(new_matches, free);
+	ft_lstclear(matches, free);
+	*new_matches = NULL;
+	*matches = NULL;
+	return (NULL);
+}
+
+static void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
+		t_file_info *matches_content)
+{
+	if (new_path == NULL || fi == NULL || path == NULL
+		|| matches_content == NULL)
+		return (NULL);
+	(void)!(*new_path = ft_strdup(path), *fi = matches_content);
+	if (*new_path == NULL || *fi == NULL)
+		return (NULL);
+	return (NOTNULL);
+}
+
+static bool is_valid_glob(char *pattern, t_file_info *fi)
+{
+        if (pattern == NULL || fi == NULL)
+                return false;
+        return (glob(pattern, fi->file_name) == true && (*fi->file_name == *pattern || *fi->file_name != '.'));
+}
+/*
+ * @brief
+ * @info
+ *      fi: file information
+ * @param
+ * @param
+ * @return List of matched files to the given pattern
+ */
+t_list	*shell_glob(char *path, t_list *patterns, t_list *new_matches,
+		t_list *matches)
+{
+	char		*new_path;
+	char		*pattern;
+	t_file_info	*fi;
+
+	if (!init_pattern_and_matches(&pattern, &matches, patterns, path,
+			&new_matches))
+		return (NULL);
+	while (matches)
+	{
+		if (!init_new_path_and_fi(&new_path, path, &fi, matches->content))
+			return (clear_new_matches_and_matches(&new_matches, &matches));
+		if (is_valid_glob(pattern, fi))
+		{
+			if (is_dir_with_trailing_slash(fi, patterns))
+                        {
+				if (is_valid_next_pattern(patterns))
+					(void)(append_path_to_file_name(&new_path, fi->file_name),
+						ft_lstadd_back(&new_matches, shell_glob(new_path,
+								patterns->next->next, new_matches, matches)));
+				else
+					append_file_name(&new_matches, fi->file_name, new_path);
+                        }
+			else if (!is_regfile_with_slash(fi, patterns))
+				append_file_name(&new_matches, fi->file_name, new_path);
+		}
+		(void)!(free(new_path), new_path = NULL, matches = matches->next);
+	}
+	return (ft_lstclear(&matches, free), new_matches);
+}
+
+t_list	*shell_glob_escaping_norms(char *path, char *pattern)
+{
+	t_list	*new_matches;
+	t_list	*matches;
+
+	new_matches = NULL;
+	matches = NULL;
+	if (path == NULL || pattern == NULL)
+		return (NULL);
+	return (shell_glob(path, ft_split_pro_max(pattern
+				+ get_backslash_pos_before_wildcard(pattern), "/"), new_matches,
+			matches));
+}
+
+int	count_slashes(char *str)
+{
+	int	slashes_count;
+
+	slashes_count = 0;
+	if (str == NULL)
+		return (0);
+	while (*str)
+		if (*str++ == '/')
+			slashes_count++;
+	return (slashes_count);
+}
+
+static void	append_slash_if_so(char **str, char *pattern)
+{
+	if (str == NULL || pattern == NULL)
+		return ;
+	if (pattern[ft_strlen(pattern) - 1] == '/')
+		append_str(str, "/");
+}
+
+/*
+ * emp: extract_matched_path
+ * @param
+ *      ps: number of slashes in the pattern
+ *      rs: number of remaining slashes
+ * */
+char	*emp(char *path, char *pattern)
+{
+	char	*start;
+	char	*current;
+	int		ps;
+	int		rs;
+
+	if (!path || !pattern)
+		return (NULL);
+	(ps = count_slashes(pattern), rs = ps, start = path, current = (path
+			+ ft_strlen(path) - 1));
+	while (current >= path)
+	{
+		if (*current == '/')
+		{
+			if (rs == 0)
+			{
+				start = current + 1;
+				break ;
+			}
+			rs--;
+		}
+		current--;
+	}
+	if (rs > 0)
+		return (NULL);
+	return (ft_strdup(start));
+}
+
+/*
+ * @brief Remove absolute path prefix
+ * @example
+ *      absolute path:  /home/zajaddad/Projects/ft_minishell/parsing/utils/
+ *      pattern      :  parsi*//*/
+ *      return path  : parsing/utils/
+ *  @var
+ *      sl: list of split pattern
+*/
+void	remove_path(t_list **matches, char *pattern)
+{
+	t_list	*matches_head;
+	t_list	*sl;
+	char	*tmp;
+
+	if (matches == NULL || pattern == NULL)
+		return ;
+	(sl = ft_split_pro_max(pattern, "/"), matches_head = *matches);
+	if (sl == NULL)
+		return ;
+	pattern = join_lst(sl);
+	if (pattern == NULL)
+		return (ft_lstclear(&sl, free));
+	while (matches_head)
+	{
+		append_slash_if_so((char **)&matches_head->content, pattern);
+		if (is_valid_absolute_path(pattern) == false)
+		{
+			(tmp = matches_head->content,
+				matches_head->content = emp(matches_head->content, pattern));
+			tmp = (free(tmp), NULL);
+			if (matches_head->content == NULL)
+				return (void)(ft_lstclear(&sl, free), free(pattern),
+					pattern == NULL);
+		}
+		matches_head = matches_head->next;
+	}
+}
+
+t_list	*get_valid_matches(t_token *token)
+{
 	t_list	*str_lst;
 	char	*pattern;
 	char	*dir_path;
-	t_list	*match_node;
+	t_list	*matches;
 
-	if (tokens == NULL || *tokens == NULL)
+	if (token == NULL)
+		return (NULL);
+	str_lst = ft_split_pro_max(token->data, "*");
+	if (str_lst == NULL)
+		return (NULL);
+	pattern = join_lst(str_lst);
+	if (pattern == NULL)
+		return (ft_lstclear(&str_lst, free), NULL);
+	dir_path = get_dir_path(str_lst);
+	if (dir_path == NULL)
+		return (ft_lstclear(&str_lst, free), free(pattern), pattern = NULL,
+			NULL);
+	matches = shell_glob_escaping_norms(dir_path, pattern);
+	if (matches == NULL)
+		return (ft_lstclear(&str_lst, free), free(pattern), pattern = NULL,
+			free(dir_path), dir_path = NULL, NULL);
+	remove_path(&matches, pattern);
+	return (matches);
+}
+
+void ft_swap(void **a, void **b)
+{
+    void *tmp;
+    
+    if (a == NULL || b == NULL)
+        return;
+    
+    tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+int	ft_case_sensitive_strcmp(char *s1, char *s2)
+{
+        int i;
+
+        i = 0;
+        s1 = ft_strdup(s1);
+        s2 = ft_strdup(s2);
+        if (s1 == NULL || s2 == NULL)
+                return -1;
+        while (s1[i])
+        {
+                s1[i] =  ft_tolower(s1[i]);
+                i++;
+        }
+        i = 0;
+        while (s2[i])
+        {
+                s2[i] =  ft_tolower(s2[i]);
+                i++;
+        }
+        return ft_strcmp(s1, s2);
+}
+
+static void sort_matches(t_list **matches)
+{
+    t_list *i;
+    t_list *j;
+
+    if (matches == NULL || *matches == NULL)
+        return;
+
+    i = *matches;
+    while (i != NULL) {
+        j = *matches;
+        while (j->next != NULL) {
+            if (ft_case_sensitive_strcmp(j->content, j->next->content) > 0) {
+                ft_swap(&j->content, &j->next->content);
+            }
+            j = j->next;
+        }
+        i = i->next;
+    }
+}
+
+void	expand_wildcard(t_list *tokens)
+{
+	t_token	*token;
+	t_list	*matches;
+
+	if (tokens == NULL)
 		return ;
-	while (*tokens)
+	while (tokens)
 	{
-		token = (*tokens)->content;
-		/* NOTE: When no match leave previous token content */
+	        matches = NULL;
+		token = (tokens)->content;
 		if (token->type == TOKEN_WORD && ft_strchr(token->data, '*') != NULL)
+                {
+
+		        matches = get_valid_matches(token);
+                        if (matches == NULL)
+                        {
+                                tokens = tokens->next;
+                                continue ;
+                        }
+                        sort_matches(&matches);
+                }
+                
+		for (t_list *tmp = matches; tmp != NULL; tmp = tmp->next)
 		{
-			str_lst = ft_split_pro_max(token->data, "*");
-			if (str_lst == NULL)
-				return ;
-			pattern = join_lst(str_lst);
-			if (pattern == NULL)
-				return (ft_lstclear(&str_lst, free));
-			dir_path = get_dir_path(str_lst);
-			if (dir_path == NULL)
-				return (ft_lstclear(&str_lst, free));
-			match_node = shell_glob(dir_path, ft_split_pro_max(pattern
-						+ get_backslash_pos_before_wildcard(pattern), "/"));
-			if (match_node == NULL)
-			{
-				printf("HELLLLLLLLLLLO\n");
-				return ;
-			}
-			for (t_list *tmp = match_node; tmp != NULL; tmp = tmp->next)
-			{
-				printf("match_node: %10s \n", (char *)tmp->content);
-				fflush(stdout);
-			}
-			printf("\n");
-			(void)match_node;
+			printf("match_node: %10s \n", (char *)tmp->content);
+			fflush(stdout);
 		}
-		*tokens = (*tokens)->next;
+		printf("\n");
+		tokens = tokens->next;
 	}
 }
 
@@ -372,6 +621,6 @@ t_cmd	*parsing(char *line, t_list *env_lst)
 	print_tokens(tokens);
 	if (tokens == NULL)
 		return (NULL);
-	expand_wildcard(&tokens);
+	expand_wildcard(tokens);
 	return ((t_cmd *)tokens);
 }
