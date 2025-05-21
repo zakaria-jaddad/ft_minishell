@@ -8,7 +8,8 @@
 - [Using Lex and Yacc to implement the Parser](#using-lex-and-yacc-to-implement-the-parser)
 - [Representing Code aka (Given Line)](#representing-code-aka-given-line)
   - [Generating the Abstract syntax tree](#generating-the-abstract-syntax-tree)
-  <!--toc:end-->
+- [Expanding Wildcards **\***](#expanding-wildcards)
+<!--toc:end-->
 
 ## TODO:
 
@@ -156,3 +157,5 @@ Pretty printer produces:
 ```
 (&& (ls -a) (group (echo "hello world") (cat filename)))
 ```
+
+## Expanding Wildcards **\***
