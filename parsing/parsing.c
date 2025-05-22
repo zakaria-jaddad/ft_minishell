@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/21 21:12:47 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:08:57 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ t_list	*get_dir_content(char *dirname)
 			return (ft_lstclear(&files, free_file_info), NULL);
 		ft_lstadd_back(&files, file_node);
 	}
+	closedir(dir);
 	return (files);
 }
 
@@ -274,8 +275,8 @@ static void	append_file_name(t_list **matches, char *file_name, char *path)
 
 static bool	is_dir_with_trailing_slash(t_file_info *file_info, t_list *patterns)
 {
-        if (file_info == NULL || patterns == NULL)
-                return false;
+	if (file_info == NULL || patterns == NULL)
+		return (false);
 	return (file_info->file_type == DT_DIR && patterns->next != NULL
 		&& ft_strcmp(patterns->next->content, "/") == 0);
 }
@@ -292,10 +293,18 @@ static bool	is_valid_next_pattern(t_list *patterns)
 		&& patterns->next->next->content != NULL);
 }
 
-static void	append_path_to_file_name(char **path, char *file_name)
+static void	append_file_name_to_path(char **path, char *file_name)
 {
-	append_str(&file_name, "/");
-	append_str(path, file_name);
+	char	*new_file_name;
+
+	if (file_name == NULL)
+		return ;
+	new_file_name = ft_strdup(file_name);
+	if (new_file_name == NULL)
+		return ;
+	append_str(&new_file_name, "/");
+	append_str(path, new_file_name);
+	free(new_file_name);
 }
 static void	*init_pattern_and_matches(char **pattern, t_list **matches,
 		t_list *patterns, char *path, t_list **new_matches)
@@ -336,11 +345,12 @@ static void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
 	return (NOTNULL);
 }
 
-static bool is_valid_glob(char *pattern, t_file_info *fi)
+static bool	is_valid_glob(char *pattern, t_file_info *fi)
 {
-        if (pattern == NULL || fi == NULL)
-                return false;
-        return (glob(pattern, fi->file_name) == true && (*fi->file_name == *pattern || *fi->file_name != '.'));
+	if (pattern == NULL || fi == NULL)
+		return (false);
+	return (glob(pattern, fi->file_name) == true && (*fi->file_name == *pattern
+			|| *fi->file_name != '.'));
 }
 /*
  * @brief
@@ -356,10 +366,12 @@ t_list	*shell_glob(char *path, t_list *patterns, t_list *new_matches,
 	char		*new_path;
 	char		*pattern;
 	t_file_info	*fi;
+	t_list		*matches_tmp;
 
 	if (!init_pattern_and_matches(&pattern, &matches, patterns, path,
 			&new_matches))
 		return (NULL);
+	matches_tmp = matches;
 	while (matches)
 	{
 		if (!init_new_path_and_fi(&new_path, path, &fi, matches->content))
@@ -367,34 +379,40 @@ t_list	*shell_glob(char *path, t_list *patterns, t_list *new_matches,
 		if (is_valid_glob(pattern, fi))
 		{
 			if (is_dir_with_trailing_slash(fi, patterns))
-                        {
 				if (is_valid_next_pattern(patterns))
-					(void)(append_path_to_file_name(&new_path, fi->file_name),
+					(void)(append_file_name_to_path(&new_path, fi->file_name),
 						ft_lstadd_back(&new_matches, shell_glob(new_path,
 								patterns->next->next, new_matches, matches)));
 				else
 					append_file_name(&new_matches, fi->file_name, new_path);
-                        }
 			else if (!is_regfile_with_slash(fi, patterns))
 				append_file_name(&new_matches, fi->file_name, new_path);
 		}
 		(void)!(free(new_path), new_path = NULL, matches = matches->next);
 	}
-	return (ft_lstclear(&matches, free), new_matches);
+	return (ft_lstclear(&matches_tmp, free_file_info), new_matches);
 }
 
 t_list	*shell_glob_escaping_norms(char *path, char *pattern)
 {
 	t_list	*new_matches;
 	t_list	*matches;
+	t_list	*split_pattern;
+	t_list	*glob;
 
 	new_matches = NULL;
 	matches = NULL;
+	glob = NULL;
 	if (path == NULL || pattern == NULL)
 		return (NULL);
-	return (shell_glob(path, ft_split_pro_max(pattern
-				+ get_backslash_pos_before_wildcard(pattern), "/"), new_matches,
-			matches));
+	split_pattern = ft_split_pro_max(pattern
+			+ get_backslash_pos_before_wildcard(pattern), "/");
+	if (split_pattern == NULL)
+		return (NULL);
+	glob = shell_glob(path, split_pattern, new_matches, matches);
+	if (glob == NULL)
+		return (ft_lstclear(&split_pattern, free), NULL);
+	return (ft_lstclear(&split_pattern, free), glob);
 }
 
 int	count_slashes(char *str)
@@ -462,46 +480,45 @@ char	*emp(char *path, char *pattern)
  *  @var
  *      sl: list of split pattern
 */
-void	remove_path(t_list **matches, char *pattern)
+void	remove_path(t_list *matches, char *pattern)
 {
-	t_list	*matches_head;
 	t_list	*sl;
 	char	*tmp;
 
 	if (matches == NULL || pattern == NULL)
 		return ;
-	(sl = ft_split_pro_max(pattern, "/"), matches_head = *matches);
+	(sl = ft_split_pro_max(pattern, "/"));
 	if (sl == NULL)
 		return ;
-	pattern = join_lst(sl);
+	(void)(pattern = join_lst(sl), ft_lstclear(&sl, free));
 	if (pattern == NULL)
-		return (ft_lstclear(&sl, free));
-	while (matches_head)
+		return ;
+	while (matches)
 	{
-		append_slash_if_so((char **)&matches_head->content, pattern);
+		append_slash_if_so((char **)&matches->content, pattern);
 		if (is_valid_absolute_path(pattern) == false)
 		{
-			(tmp = matches_head->content,
-				matches_head->content = emp(matches_head->content, pattern));
+			(tmp = matches->content, matches->content = emp(matches->content,
+					pattern));
 			tmp = (free(tmp), NULL);
-			if (matches_head->content == NULL)
-				return (void)(ft_lstclear(&sl, free), free(pattern),
-					pattern == NULL);
+			if (matches->content == NULL)
+				break ;
 		}
-		matches_head = matches_head->next;
+		matches = matches->next;
 	}
+	(void)(free(pattern), pattern = NULL);
 }
 
-t_list	*get_valid_matches(t_token *token)
+t_list	*get_valid_matches(char *str)
 {
 	t_list	*str_lst;
 	char	*pattern;
 	char	*dir_path;
 	t_list	*matches;
 
-	if (token == NULL)
+	if (str == NULL)
 		return (NULL);
-	str_lst = ft_split_pro_max(token->data, "*");
+	str_lst = ft_split_pro_max(str, "*");
 	if (str_lst == NULL)
 		return (NULL);
 	pattern = join_lst(str_lst);
@@ -511,101 +528,75 @@ t_list	*get_valid_matches(t_token *token)
 	if (dir_path == NULL)
 		return (ft_lstclear(&str_lst, free), free(pattern), pattern = NULL,
 			NULL);
+	ft_lstclear(&str_lst, free);
 	matches = shell_glob_escaping_norms(dir_path, pattern);
 	if (matches == NULL)
-		return (ft_lstclear(&str_lst, free), free(pattern), pattern = NULL,
-			free(dir_path), dir_path = NULL, NULL);
-	remove_path(&matches, pattern);
+		return (free(pattern), pattern = NULL, free(dir_path), dir_path = NULL,
+			NULL);
+	remove_path(matches, pattern);
+	(void)(free(pattern), pattern = NULL, free(dir_path), dir_path = NULL,
+		NULL);
 	return (matches);
 }
 
-void ft_swap(void **a, void **b)
+void	ft_swap(void **a, void **b)
 {
-    void *tmp;
-    
-    if (a == NULL || b == NULL)
-        return;
-    
-    tmp = *a;
-    *a = *b;
-    *b = tmp;
+	void	*tmp;
+
+	if (a == NULL || b == NULL)
+		return ;
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 
 int	ft_case_sensitive_strcmp(char *s1, char *s2)
 {
-        int i;
-
-        i = 0;
-        s1 = ft_strdup(s1);
-        s2 = ft_strdup(s2);
-        if (s1 == NULL || s2 == NULL)
-                return -1;
-        while (s1[i])
-        {
-                s1[i] =  ft_tolower(s1[i]);
-                i++;
-        }
-        i = 0;
-        while (s2[i])
-        {
-                s2[i] =  ft_tolower(s2[i]);
-                i++;
-        }
-        return ft_strcmp(s1, s2);
+	while (ft_tolower(*s1) == ft_tolower(*s2) && ft_tolower(*s1))
+	{
+		s1++;
+		s2++;
+	}
+	return (ft_tolower(*s1) - ft_tolower(*s2));
 }
 
-static void sort_matches(t_list **matches)
+static void	sort_matches(t_list **matches)
 {
-    t_list *i;
-    t_list *j;
+	t_list	*i;
+	t_list	*j;
 
-    if (matches == NULL || *matches == NULL)
-        return;
-
-    i = *matches;
-    while (i != NULL) {
-        j = *matches;
-        while (j->next != NULL) {
-            if (ft_case_sensitive_strcmp(j->content, j->next->content) > 0) {
-                ft_swap(&j->content, &j->next->content);
-            }
-            j = j->next;
-        }
-        i = i->next;
-    }
+	if (matches == NULL || *matches == NULL)
+		return ;
+	i = *matches;
+	while (i != NULL)
+	{
+		j = *matches;
+		while (j->next != NULL)
+		{
+			if (ft_case_sensitive_strcmp(j->content, j->next->content) > 0)
+			{
+				ft_swap(&j->content, &j->next->content);
+			}
+			j = j->next;
+		}
+		i = i->next;
+	}
 }
 
-void	expand_wildcard(t_list *tokens)
+
+
+t_list	*expand_wildcard(char *str)
 {
-	t_token	*token;
 	t_list	*matches;
 
-	if (tokens == NULL)
-		return ;
-	while (tokens)
-	{
-	        matches = NULL;
-		token = (tokens)->content;
-		if (token->type == TOKEN_WORD && ft_strchr(token->data, '*') != NULL)
-                {
-
-		        matches = get_valid_matches(token);
-                        if (matches == NULL)
-                        {
-                                tokens = tokens->next;
-                                continue ;
-                        }
-                        sort_matches(&matches);
-                }
-                
-		for (t_list *tmp = matches; tmp != NULL; tmp = tmp->next)
-		{
-			printf("match_node: %10s \n", (char *)tmp->content);
-			fflush(stdout);
-		}
-		printf("\n");
-		tokens = tokens->next;
-	}
+	matches = NULL;
+	if (str == NULL)
+		return (NULL);
+	matches = get_valid_matches(str);
+	if (matches == NULL)
+		return (NULL);
+	sort_matches(&matches);
+	return (matches);
 }
 
 /*
@@ -615,12 +606,21 @@ void	expand_wildcard(t_list *tokens)
 t_cmd	*parsing(char *line, t_list *env_lst)
 {
 	t_list	*tokens;
+	t_list	*matches;
 
 	(void)env_lst;
 	tokens = get_tokens(line);
-	print_tokens(tokens);
 	if (tokens == NULL)
 		return (NULL);
-	expand_wildcard(tokens);
+	matches = expand_wildcard(((t_token *)tokens->content)->data);
+	print_tokens(tokens);
+	ft_lstclear(&tokens, free_token);
+	for (t_list *tmp = matches; tmp != NULL; tmp = tmp->next)
+	{
+		printf("matched node: %10s\n", (char *)tmp->content);
+	}
+	ft_lstclear(&matches, free);
+	ft_lstclear(&env_lst, free_env);
+	exit(0);
 	return ((t_cmd *)tokens);
 }
