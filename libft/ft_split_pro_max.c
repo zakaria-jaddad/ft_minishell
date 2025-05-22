@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:48:03 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 18:22:10 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/22 17:48:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ t_list	*ft_split_pro_max(char *str, char *charset)
 	new_lst = remove_dup(lst, charset);
 	if (new_lst == NULL)
 		return (ft_lstclear(&lst, free), NULL);
+        ft_lstclear(&lst, free);
 	return (new_lst);
 }

@@ -6,11 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:27:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/14 17:49:05 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/22 16:08:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
+#include <unistd.h>
 
 static void	append_prev_word(t_list **lst, char *line, int i, int prev)
 {
@@ -48,17 +50,25 @@ t_list	*ft_split_pro(char *str, char *charset)
 	t_list	*lst;
 	int		i;
 	int		prev;
+        char *special;
 
 	i = 0;
         prev = 0;
 	lst = NULL;
+        special = NULL;
         if (str == NULL || charset == NULL)
                 return (NULL);
 	while (str[i])
         {
                 if (ft_strchr(charset, str[i]) != NULL)
-                		(append_prev_word(&lst, &str[prev], i, prev), append_special(&lst,
-				ft_substr(&str[i], 0, 1), &i, &prev));
+                {
+                        special = ft_substr(&str[i], 0, 1);
+                        if (special == NULL)
+                                return (ft_lstclear(&lst, free), NULL);
+                        append_prev_word(&lst, &str[prev], i, prev);
+                        append_special(&lst, special, &i, &prev);
+                        special = (free(special), NULL);
+                }
                 else
                         i++;
         }
