@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 16:19:32 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/23 22:31:41 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,14 @@ static t_list	*shell_glob(char *path, char *pattern)
 	t_list	*split_pattern;
 	t_list	*glob;
 
-	new_matches = NULL;
-	matches = NULL;
-	glob = NULL;
+	(void)!(new_matches = matches = glob = NULL);
 	if (path == NULL || pattern == NULL)
 		return (NULL);
 	split_pattern = ft_split_pro_max(pattern
 			+ get_backslash_pos_before_wildcard(pattern), "/");
 	if (split_pattern == NULL)
 		return (NULL);
-	glob = shell_glob_escaping_norms(path, split_pattern, new_matches, matches);
+	glob = sgen(path, split_pattern, new_matches, matches);
 	if (glob == NULL)
 		return (ft_lstclear(&split_pattern, free), NULL);
 	return (ft_lstclear(&split_pattern, free), glob);
@@ -78,8 +76,7 @@ static t_list	*get_valid_matches(char *str)
 		return (free(pattern), pattern = NULL, free(dir_path), dir_path = NULL,
 			NULL);
 	remove_path(matches, pattern);
-	(void)(free(pattern), pattern = NULL, free(dir_path), dir_path = NULL,
-		NULL);
+	(void)(free(pattern), pattern = NULL, free(dir_path), dir_path = NULL);
 	return (matches);
 }
 

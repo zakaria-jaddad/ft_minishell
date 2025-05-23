@@ -6,18 +6,17 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:02:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 16:02:53 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/23 21:55:36 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/parsing.h"
 
 void	*init_pattern_and_matches(char **pattern, t_list **matches,
-		t_list *patterns, char *path, t_list **new_matches)
+		t_list *patterns, char *path)
 {
-	if (patterns == NULL || path == NULL || new_matches == NULL)
+	if (patterns == NULL || path == NULL)
 		return (NULL);
-	*new_matches = NULL;
 	*pattern = patterns->content;
 	if (*pattern == NULL)
 		return (NULL);
@@ -56,4 +55,18 @@ bool	is_valid_glob(char *pattern, t_file_info *fi)
 		return (false);
 	return (glob(pattern, fi->file_name) == true && (*fi->file_name == *pattern
 			|| *fi->file_name != '.'));
+}
+
+void	append_file_name_to_path(char **path, char *file_name)
+{
+	char	*new_file_name;
+
+	if (file_name == NULL)
+		return ;
+	new_file_name = ft_strdup(file_name);
+	if (new_file_name == NULL)
+		return ;
+	append_str(&new_file_name, "/");
+	append_str(path, new_file_name);
+	free(new_file_name);
 }

@@ -6,26 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:13:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 16:14:53 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/23 22:30:42 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/parsing.h"
-
-static int	get_backslash_pos(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i])
-	{
-		if (str[i++] == '/')
-			return (i);
-	}
-	return (0);
-}
 
 static int	count_slashes(char *str)
 {
@@ -63,7 +48,7 @@ char	*emp(char *path, char *pattern)
 
 	if (!path || !pattern)
 		return (NULL);
-	(ps = count_slashes(pattern), rs = ps, start = path, current = (path
+	(void)!(ps = count_slashes(pattern), rs = ps, start = path, current = (path
 			+ ft_strlen(path) - 1));
 	while (current >= path)
 	{
@@ -92,31 +77,31 @@ char	*emp(char *path, char *pattern)
  *  @var
  *      sl: list of split pattern
 */
-void	remove_path(t_list *matches, char *pattern)
+void	remove_path(t_list *m, char *pattern)
 {
 	t_list	*sl;
 	char	*tmp;
 
-	if (matches == NULL || pattern == NULL)
+	if (m == NULL || pattern == NULL)
 		return ;
 	(sl = ft_split_pro_max(pattern, "/"));
 	if (sl == NULL)
 		return ;
-	(void)(pattern = join_lst(sl), ft_lstclear(&sl, free));
+	(void)!(pattern = join_lst(sl), ft_lstclear(&sl, free), 0);
 	if (pattern == NULL)
 		return ;
-	while (matches)
+	while (m)
 	{
-		append_slash_if_so((char **)&matches->content, pattern);
+		append_slash_if_so((char **)&m->content, pattern);
 		if (is_valid_absolute_path(pattern) == false)
 		{
-			(tmp = matches->content, matches->content = emp(matches->content,
+			(void)!(tmp = m->content, m->content = emp(m->content,
 					pattern));
 			tmp = (free(tmp), NULL);
-			if (matches->content == NULL)
+			if (m->content == NULL)
 				break ;
 		}
-		matches = matches->next;
+		m = m->next;
 	}
 	(void)(free(pattern), pattern = NULL);
 }

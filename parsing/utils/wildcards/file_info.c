@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:53:55 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 15:55:20 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:55:47 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 void	free_file_info(void *file_info)
 {
+	char	*file_name;
+
 	if (file_info == NULL)
 		return ;
-	((t_file_info *)file_info)->file_name = (
-                free(((t_file_info *)file_info)->file_name),
-			NULL);
+	file_name = ((t_file_info *)file_info)->file_name;
+	file_name = (free(file_name), NULL);
 	free(file_info);
 }
 
