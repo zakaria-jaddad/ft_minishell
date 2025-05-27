@@ -45,8 +45,8 @@ typedef struct s_env
 
 typedef struct s_cmd
 {
-	char			*command;
-	t_token_type	type;
+	t_list			*command; // list of current command tokens
+	t_token_type	type; // type of the current command
 	struct s_tree	*left;
 	struct s_tree	*right;
 	t_list			*arguments;
