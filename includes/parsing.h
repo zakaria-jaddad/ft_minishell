@@ -4,7 +4,7 @@
 
 # include "../libft/libft.h"
 # include <dirent.h>
-# include <linux/limits.h>
+# include <limits.h>
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdio.h>
@@ -45,10 +45,15 @@ typedef struct s_env
 
 typedef struct s_cmd
 {
-	char			*foo;
+	char			*command;
+	t_token_type	type;
+	struct s_tree	*left;
+	struct s_tree	*right;
+	t_list			*arguments;
+	t_list			*infile;
+	t_list			*outfile;
 }					t_cmd;
-
-t_cmd				*parsing(char *line, t_list *env);
+t_cmd				*parsecmd(char *line, t_list *env);
 
 // envs
 t_list				*envs_init(char **env);
@@ -69,7 +74,7 @@ t_list				*create_token_node(t_token_type token_type,
 						char *token_data);
 t_list				*tokenize_quotes(char *quote_type, t_token_type token_type,
 						t_list **line_lst);
-t_list				*get_tokens(char *line);
+t_list				*gettokens(char *line);
 t_list				*get_token_node(t_list *line_lst);
 t_token				*create_token(t_token_type token_type, char *token_data);
 char				*get_token_type(t_token_type token);
@@ -120,5 +125,11 @@ bool				glob(const char *pattern, const char *text);
 void				check_glob(const char *pattern, const char *text);
 void				remove_path(t_list *matches, char *pattern);
 void				sort_matches(t_list **matches);
+
+inline void	panic(char *s)
+{
+	ft_fprintf(STDERR_FILENO, s);
+	exit(EXIT_FAILURE);
+}
 
 #endif // PARSING_

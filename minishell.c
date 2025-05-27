@@ -20,7 +20,8 @@ int	main(int argc, char **argv, char **env)
 		line = readline("Hello Shell >> ");
 		if (line == NULL)
 			break ;
-		cmd = parsing(line, env_lst);
+		cmd = parsecmd(line, env_lst);
+		(void) cmd;
 	}
 	free(line);
 	return (EXIT_SUCCESS);
