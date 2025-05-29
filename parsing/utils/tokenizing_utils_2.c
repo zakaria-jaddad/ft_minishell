@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/22 19:27:53 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/28 20:49:57 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*get_token_type(t_token_type token)
 		return ("TOKEN_DOUBLE_QUOTE_WORD");
 	if (token == TOKEN_SINGLE_QUOTE_WORD)
 		return ("TOKEN_SINGLE_QUOTE_WORD");
+	if (token == TOKEN_COMMAND)
+		return ("TOKEN_COMMAND");
 	return ("TOKEN_WORD");
 }
 

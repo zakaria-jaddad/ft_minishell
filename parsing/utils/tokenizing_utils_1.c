@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 15:43:49 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/29 20:50:26 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,9 @@ void	print_tokens(t_list *tokens)
 	while (tokens)
 	{
 		token = (t_token *)tokens->content;
-		printf("data: %-10s %-30s\n", token->data, get_token_type(token->type));
+		printf("data: \"%s\" %s, ", token->data, get_token_type(token->type));
 		tokens = tokens->next;
 	}
 	printf("\n");
 }
+

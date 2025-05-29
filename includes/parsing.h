@@ -29,6 +29,7 @@ typedef enum e_token_type
 	TOKEN_WORD,         //
 	TOKEN_DOUBLE_QUOTE_WORD,
 	TOKEN_SINGLE_QUOTE_WORD,
+	TOKEN_COMMAND
 }					t_token_type;
 
 typedef struct s_token
@@ -47,8 +48,8 @@ typedef struct s_cmd
 {
 	t_list			*command; // list of current command tokens
 	t_token_type	type; // type of the current command
-	struct s_tree	*left;
-	struct s_tree	*right;
+	struct s_cmd	*left;
+	struct s_cmd	*right;
 	t_list			*arguments;
 	t_list			*infile;
 	t_list			*outfile;
@@ -131,5 +132,8 @@ inline void	panic(char *s)
 	ft_fprintf(STDERR_FILENO, s);
 	exit(EXIT_FAILURE);
 }
+
+// ast
+t_list	*get_root(t_list *tokens);
 
 #endif // PARSING_
