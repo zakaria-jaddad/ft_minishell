@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/30 16:52:47 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/30 23:32:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -343,11 +343,13 @@ void print_cmd(t_cmd *root, int depth)
 	} else {
 		printf("╰───   : ");
 	}
-	printf("↪ command: ");
+	printf("command: ");
 	fflush(stdout);
 	print_tokens(root->command);
+	printf("\n");
 
-	printf("↪ arguments: ");
+	print_depth(depth + 3);
+	printf("arguments: ");
 	fflush(stdout);
 	print_tokens(root->arguments);
 	printf("\n");
