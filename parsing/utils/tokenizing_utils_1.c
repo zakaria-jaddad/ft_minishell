@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/29 20:50:26 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:52:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ void	print_tokens(t_list *tokens)
 	{
 		token = (t_token *)tokens->content;
 		printf("data: \"%s\" %s, ", token->data, get_token_type(token->type));
+		fflush(stdout);
 		tokens = tokens->next;
 	}
-	printf("\n");
 }
 
