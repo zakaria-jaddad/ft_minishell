@@ -6,34 +6,32 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:26:10 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/04 12:26:40 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/05/23 12:15:01 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
 
-int	_echo_(char **args, int fd)
+int	_echo_(t_list *args, int fd)
 {
-	int	i;
-	int	j;
+	t_list	*s;
 
-	i = 0;
-	if (!args || !*args)
+	if (!args || !args->content)
 	{
 		write(fd, "\n", 1);
-		return (-1);
+		return (1);
 	}
-	if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
-		i++;
-	while (args[i])
+	s = args;
+	if (ft_strncmp(args->content, "-n", ft_strlen(args->content)) == 0)
+		args = args->next;
+	while (args)
 	{
-		j = 0;
-		while (args[i][j] != '\0')
-			write(fd, &args[i][j++], 1);
-		if (args[++i])
-			write(fd, " ", 1);
+		if (args->content)
+			ft_fprintf(fd, "%s", args->content);
+		args = args->next;
 	}
-	if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) != 0 || !args[0])
-		write(1, "\n", 1);
+	if (ft_strncmp(s->content, "-n", ft_strlen(s->content)) != 0 || !s->content)
+		ft_fprintf(fd, "\n");
+	ft_lstclear(&s, free);
 	return (0);
 }
