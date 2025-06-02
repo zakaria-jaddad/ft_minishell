@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/29 20:55:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/05/30 23:32:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,38 @@ bool	is_between_per(t_list *tokens)
 
 void remove_per(t_list **tokens)
 {
-	t_list	*tmp;
+    t_list *first;
+    t_list *last;
+    int tokens_size;
 
-	if (tokens == NULL)	
-		return ;
+    if (tokens == NULL || *tokens == NULL)
+        return;
 
-	tmp = (*tokens);
-	(*tokens) = (*tokens)->next;
-	ft_lstdelone(tmp, free_token);
-	tmp = ft_lstlast((*tokens));
-	if (tmp == NULL)
-		return ; 
-	if (tmp->prev != NULL)
-		tmp->prev->next = NULL;
-	ft_lstdelone(tmp, free);
+    tokens_size = ft_lstsize(*tokens);
+    
+    // Remove first node
+    first = *tokens;
+    *tokens = first->next;
+    if (*tokens != NULL)
+        (*tokens)->prev = NULL;
+    first->next = NULL;
+    first->prev = NULL;
+    ft_lstdelone(first, free_token);
+
+    // If list is now empty after removing first node
+    if (*tokens == NULL)
+        return;
+
+    // Remove last node
+    last = ft_lstlast(*tokens);
+    if (last->prev != NULL)
+        last->prev->next = NULL;
+    else if (tokens_size == 2)  // Special case: only two nodes existed
+        *tokens = NULL;
+    
+    last->prev = NULL;
+    last->next = NULL;
+    ft_lstdelone(last, free_token);
 }
 void remove_front_spaces(t_list **tokens, void (*del)(void *))
 {
@@ -245,6 +263,8 @@ t_cmd	*ast(t_list *tokens)
 	if (is_between_per(tokens) == true)
 		remove_per(&tokens); // FIX: "()" heap-use-after-free
 
+	if (tokens == NULL)
+		return (NULL);
 	tokens_root = get_root(tokens);
 	if (tokens_root == NULL)
 		return parseexec(tokens);
@@ -319,17 +339,20 @@ void print_cmd(t_cmd *root, int depth)
 	print_depth(depth);
 	// Print current node
 	if (depth == 0) {
-		printf("root : ");
+		printf("root   : ");
 	} else {
-		printf("---> : ");
+		printf("╰───   : ");
 	}
 	printf("command: ");
 	fflush(stdout);
 	print_tokens(root->command);
+	printf("\n");
 
+	print_depth(depth + 3);
 	printf("arguments: ");
 	fflush(stdout);
 	print_tokens(root->arguments);
+	printf("\n");
 
 	print_cmd(root->left, depth + 1);
 	print_cmd(root->right, depth + 1);
