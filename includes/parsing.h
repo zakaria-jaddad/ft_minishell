@@ -134,6 +134,6 @@ inline void	panic(char *s)
 }
 
 // ast
-t_list	*
+t_list	*get_root(t_list *tokens);
 
 #endif // PARSING_
