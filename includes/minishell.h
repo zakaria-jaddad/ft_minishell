@@ -3,7 +3,7 @@
 
 # include "parsing.h"
 # include "../libft/libft.h"
-# include <linux/limits.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <stdbool.h>
