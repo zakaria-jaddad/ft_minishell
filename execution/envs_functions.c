@@ -1,0 +1,79 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envs_functions.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/05/23 10:35:39 by mouait-e         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/execution.h"
+
+void	_unset_(t_list *envs, char **args)
+{
+	t_list	*var;
+	int		i;
+
+	i = 0;
+	while (args[i])
+	{
+		var = find_node(envs, args[i]);
+		if (var)
+			ft_lst_rm_one(var, free_env);
+		i++;
+	}
+}
+
+int	print_envs(char *declar, t_list *list)
+{
+	t_env	*env;
+
+	while (list)
+	{
+		env = list->content;
+		if (!declar)
+		{
+			if (env->value)
+				printf("%s=\"%s\"\n", env->key, env->value);
+		}
+		else
+			printf("%s%s=\"%s\"\n", declar, env->key, env->value);
+		list = list->next;
+	}
+	return (0);
+}
+
+int	_env_(t_list *list)
+{
+	if (!list)
+		return (-1);
+	return (print_envs(NULL, list));
+}
+
+/* static void	swap_two_envs(t_list *env1, t_list *env2) */
+/* { */
+/* 	t_env	*tmp; */
+/**/
+/* 	tmp = env1->content; */
+/* 	env1->content = env2->content; */
+/* 	env2->content = tmp; */
+/* } */
+
+int	_export_(t_list *list, char **args)
+{
+	t_env	*env;
+
+	if (!list)
+		return (-1);
+	if (!args || !args[0])
+		return (print_envs("declare -x ", list));
+	env = get_env(list->content, args[0]);
+	if (env)
+		edit_env(env, args[1]);
+	else
+		append_env(&list, args[0], args[1]);
+	return (0);
+}

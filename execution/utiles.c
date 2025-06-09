@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:24:34 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/08 01:27:26 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/05/27 09:25:51 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,22 +57,21 @@ void	free_double_pointer(void **p)
 
 int	count_envs(t_list *envs)
 {
-	t_env	*env;
-	int		count;
+	int	count;
 
 	if (!envs)
 		return (0);
+	count = 0;
 	while (envs)
 	{
-		env = envs->content;
-		if (env && env->key)
+		if (envs->content)
 			count++;
 		envs = envs->next;
 	}
 	return (count);
 }
 
-char	**list_to_double_pointer(t_list *env_list)
+char	**envs_list_to_double_pointer(t_list *env_list)
 {
 	int		i;
 	char	**res;
@@ -80,13 +79,15 @@ char	**list_to_double_pointer(t_list *env_list)
 	char	*str;
 
 	i = 0;
+	if (!env_list)
+		return (NULL);
 	res = malloc(sizeof(char *) * (count_envs(env_list) + 1));
 	if (!res)
 		return (NULL);
 	while (env_list)
 	{
 		env = env_list->content;
-		if (env && env->key && env->value)
+		if (env && env->key)
 		{
 			str = ft_strjoin(env->key, "=");
 			if (env->value)
@@ -98,4 +99,36 @@ char	**list_to_double_pointer(t_list *env_list)
 		env_list = env_list->next;
 	}
 	return (res[i] = NULL, res);
+}
+
+char	**list_to_double_pointer(t_list *list)
+{
+	int		i;
+	char	**res;
+
+	i = 0;
+	if (!list)
+		return (NULL);
+	res = malloc(sizeof(char *) * (count_envs(list) + 1));
+	if (!res)
+		return (NULL);
+	while (list)
+	{
+		res[i] = ft_strdup(list->content);
+		list = list->next;
+		i++;
+	}
+	res[i] = NULL;
+	return (res[i] = NULL, res);
+}
+
+char	*manage_pwd(char *value)
+{
+	static char	*pwd;
+
+	if (!value)
+		return (pwd);
+	free(pwd);
+	pwd = ft_strdup(value);
+	return (pwd);
 }
