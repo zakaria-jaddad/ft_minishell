@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizing_utils_1.c                               :+:      :+:    :+:   */
+/*   tokenize_utils_1.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/30 16:52:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:39:19 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
-#include <stdio.h>
+#include "../../../includes/parsing.h"
 
 /*
  * @brief frees t_token object

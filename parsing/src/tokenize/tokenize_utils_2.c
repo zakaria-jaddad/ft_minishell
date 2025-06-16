@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizing_utils_2.c                               :+:      :+:    :+:   */
+/*   tokenize_utils_2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:41:23 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/28 20:49:57 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:39:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 /*
  * @return: returns a string of the given token

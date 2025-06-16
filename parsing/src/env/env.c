@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envs_init.c                                        :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 15:42:44 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:41:53 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 static int	locate_first_equale(char *line)
 {
@@ -49,7 +49,6 @@ static char	**get_split_env(char *env)
 	return (_env);
 }
 
-// TODO: update shell level
 static t_list	*simple_env(t_list *env_lst)
 {
 	char	path_buff[PATH_MAX];

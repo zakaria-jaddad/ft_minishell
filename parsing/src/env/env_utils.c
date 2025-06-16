@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:11:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/08 18:39:22 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:41:09 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 void	free_env(void *env)
 {

@@ -6,7 +6,12 @@ NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 EXECUTION = # execution/execution.c
-PARCING = parsing/parsing.c ./parsing/envs_init.c ./parsing/tokenizing.c ./parsing/utils/env_utils.c ./parsing/utils/split_line.c ./parsing/utils/tokenizing_utils_1.c ./parsing/utils/tokenizing_utils_2.c ./parsing/utils/tokenizing_utils_3.c parsing/utils/wildcards/file_info.c parsing/utils/wildcards/glob.c parsing/utils/wildcards/shell_glob.c parsing/utils/wildcards/shell_glob_escaping_norms_1.c parsing/utils/wildcards/shell_glob_escaping_norms_2.c parsing/utils/wildcards/wildcards_utils_1.c parsing/utils/wildcards/wildcards_utils_2.c parsing/utils/wildcards/wildcards_utils_3.c ./parsing/utils/wildcards/shell_glob_escaping_norms_3.c  ./parsing/get_root.c
+
+PARCING = parsing/parsing.c  \
+	  ./parsing/src/tokenize/tokenize.c ./parsing/src/tokenize/tokenize_utils_1.c ./parsing/src/tokenize/tokenize_utils_2.c ./parsing/src/tokenize/tokenize_utils_3.c ./parsing/src/tokenize/split_line.c \
+	  ./parsing/src/env/env.c ./parsing/src/env/env_utils.c \
+	  parsing/src/wildcards/file_info.c parsing/src/wildcards/glob.c parsing/src/wildcards/shell_glob.c parsing/src/wildcards/shell_glob_escaping_norms_1.c parsing/src/wildcards/shell_glob_escaping_norms_2.c parsing/src/wildcards/wildcards_utils_1.c parsing/src/wildcards/wildcards_utils_2.c parsing/src/wildcards/wildcards_utils_3.c ./parsing/src/wildcards/shell_glob_escaping_norms_3.c  \
+	  ./parsing/src/ast/ast.c ./parsing/src/ast/ast_utils_1.c ./parsing/src/ast/ast_utils_2.c
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 
 LIBFT = libft/libft.a

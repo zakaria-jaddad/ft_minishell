@@ -51,8 +51,7 @@ typedef struct s_cmd
 	struct s_cmd	*left;
 	struct s_cmd	*right;
 	t_list			*arguments;
-	t_list			*infile;
-	t_list			*outfile;
+	t_list *filename;
 }					t_cmd;
 t_cmd				*parsecmd(char *line, t_list *env);
 
@@ -135,5 +134,9 @@ inline void	panic(char *s)
 
 // ast
 t_list	*get_root(t_list *tokens);
+t_cmd	*ast(t_list *tokens);
+
+void remove_back_spaces(t_list **tokens);
+void remove_front_spaces(t_list **tokens);
 
 #endif // PARSING_

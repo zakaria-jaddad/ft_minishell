@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 20:04:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/22 16:14:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:38:56 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 static void	append_prev_word(t_list **lst, char *line, int i, int prev)
 {

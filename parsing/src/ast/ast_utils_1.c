@@ -1,30 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_root.c                                         :+:      :+:    :+:   */
+/*   ast_utils_1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:23:10 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/28 20:03:07 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 21:43:21 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 static void	skip_par(t_list **tokens)
 {
+	int depth = 0;
 	t_token	*token;
 
 	if (tokens == NULL)
 		return ;
-	while (*tokens)
+	while (*tokens != NULL)
 	{
 		token = (*tokens)->content;
-		if (token->type == TOKEN_PAR_CLOSE)
+		if (token->type == TOKEN_PAR_OPEN)
+			depth++;
+		else if (token->type == TOKEN_PAR_CLOSE)
 		{
-			(*tokens) = (*tokens)->next;
-			break ;
+			// depth 100% wouldn't be negative
+			// par validation already happened
+			depth--;
+			if (depth == 0)
+			{
+				(*tokens) = (*tokens)->next;
+				break ;
+			}
 		}
 		(*tokens) = (*tokens)->next;
 	}

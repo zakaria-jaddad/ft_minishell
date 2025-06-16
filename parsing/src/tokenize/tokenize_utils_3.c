@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizing_utils_3.c                               :+:      :+:    :+:   */
+/*   tokenize_utils_3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:07:45 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/09 15:44:20 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:39:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../../includes/parsing.h"
 
 /*
  * @brief Checks if last token, it's last character is equal
