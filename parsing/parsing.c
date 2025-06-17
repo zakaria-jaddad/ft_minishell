@@ -6,14 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/16 01:52:49 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/17 01:43:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing.h"
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 bool is_valid_per(t_list *tokens) {
     int depth = 0;

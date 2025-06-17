@@ -15,8 +15,9 @@
 
 - Create a Lexer
 - Expand "\*"
-  <!-- - Check Syntax Error -->
-  <!-- - Generate Abstract Syntax Three based on the tokens given from the lexer -->
+- Create Syntax_checker <!-- Qued -->
+- Creat pre_ast
+<!-- - Create ast -->
 
 ## Parts of a shell Program
 

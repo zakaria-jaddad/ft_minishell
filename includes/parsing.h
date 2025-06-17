@@ -126,7 +126,7 @@ void				check_glob(const char *pattern, const char *text);
 void				remove_path(t_list *matches, char *pattern);
 void				sort_matches(t_list **matches);
 
-inline void	panic(char *s)
+static inline void	panic(char *s)
 {
 	ft_fprintf(STDERR_FILENO, s);
 	exit(EXIT_FAILURE);

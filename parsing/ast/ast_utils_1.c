@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:23:10 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/09 21:43:21 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/17 01:44:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 static void	skip_par(t_list **tokens)
 {

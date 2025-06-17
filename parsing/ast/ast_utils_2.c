@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 21:48:02 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/16 01:51:48 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/17 01:44:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/parsing.h"
+#include "../../includes/parsing.h"
 
 
 void remove_front_spaces(t_list **tokens)
