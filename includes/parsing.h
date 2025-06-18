@@ -80,6 +80,7 @@ t_list				*get_token_node(t_list *line_lst);
 t_token				*create_token(t_token_type token_type, char *token_data);
 char				*get_token_type(t_token_type token);
 
+void	remove_es(t_list **tokens);
 t_token_type peak_next(t_list *tokens);
 t_token_type peak_prev(t_list *tokens);
 t_list *append_tokens(t_list **tokens, t_token_type token_type, char *token_data);
@@ -204,5 +205,54 @@ void				skip_prev_spaces(t_list **tokens);
 void				skip_front_spaces(t_list **tokens);
 void				remove_back_spaces(t_list **tokens);
 void				remove_front_spaces(t_list **tokens);
+
+static inline void print_depth(int depth)
+{
+    for (int i = 0; i < depth; i++)
+        printf("    ");
+}
+
+static void print_cmd(t_cmd *root, int depth) 
+{
+	if (root == NULL)
+		return;
+
+	printf("\n");
+	print_depth(depth);
+	// Print current node
+	if (depth == 0) {
+		printf("root   : ");
+	} else {
+		printf("╰───   : ");
+	}
+	printf("type: %s\n", get_token_type(root->type));
+	print_depth(depth + 3);
+	printf("command: ");
+	fflush(stdout);
+	print_tokens(root->command);
+	printf("\n");
+
+	print_depth(depth + 3);
+	printf("arguments: ");
+	fflush(stdout);
+	print_tokens(root->arguments);
+	printf("\n");
+	if (root->filename != NULL)
+	{
+		print_depth(depth + 3);
+		printf("filename: ");
+		fflush(stdout);
+		for (t_list *tmp = root->filename; tmp != NULL ;tmp = tmp->next)
+		{
+			printf("%s", ((t_token *)tmp->content)->data);
+			fflush(stdout);
+		}
+		printf("\n");
+	}
+	printf("\n");
+
+	print_cmd(root->left, depth + 1);
+	print_cmd(root->right, depth + 1);
+}
 
 #endif // PARSING_
