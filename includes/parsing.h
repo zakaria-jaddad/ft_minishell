@@ -80,6 +80,36 @@ t_list				*get_token_node(t_list *line_lst);
 t_token				*create_token(t_token_type token_type, char *token_data);
 char				*get_token_type(t_token_type token);
 
+t_token_type peak_next(t_list *tokens);
+t_token_type peak_prev(t_list *tokens);
+t_list *append_tokens(t_list **tokens, t_token_type token_type, char *token_data);
+t_list *insert_tokens(t_list **tokens, t_token_type token_type, char *token_data);
+t_list *dup_simple_tokens(t_list *to_start);
+
+
+static inline bool	check_token_type(t_token *token, t_token_type token_type)
+{
+	if (token == NULL)
+		return (false);
+	return (token->type == token_type);
+}
+
+static inline bool	is_word(t_token *token)
+{
+	if (token == NULL)
+		return (false);
+	return (token->type == TOKEN_WORD || token->type == TOKEN_DOUBLE_QUOTE_WORD
+		|| token->type == TOKEN_SINGLE_QUOTE_WORD);
+}
+
+static inline bool is_token_special(t_token *token)
+{
+        if (token == NULL)
+                return false;
+        return !(is_word(token) || check_token_type(token, TOKEN_WHITE_SPACE));
+                
+}
+
 /*
  * @brief hold file information
  * s_file_info is used when expanding "*" wildcards
@@ -133,12 +163,6 @@ static inline void	panic(char *s)
 	exit(EXIT_FAILURE);
 }
 
-static inline bool	check_token_type(t_token *token, t_token_type token_type)
-{
-	if (token == NULL)
-		return (false);
-	return (token->type == token_type);
-}
 
 static inline bool	is_redirection(t_token *token)
 {
@@ -148,13 +172,7 @@ static inline bool	is_redirection(t_token *token)
 		|| token->type == TOKEN_APPEND_REDIR || token->type == TOKEN_HEREDOC);
 }
 
-static inline bool	is_word(t_token *token)
-{
-	if (token == NULL)
-		return (false);
-	return (token->type == TOKEN_WORD || token->type == TOKEN_DOUBLE_QUOTE_WORD
-		|| token->type == TOKEN_SINGLE_QUOTE_WORD);
-}
+
 
 static inline void	print_tokens_data(t_list *tokens)
 {

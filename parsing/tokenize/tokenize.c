@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:37:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/18 20:40:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/18 21:30:38 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ static void	*get_tokens_escaping_norms_2(t_list **line_lst,
 	return (NOTNULL);
 }
 
+static void rm_sp(t_list **tokens)
+{
+	remove_front_spaces(tokens);
+	remove_back_spaces(tokens);
+}
+
 t_list	*get_tokens(char *line)
 {
 	t_list	*line_lst;
@@ -81,5 +87,5 @@ t_list	*get_tokens(char *line)
 		if (line_lst != NULL)
 			line_lst = line_lst->next;
 	}
-	return (ft_lstclear(&line_lst_head, free), tokens);
+	return (rm_sp(&tokens), ft_lstclear(&line_lst_head, free), tokens);
 }
