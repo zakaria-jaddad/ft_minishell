@@ -111,6 +111,9 @@ static inline bool is_token_special(t_token *token)
                 
 }
 
+// Syntax Check
+bool syntax_check(t_list **tokens);
+
 /*
  * @brief hold file information
  * s_file_info is used when expanding "*" wildcards
@@ -212,7 +215,7 @@ static inline void print_depth(int depth)
         printf("    ");
 }
 
-static void print_cmd(t_cmd *root, int depth) 
+static inline void print_cmd(t_cmd *root, int depth) 
 {
 	if (root == NULL)
 		return;
