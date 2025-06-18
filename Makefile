@@ -11,7 +11,8 @@ PARCING = parsing/parsing.c  \
 	  ./parsing/tokenize/tokenize.c ./parsing/tokenize/tokenize_utils_1.c ./parsing/tokenize/tokenize_utils_2.c ./parsing/tokenize/tokenize_utils_3.c ./parsing/tokenize/split_line.c \
 	  ./parsing/env/env.c ./parsing/env/env_utils.c \
 	  parsing/wildcards/file_info.c parsing/wildcards/glob.c parsing/wildcards/shell_glob.c parsing/wildcards/shell_glob_escaping_norms_1.c parsing/wildcards/shell_glob_escaping_norms_2.c parsing/wildcards/wildcards_utils_1.c parsing/wildcards/wildcards_utils_2.c parsing/wildcards/wildcards_utils_3.c ./parsing/wildcards/shell_glob_escaping_norms_3.c  \
-	  ./parsing/ast/ast.c ./parsing/ast/ast_utils_1.c ./parsing/ast/ast_utils_2.c
+	  ./parsing/ast/ast.c ./parsing/ast/ast_utils_1.c ./parsing/ast/ast_utils_2.c \
+	  ./parsing/ast/pre_ast.c ./parsing/ast/redirections/redirections_utils_1.c
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 

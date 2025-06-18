@@ -1,8 +1,8 @@
 
 
 #include "includes/minishell.h"
+#include "includes/parsing.h"
 #include "libft/libft.h"
-#include <stdio.h>
 
 int	main(int argc, char **argv, char **env)
 {
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **env)
 		line = readline("Hello Shell >> ");
 		if (line == NULL)
 			break ;
-		cmd = parsecmd(line, env_lst);
+		cmd = parse_cmd(line, env_lst);
 		(void) cmd;
 	}
 	free(line);

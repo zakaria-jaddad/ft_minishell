@@ -75,7 +75,7 @@ t_list				*create_token_node(t_token_type token_type,
 						char *token_data);
 t_list				*tokenize_quotes(char *quote_type, t_token_type token_type,
 						t_list **line_lst);
-t_list				*gettokens(char *line);
+t_list				*get_tokens(char *line);
 t_list				*get_token_node(t_list *line_lst);
 t_token				*create_token(t_token_type token_type, char *token_data);
 char				*get_token_type(t_token_type token);

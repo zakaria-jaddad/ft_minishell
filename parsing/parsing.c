@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/18 05:42:29 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:41:05 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
 	t_cmd	*cmd;
 
 	(void)env_lst;
-	tokens = gettokens(line);
+	tokens = get_tokens(line);
 	if (tokens == NULL)
 		return (NULL);
 	remove_es(&tokens);
