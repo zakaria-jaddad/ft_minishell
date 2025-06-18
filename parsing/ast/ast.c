@@ -4,21 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void skip_spaces(t_list **tokens)
-{
-    t_token *token;
-
-    if (tokens == NULL || *tokens == NULL)
-        return;
-
-    while (*tokens != NULL)
-    {
-        token = (*tokens)->content;
-        if (token == NULL || token->type != TOKEN_WHITE_SPACE)
-            break;
-        *tokens = (*tokens)->next;
-    }
-}
 
 bool	is_between_per(t_list *tokens)
 {
@@ -83,7 +68,7 @@ t_list	*get_command(t_list **tokens)
 		return (NULL);
 	commands = NULL;
 	command_node = NULL;
-	skip_spaces(tokens);
+	skip_front_spaces(tokens);
 	while ((*tokens))
 	{
 		token = (*tokens)->content;
@@ -110,7 +95,7 @@ t_list *get_arguments(t_list **tokens)
 	arguments = NULL;
 	token = NULL;
 	argument_node = NULL;
-	skip_spaces(tokens);
+	skip_front_spaces(tokens);
 	while ((*tokens))
 	{
 		token = (*tokens)->content;
@@ -209,49 +194,10 @@ t_cmd	*new_ast_node(void)
 	return cmd;
 }
 
-bool is_redirection(t_token *token) {
-	if (token == NULL)
-		return false;
-	return (token->type == TOKEN_IN_REDIR 
-		|| token->type == TOKEN_OUT_REDIR
-		|| token->type == TOKEN_APPEND_REDIR
-		|| token->type == TOKEN_HEREDOC);
-}
 
-bool is_word(t_token *token) {
-	if (token == NULL)
-		return false;
-	return (token->type == TOKEN_WORD 
-		|| token->type == TOKEN_DOUBLE_QUOTE_WORD
-		|| token->type == TOKEN_SINGLE_QUOTE_WORD
-	);
-}
 
-t_list *get_filename(t_list **tokens)
-{
-	t_list *filename;
-	t_list *token_node;
-	t_token *token;
 
-	filename = NULL;
-	token_node = NULL;
-	token = NULL;
-	if (tokens == NULL)
-		return (NULL);
-	skip_spaces(tokens);
-	while (*tokens)
-	{
-		token = (*tokens)->content;
-		if (token->type != TOKEN_WORD
-			&& token->type != TOKEN_DOUBLE_QUOTE_WORD
-			&& token->type != TOKEN_SINGLE_QUOTE_WORD)
-			break;
-		token_node = create_token_node(token->type, token->data);
-		ft_lstadd_back(&filename, token_node);
-		*tokens = (*tokens)->next;
-	}
-	return (filename);
-}
+
 
 t_cmd	*ast(t_list *tokens)
 {
@@ -312,7 +258,7 @@ t_cmd	*ast(t_list *tokens)
 		else
 		{
 			// > out > otherout ls > kkk -lah > otherotherout
-			skip_spaces(&redir);
+			skip_front_spaces(&redir);
 			if (redir != NULL && is_word(redir->content) == true)
 			{
 				root->left = ast(sublst(tokens, tokens_root, false));

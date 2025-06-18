@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/17 01:43:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/18 05:42:29 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,25 @@ bool is_valid_per(t_list *tokens) {
     return (depth == 0);
 }
 
-t_cmd	*parsing(t_list *tokens)
+t_cmd	*parsing(t_list **tokens)
 {
-	if (tokens == NULL)
+	if (tokens == NULL || *tokens == NULL)
 		return (NULL);
-	// TODO:  Get the root of tokens
-	if (is_valid_per(tokens) == false)
+	if (is_valid_per(*tokens) == false)
 		return (panic("(): Syntax Error\n"), NULL);
-	return (ast(tokens));
+
+        // TODO: ADD A SYNTAX CHECKER
+        
+        remove_front_spaces(tokens);
+        remove_back_spaces(tokens);
+
+
+        pre_ast(tokens);
+
+        // NOTE: Debug print
+        print_tokens_data(*tokens);
+        return ((t_cmd*) tokens);
+         /* return (ast(tokens)); */
 }
 
 void	remove_es(t_list **tokens)
@@ -123,7 +134,7 @@ void print_cmd(t_cmd *root, int depth)
 	print_cmd(root->right, depth + 1);
 }
 
-t_cmd	*parsecmd(char *line, t_list *env_lst)
+t_cmd	*parse_cmd(char *line, t_list *env_lst)
 {
 	t_list	*tokens;
 	t_cmd	*cmd;
@@ -133,10 +144,11 @@ t_cmd	*parsecmd(char *line, t_list *env_lst)
 	if (tokens == NULL)
 		return (NULL);
 	remove_es(&tokens);
-	cmd = parsing(tokens);
-	if (cmd == NULL)
-		printf("(null)");
-	print_cmd(cmd, 0);
+	cmd = parsing(&tokens);
+
+	/* if (cmd == NULL) */
+	/* 	printf("(null)"); */
+	/* print_cmd(cmd, 0); */
 
 	/* expand_command_if_so(&command, &arguments, cmd, env_lst); */
 	// use here 
@@ -151,5 +163,5 @@ t_cmd	*parsecmd(char *line, t_list *env_lst)
 	/* ft_lstclear(&matches, free); */
 	/* ft_lstclear(&env_lst, free_env); */
 	/* exit(0); */
-	return ((t_cmd *)tokens);
+	return ((t_cmd *)NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 21:48:02 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/17 01:44:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/17 02:37:21 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,3 +70,34 @@ void remove_back_spaces(t_list **tokens)
 	}
 }
 
+void skip_front_spaces(t_list **tokens)
+{
+    t_token *token;
+
+    if (tokens == NULL || *tokens == NULL)
+        return;
+
+    while (*tokens != NULL)
+    {
+        token = (*tokens)->content;
+        if (token == NULL || token->type != TOKEN_WHITE_SPACE)
+            break;
+        *tokens = (*tokens)->next;
+    }
+}
+
+void skip_prev_spaces(t_list **tokens)
+{
+    t_token *token;
+
+    if (tokens == NULL || *tokens == NULL)
+        return;
+
+    while (*tokens != NULL)
+    {
+        token = (t_token *)(*tokens)->content;
+        if (token == NULL || token->type != TOKEN_WHITE_SPACE)
+            break;
+        *tokens = (*tokens)->prev;
+    }
+}

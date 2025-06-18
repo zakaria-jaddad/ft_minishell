@@ -160,3 +160,27 @@ Pretty printer produces:
 ```
 
 ## Expanding Wildcards **\***
+
+## Pre AST
+
+### TODO:
+
+- enhance redirections
+
+the main purpos of pre_ast was the need of effectively order redirections
+
+When the provided command is : `> filename command arguments`
+
+The `pre_ast` function should enhance the generated tokens for batter ast generating
+
+`pre_ast` output `command arguments > filename`
+
+When finding a redirections:
+
+- peak and check prev
+  - if one word found redir has a command
+    - Search for arguments after redirs
+  - if more than one word found redir has command and arguments
+    - Search for more arguments after redir
+  - if no word found
+    - Search for command and arguments

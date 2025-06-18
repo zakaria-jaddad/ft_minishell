@@ -29,7 +29,8 @@ typedef enum e_token_type
 	TOKEN_WORD,         //
 	TOKEN_DOUBLE_QUOTE_WORD,
 	TOKEN_SINGLE_QUOTE_WORD,
-	TOKEN_COMMAND
+	TOKEN_COMMAND,
+	INVALID_TOKEN
 }					t_token_type;
 
 typedef struct s_token
@@ -46,14 +47,14 @@ typedef struct s_env
 
 typedef struct s_cmd
 {
-	t_list			*command; // list of current command tokens
-	t_token_type	type; // type of the current command
+	t_list *command;   // list of current command tokens
+	t_token_type type; // type of the current command
 	struct s_cmd	*left;
 	struct s_cmd	*right;
 	t_list			*arguments;
-	t_list *filename;
+	t_list			*filename;
 }					t_cmd;
-t_cmd				*parsecmd(char *line, t_list *env);
+t_cmd				*parse_cmd(char *line, t_list *env);
 
 // envs
 t_list				*envs_init(char **env);
@@ -132,11 +133,58 @@ static inline void	panic(char *s)
 	exit(EXIT_FAILURE);
 }
 
-// ast
-t_list	*get_root(t_list *tokens);
-t_cmd	*ast(t_list *tokens);
+static inline bool	check_token_type(t_token *token, t_token_type token_type)
+{
+	if (token == NULL)
+		return (false);
+	return (token->type == token_type);
+}
 
-void remove_back_spaces(t_list **tokens);
-void remove_front_spaces(t_list **tokens);
+static inline bool	is_redirection(t_token *token)
+{
+	if (token == NULL)
+		return (false);
+	return (token->type == TOKEN_IN_REDIR || token->type == TOKEN_OUT_REDIR
+		|| token->type == TOKEN_APPEND_REDIR || token->type == TOKEN_HEREDOC);
+}
+
+static inline bool	is_word(t_token *token)
+{
+	if (token == NULL)
+		return (false);
+	return (token->type == TOKEN_WORD || token->type == TOKEN_DOUBLE_QUOTE_WORD
+		|| token->type == TOKEN_SINGLE_QUOTE_WORD);
+}
+
+static inline void	print_tokens_data(t_list *tokens)
+{
+	t_token	*token;
+
+	if (tokens == NULL)
+		printf("(null)");
+	while (tokens)
+	{
+		token = (t_token *)tokens->content;
+		printf("%s", token->data);
+		fflush(stdout);
+		tokens = tokens->next;
+	}
+        printf("\n");
+}
+// redirection helpers
+t_list				*get_filename(t_list **tokens);
+t_list				*dup_tokens(t_list *tokens);
+
+// pre_ast
+void				pre_ast(t_list **tokens);
+
+// ast
+t_list				*get_root(t_list *tokens);
+t_cmd				*ast(t_list *tokens);
+
+void				skip_prev_spaces(t_list **tokens);
+void				skip_front_spaces(t_list **tokens);
+void				remove_back_spaces(t_list **tokens);
+void				remove_front_spaces(t_list **tokens);
 
 #endif // PARSING_
