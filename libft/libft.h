@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/21 23:58:20 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/06/18 00:20:16 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void				ft_putnbr_fd(int n, int fd);
 
 t_list				*ft_lstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
+t_list				*ft_lstfirst(t_list *lst);
 void				ft_lstadd_front(t_list **lst, t_list *new_node);
 void				ft_lstadd_back(t_list **lst, t_list *new_node);
 void				ft_lstdelone(t_list *lst, void (*del)(void *));
