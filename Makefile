@@ -15,13 +15,13 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/tokenize_utils_3.c \
 	  ./parsing/tokenize/tokenize_utils_4.c \
 	  ./parsing/tokenize/tokenize_utils_5.c	\
+	  ./parsing/tokenize/tokenize_utils_6.c	\
 	  ./parsing/tokenize/split_line.c \
 	  ./parsing/pre_ast/pre_ast.c \
+	  ./parsing/pre_ast/enhance_redirection.c \
 	  parsing/wildcards/file_info.c parsing/wildcards/glob.c parsing/wildcards/shell_glob.c parsing/wildcards/shell_glob_escaping_norms_1.c parsing/wildcards/shell_glob_escaping_norms_2.c parsing/wildcards/wildcards_utils_1.c parsing/wildcards/wildcards_utils_2.c parsing/wildcards/wildcards_utils_3.c ./parsing/wildcards/shell_glob_escaping_norms_3.c  \
 	  ./parsing/ast/ast.c \
-	  ./parsing/ast/ast_utils_1.c \
-	  ./parsing/ast/ast_utils_2.c \
-	  ./parsing/ast/ast_utils_3.c \
+	  ./parsing/ast/get_root.c \
 	  ./parsing/syntx_check/syntax_check.c
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
@@ -30,8 +30,6 @@ LIBFT = libft/libft.a
 INCLUDE = includes/minishell.h libft/libft.h
 
 all : $(LIBFT) $(NAME)
-	@echo "cleaning"
-	@make -s clean
 
 $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME)

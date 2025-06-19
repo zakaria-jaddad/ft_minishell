@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/parsing/parsing.h"
 
 int	get_backslash_pos_before_wildcard(char *str)
 {

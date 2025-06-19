@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/parsing/parsing.h"
 
 t_list	*get_dir_content(char *dirname)
 {

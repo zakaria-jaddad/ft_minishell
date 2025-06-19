@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 00:57:24 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 01:22:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/19 05:58:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/parsing/parsing.h"
 
 static void	skip_redirections(t_list **tokens)
 {
@@ -44,7 +44,7 @@ static void	move_redirection_after(t_list *cmd_node, t_list **redir_node)
 
 	if (cmd_node == NULL || redir_node == NULL || *redir_node == NULL)
 		return ;
-	cmd_node = dup_simple_tokens(cmd_node);
+	cmd_node = dup_and_remove_simple_tokens(cmd_node);
 	if (cmd_node == NULL)
 		return ;
         redir_prev = (*redir_node)->prev;

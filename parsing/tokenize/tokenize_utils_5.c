@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 04:39:44 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/19 06:15:54 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/parsing/parsing.h"
 
 void	remove_es(t_list **tokens)
 {
@@ -41,7 +41,7 @@ void	remove_es(t_list **tokens)
 		*tokens = NULL;
 }
 
-static bool	is_between_per(t_list *tokens)
+bool	is_between_per(t_list *tokens)
 {
 	t_list	*first_token_node;
 	t_list	*last_token_node;
@@ -82,4 +82,36 @@ void	remove_per(t_list **tokens)
 	last->prev = NULL;
 	last->next = NULL;
 	ft_lstdelone(last, free_token);
+}
+
+t_list *dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
+{
+	t_list *new_tokens;
+	t_list *token_node;
+	t_token *token;
+
+        if (tokens_start == NULL || token_end == NULL)
+                return (NULL);
+
+	(new_tokens = NULL, token = NULL);
+	while (tokens_start && tokens_start != token_end)
+        {
+		token = tokens_start->content;
+		if (token == NULL)
+			return (ft_lstclear(&new_tokens, free_token), NULL);
+		token_node = create_token_node(token->type, token->data);
+		if (token_node == NULL)
+			return (ft_lstclear(&new_tokens, free_token), NULL);
+		ft_lstadd_back(&new_tokens, token_node);
+		tokens_start = tokens_start->next;
+	}
+	if (tokens_start != NULL && add_last == true)
+	{
+		token = tokens_start->content;
+		token_node = create_token_node(token->type, token->data);
+		if (token_node == NULL)
+			return (ft_lstclear(&new_tokens, free_token), NULL);
+		ft_lstadd_back(&new_tokens, token_node);
+	}
+	return new_tokens;
 }

@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:24:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/18 21:53:48 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/19 05:57:08 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing.h"
+#include "../../includes/parsing/parsing.h"
 
 /*
  * @brief Get the type of the next non white space token
@@ -82,12 +82,13 @@ t_list *insert_tokens(t_list **tokens, t_token_type token_type, char *token_data
 
 /*
  * @brief Duplicate tokens Untile special token
+ *      Each token duplicated get remove from the original list
  * Special Token : && || | > < >> << 
  *
  * @var: 
  *      - dtn: dup_simple_tokens
  */
-t_list *dup_simple_tokens(t_list *to_start)
+t_list *dup_and_remove_simple_tokens(t_list *to_start)
 {
         t_list *simple_tokens;
         t_list *dsn;

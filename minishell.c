@@ -1,8 +1,6 @@
 
 
 #include "includes/minishell.h"
-#include "includes/parsing.h"
-#include "libft/libft.h"
 
 int	main(int argc, char **argv, char **env)
 {

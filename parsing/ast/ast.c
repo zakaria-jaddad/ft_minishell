@@ -1,8 +1,5 @@
 
-#include "../../includes/parsing.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "../../includes/parsing/parsing.h"
 
 t_list	*get_command(t_list **tokens)
 {
@@ -45,6 +42,7 @@ t_list *get_arguments(t_list **tokens)
 	while ((*tokens))
 	{
 		token = (*tokens)->content;
+                // FIX: an argument can be bunch of words separated by spaces
 		if (token->type != TOKEN_WORD && token->type != TOKEN_DOUBLE_QUOTE_WORD
 			&& token->type != TOKEN_SINGLE_QUOTE_WORD)
 			break ;
@@ -75,57 +73,6 @@ t_cmd	*parseexec(t_list *tokens)
 	return cmd;
 }
 
-t_list *sublst(t_list *start, t_list *end, bool add_last)
-{
-	t_list *lst;
-	t_token *token;
-	t_list *token_node;
-
-	if (start == NULL || end == NULL)	
-		return NULL;
-	lst = NULL;
-	while (start && start != end)
-	{
-		token = start->content;
-		token_node = create_token_node(token->type, token->data);
-		if (token_node == NULL)
-			return (ft_lstclear(&lst, free_token), NULL);
-		ft_lstadd_back(&lst, token_node);
-		start = start->next;
-	}
-	if (start != NULL && add_last == true)
-	{
-		token = start->content;
-		token_node = create_token_node(token->type, token->data);
-		if (token_node == NULL)
-			return (ft_lstclear(&lst, free_token), NULL);
-		ft_lstadd_back(&lst, token_node);
-	}
-	return lst;
-}
-
-t_list *dup_tokens(t_list *tokens_start, t_list *token_end)
-{
-	t_list *new_tokens;
-	t_list *token_node;
-	t_token *token;
-
-	new_tokens = NULL;
-	token = NULL;
-	while (tokens_start)
-        {
-		token = tokens_start->content;
-		if (token == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		token_node = create_token_node(token->type, token->data);
-		if (token_node == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		ft_lstadd_back(&new_tokens, token_node);
-		tokens_start = tokens_start->next;
-	}
-	return new_tokens;
-}
-
 t_cmd	*new_ast_node(void)
 {
 	t_cmd			 *cmd;
@@ -140,19 +87,12 @@ t_cmd	*new_ast_node(void)
 	return cmd;
 }
 
-
-
-
-
-
 t_cmd	*ast(t_list *tokens)
 {
 	t_cmd	*root;
 	t_list	*tokens_root;
-	/* t_token	*tokens_root_token; */
 	t_list *right;
 	t_list *left;
-
 
 	if (tokens == NULL)
 		return (NULL);
@@ -160,13 +100,10 @@ t_cmd	*ast(t_list *tokens)
 	right = left = NULL;
 	remove_front_spaces(&tokens);
 	remove_back_spaces(&tokens);
-	/* print_tokens(tokens); */
-
 	if (tokens == NULL)
 		return NULL;
-
-	/* if (is_between_per(tokens) == true) */
-	/* 	remove_per(&tokens); */
+	if (is_between_per(tokens) == true)
+		remove_per(&tokens);
 
 	tokens_root = get_root(tokens);
 	if (tokens_root == NULL)
@@ -183,9 +120,8 @@ t_cmd	*ast(t_list *tokens)
 
 
 	// not a simple command
-	left = sublst(tokens, tokens_root, false);
-	/* right = sublst(tokens_root->next, ft_lstlast(tokens_root), true); */
-	right = dup_tokens(tokens_root->next);
+	left = dup_tokens(tokens, tokens_root, false);
+	right = dup_tokens(tokens_root->next, ft_lstlast(tokens_root), true);
 
 
 
