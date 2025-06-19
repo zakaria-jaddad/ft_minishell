@@ -80,13 +80,14 @@ t_list				*get_token_node(t_list *line_lst);
 t_token				*create_token(t_token_type token_type, char *token_data);
 char				*get_token_type(t_token_type token);
 
-void	remove_es(t_list **tokens);
-t_token_type peak_next(t_list *tokens);
-t_token_type peak_prev(t_list *tokens);
-t_list *append_tokens(t_list **tokens, t_token_type token_type, char *token_data);
-t_list *insert_tokens(t_list **tokens, t_token_type token_type, char *token_data);
-t_list *dup_simple_tokens(t_list *to_start);
-
+void				remove_es(t_list **tokens);
+t_token_type		peak_next(t_list *tokens);
+t_token_type		peak_prev(t_list *tokens);
+t_list				*append_tokens(t_list **tokens, t_token_type token_type,
+						char *token_data);
+t_list				*insert_tokens(t_list **tokens, t_token_type token_type,
+						char *token_data);
+t_list				*dup_simple_tokens(t_list *to_start);
 
 static inline bool	check_token_type(t_token *token, t_token_type token_type)
 {
@@ -103,16 +104,15 @@ static inline bool	is_word(t_token *token)
 		|| token->type == TOKEN_SINGLE_QUOTE_WORD);
 }
 
-static inline bool is_token_special(t_token *token)
+static inline bool	is_token_special(t_token *token)
 {
-        if (token == NULL)
-                return false;
-        return !(is_word(token) || check_token_type(token, TOKEN_WHITE_SPACE));
-                
+	if (token == NULL)
+		return (false);
+	return (!(is_word(token) || check_token_type(token, TOKEN_WHITE_SPACE)));
 }
 
 // Syntax Check
-bool syntax_check(t_list **tokens);
+bool				syntax_check(t_list **tokens);
 
 /*
  * @brief hold file information
@@ -167,7 +167,6 @@ static inline void	panic(char *s)
 	exit(EXIT_FAILURE);
 }
 
-
 static inline bool	is_redirection(t_token *token)
 {
 	if (token == NULL)
@@ -175,8 +174,6 @@ static inline bool	is_redirection(t_token *token)
 	return (token->type == TOKEN_IN_REDIR || token->type == TOKEN_OUT_REDIR
 		|| token->type == TOKEN_APPEND_REDIR || token->type == TOKEN_HEREDOC);
 }
-
-
 
 static inline void	print_tokens_data(t_list *tokens)
 {
@@ -191,7 +188,7 @@ static inline void	print_tokens_data(t_list *tokens)
 		fflush(stdout);
 		tokens = tokens->next;
 	}
-        printf("\n");
+	printf("\n");
 }
 // redirection helpers
 t_list				*get_filename(t_list **tokens);
@@ -199,6 +196,7 @@ t_list				*dup_tokens(t_list *tokens);
 
 // pre_ast
 void				pre_ast(t_list **tokens);
+void				enhance_redirection(t_list **redir_tokens, t_list **tokens);
 
 // ast
 t_list				*get_root(t_list *tokens);
@@ -209,23 +207,25 @@ void				skip_front_spaces(t_list **tokens);
 void				remove_back_spaces(t_list **tokens);
 void				remove_front_spaces(t_list **tokens);
 
-static inline void print_depth(int depth)
+static inline void	print_depth(int depth)
 {
-    for (int i = 0; i < depth; i++)
-        printf("    ");
+	for (int i = 0; i < depth; i++)
+		printf("    ");
 }
 
-static inline void print_cmd(t_cmd *root, int depth) 
+static inline void	print_cmd(t_cmd *root, int depth)
 {
 	if (root == NULL)
-		return;
-
+		return ;
 	printf("\n");
 	print_depth(depth);
 	// Print current node
-	if (depth == 0) {
+	if (depth == 0)
+	{
 		printf("root   : ");
-	} else {
+	}
+	else
+	{
 		printf("╰───   : ");
 	}
 	printf("type: %s\n", get_token_type(root->type));
@@ -234,7 +234,6 @@ static inline void print_cmd(t_cmd *root, int depth)
 	fflush(stdout);
 	print_tokens(root->command);
 	printf("\n");
-
 	print_depth(depth + 3);
 	printf("arguments: ");
 	fflush(stdout);
@@ -245,7 +244,7 @@ static inline void print_cmd(t_cmd *root, int depth)
 		print_depth(depth + 3);
 		printf("filename: ");
 		fflush(stdout);
-		for (t_list *tmp = root->filename; tmp != NULL ;tmp = tmp->next)
+		for (t_list *tmp = root->filename; tmp != NULL; tmp = tmp->next)
 		{
 			printf("%s", ((t_token *)tmp->content)->data);
 			fflush(stdout);
@@ -253,7 +252,6 @@ static inline void print_cmd(t_cmd *root, int depth)
 		printf("\n");
 	}
 	printf("\n");
-
 	print_cmd(root->left, depth + 1);
 	print_cmd(root->right, depth + 1);
 }

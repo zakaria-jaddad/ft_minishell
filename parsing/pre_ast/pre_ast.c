@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   pre_ast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 00:07:42 by zajaddad         ###   ########.fr       */
+/*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/06/19 01:22:55 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
+#include "../../includes/parsing.h"
 
-t_cmd	*parse_cmd(char *line, t_list *env_lst)
+void	pre_ast(t_list **tokens)
 {
-	t_list	*tokens;
+	t_list	*current_token;
 
-	(void)env_lst;
-	tokens = get_tokens(line);
 	if (tokens == NULL)
-		return (NULL);
-
-        // syntax_check() NOTE IMPLEMENTED
-        if (syntax_check(&tokens) == false)
-                return (ft_lstclear(&tokens, free_token), NULL);
-        pre_ast(&tokens);
-        print_tokens_data(tokens);
-	return ((t_cmd *)NULL);
+		return ;
+	current_token = *tokens;
+	while (current_token)
+	{
+		if (is_redirection(current_token->content) == true)
+		{
+			enhance_redirection(&current_token, tokens);
+			continue ;
+		}
+		current_token = current_token->next;
+	}
 }
