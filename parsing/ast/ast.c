@@ -4,60 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-bool	is_between_per(t_list *tokens)
-{
-	t_list	*first_token_node;
-	t_list	*last_token_node;
-
-	if (tokens == NULL)
-		return (false);
-	first_token_node = tokens;
-	last_token_node = ft_lstlast(tokens);
-	if (last_token_node == NULL)
-		return (false);
-	if (((t_token *)first_token_node->content)->type == TOKEN_PAR_OPEN
-		&& ((t_token *)last_token_node->content)->type == TOKEN_PAR_CLOSE)
-		return (true);
-	return (false);
-}
-
-void remove_per(t_list **tokens)
-{
-    t_list *first;
-    t_list *last;
-    int tokens_size;
-
-    if (tokens == NULL || *tokens == NULL)
-        return;
-
-    tokens_size = ft_lstsize(*tokens);
-    
-    // Remove first node
-    first = *tokens;
-    *tokens = first->next;
-    if (*tokens != NULL)
-        (*tokens)->prev = NULL;
-    first->next = NULL;
-    first->prev = NULL;
-    ft_lstdelone(first, free_token);
-
-    // If list is now empty after removing first node
-    if (*tokens == NULL)
-        return;
-
-    // Remove last node
-    last = ft_lstlast(*tokens);
-    if (last->prev != NULL)
-        last->prev->next = NULL;
-    else if (tokens_size == 2)  // Special case: only two nodes existed
-        *tokens = NULL;
-    
-    last->prev = NULL;
-    last->next = NULL;
-    ft_lstdelone(last, free_token);
-}
-
 t_list	*get_command(t_list **tokens)
 {
 	t_list	*commands;
@@ -125,10 +71,10 @@ t_cmd	*parseexec(t_list *tokens)
 		return  (NULL);
 	cmd->left = NULL;
 	cmd->right = NULL;
-	cmd->filename = NULL;
 	cmd->type = TOKEN_COMMAND; 
 	return cmd;
 }
+
 t_list *sublst(t_list *start, t_list *end, bool add_last)
 {
 	t_list *lst;
@@ -158,7 +104,7 @@ t_list *sublst(t_list *start, t_list *end, bool add_last)
 	return lst;
 }
 
-t_list *dup_tokens(t_list *tokens)
+t_list *dup_tokens(t_list *tokens_start, t_list *token_end)
 {
 	t_list *new_tokens;
 	t_list *token_node;
@@ -166,15 +112,16 @@ t_list *dup_tokens(t_list *tokens)
 
 	new_tokens = NULL;
 	token = NULL;
-	while (tokens) {
-		token = tokens->content;
+	while (tokens_start)
+        {
+		token = tokens_start->content;
 		if (token == NULL)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
 		token_node = create_token_node(token->type, token->data);
 		if (token_node == NULL)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
 		ft_lstadd_back(&new_tokens, token_node);
-		tokens = tokens->next;
+		tokens_start = tokens_start->next;
 	}
 	return new_tokens;
 }
@@ -187,7 +134,6 @@ t_cmd	*new_ast_node(void)
 		return (NULL);
 	cmd->left = NULL;
 	cmd->right = NULL;
-	cmd->filename = NULL;
 	cmd->command = NULL;
 	cmd->arguments = NULL;
 	cmd->type = 222222;
@@ -219,8 +165,8 @@ t_cmd	*ast(t_list *tokens)
 	if (tokens == NULL)
 		return NULL;
 
-	if (is_between_per(tokens) == true)
-		remove_per(&tokens);
+	/* if (is_between_per(tokens) == true) */
+	/* 	remove_per(&tokens); */
 
 	tokens_root = get_root(tokens);
 	if (tokens_root == NULL)
@@ -235,39 +181,6 @@ t_cmd	*ast(t_list *tokens)
 	if (root->command == NULL)
 		return (NULL); // TODO: FREE MEMORY
 
-	// tokens root is not NULL
-	// check if it's a type or redirection > < >> <<
-	if (is_redirection(tokens_root->content) == true)
-	{
-		t_list *redir = tokens_root;
-		/* tokens_root_token = tokens_root->content; */
-
-		redir = redir->next;
-		root->filename = get_filename(&redir);
-		if (root->filename == NULL)
-			panic("unexpected filename\n"); // TODO: free memory
-
-		
-		if (tokens_root->prev == NULL)
-		{
-
-			if (get_root(redir) != NULL)
-				return (root->right = ast(dup_tokens(redir)), root); // > out > otherout ls --lah
-			return (root->left = ast(dup_tokens(redir)), root);
-		}
-		else
-		{
-			// > out > otherout ls > kkk -lah > otherotherout
-			skip_front_spaces(&redir);
-			if (redir != NULL && is_word(redir->content) == true)
-			{
-				root->left = ast(sublst(tokens, tokens_root, false));
-				root->left->arguments = get_arguments(&redir);
-				root->right = ast(dup_tokens(redir));
-				return root;
-			}
-		}
-	}
 
 	// not a simple command
 	left = sublst(tokens, tokens_root, false);
