@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 06:15:54 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/20 07:01:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/parsing.h"
+#include <stdio.h>
 
 void	remove_es(t_list **tokens)
 {
@@ -53,7 +54,7 @@ bool	is_between_per(t_list *tokens)
 	if (last_token_node == NULL)
 		return (false);
 	if (check_token_type(first_token_node->content, TOKEN_PAR_OPEN)
-		&& check_token_type(first_token_node->content, TOKEN_PAR_CLOSE))
+		&& check_token_type(last_token_node->content, TOKEN_PAR_CLOSE))
 		return (true);
 	return (false);
 }

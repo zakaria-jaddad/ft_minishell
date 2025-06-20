@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:18:57 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/20 08:24:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../../libft/libft.h"
 # include <stdio.h>
 # include <stdbool.h>
+#include <unistd.h>
 
 typedef enum e_token_type
 {
@@ -88,15 +89,20 @@ static inline void	print_tokens_data(t_list *tokens)
 	t_token	*token;
 
 	if (tokens == NULL)
-		printf("(null)");
+        {
+		ft_fprintf(STDOUT_FILENO, "(null) ");
+                return ;
+        }
+        ft_fprintf(STDOUT_FILENO, "\"");
 	while (tokens)
 	{
 		token = (t_token *)tokens->content;
-		printf("%s", token->data);
+		ft_fprintf(STDOUT_FILENO, "%s", token->data);
 		fflush(stdout);
 		tokens = tokens->next;
 	}
-	printf("\n");
+        ft_fprintf(STDOUT_FILENO, "\"");
+	ft_fprintf(STDOUT_FILENO, "\n");
 }
 
 static inline bool	check_token_type(t_token *token, t_token_type token_type)

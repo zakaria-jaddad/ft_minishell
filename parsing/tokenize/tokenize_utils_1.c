@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/09 19:39:19 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/20 08:24:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,14 @@ void	print_tokens(t_list *tokens)
 	t_token	*token;
 
 	if (tokens == NULL)
-		printf("(null)");
+        {
+		ft_fprintf(STDOUT_FILENO, "(null) ");
+                return ;
+        }
 	while (tokens)
 	{
 		token = (t_token *)tokens->content;
-		printf("data: \"%s\" %s, ", token->data, get_token_type(token->type));
+		ft_fprintf(STDOUT_FILENO, "data: \"%s\" %s, ", token->data, get_token_type(token->type));
 		fflush(stdout);
 		tokens = tokens->next;
 	}
