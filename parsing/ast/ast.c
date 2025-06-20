@@ -1,5 +1,7 @@
 
 #include "../../includes/parsing/parsing.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 t_list	*get_command(t_list **tokens)
 {
@@ -42,10 +44,8 @@ t_list *get_arguments(t_list **tokens)
 	while ((*tokens))
 	{
 		token = (*tokens)->content;
-                // FIX: an argument can be bunch of words separated by spaces
-		if (token->type != TOKEN_WORD && token->type != TOKEN_DOUBLE_QUOTE_WORD
-			&& token->type != TOKEN_SINGLE_QUOTE_WORD)
-			break ;
+                if (is_token_special(token) == true)
+                        break ;
 		argument_node = create_token_node(token->type, token->data);
 		if (argument_node == NULL)
 			return (ft_lstclear(&arguments, free_token), NULL);
@@ -55,77 +55,131 @@ t_list *get_arguments(t_list **tokens)
 	return arguments;
 }
 
-t_cmd	*parseexec(t_list *tokens)
+
+t_cmd	*ast_new(void)
 {
-	t_cmd			 *cmd;
+	t_cmd   *cmd;
+
 	cmd = malloc(sizeof(t_cmd));
 	if (cmd == NULL)
 		return (NULL);
-	remove_front_spaces(&tokens);
-	cmd->command = get_command(&tokens);
-	remove_back_spaces(&tokens);
-	cmd->arguments = get_arguments(&tokens);
-	if (cmd->command == NULL)
-		return  (NULL);
+        cmd->content = NULL;
 	cmd->left = NULL;
 	cmd->right = NULL;
-	cmd->type = TOKEN_COMMAND; 
 	return cmd;
 }
 
-t_cmd	*new_ast_node(void)
+
+void tokens_clean_up(t_list **tokens)
 {
-	t_cmd			 *cmd;
-	cmd = malloc(sizeof(t_cmd));
-	if (cmd == NULL)
-		return (NULL);
-	cmd->left = NULL;
-	cmd->right = NULL;
-	cmd->command = NULL;
-	cmd->arguments = NULL;
-	cmd->type = 222222;
-	return cmd;
+        if (tokens == NULL || *tokens == NULL)
+                return ;
+	remove_front_spaces(tokens);
+	remove_back_spaces(tokens);
+        while (true)
+        {
+                if (is_between_per(*tokens) == false)
+                        break ;
+                else
+		        remove_per(tokens);
+        }
 }
 
-t_cmd	*ast(t_list *tokens)
+t_cmd_redir *create_redir(t_list **redir_start)
 {
-	t_cmd	*root;
-	t_list	*tokens_root;
+        t_list *filename;
+        t_cmd_redir *cmd_redir;
+
+        if (redir_start == NULL || *redir_start == NULL)
+                return (NULL);
+        *redir_start = (*redir_start)->next;
+        filename = get_filename(redir_start);
+        if (filename == NULL)
+                return (NULL);
+        cmd_redir = malloc(sizeof(t_cmd_redir));
+        if (cmd_redir == NULL)
+                return (ft_lstclear(&filename, free_token), NULL);
+        cmd_redir->filename = filename;
+        return (cmd_redir);
+}
+
+t_cmd_simple *create_simple_cmd(t_list *cmd_start)
+{
+        t_cmd_simple *cmd_simple;
+
+        if (cmd_start == NULL)
+                return (NULL);
+        cmd_simple = malloc((sizeof(t_cmd_simple)));
+        if (cmd_simple == NULL)
+                return (NULL);
+        cmd_simple->command = get_command(&cmd_start);
+        if (cmd_simple == NULL)
+                return (NULL);
+        cmd_simple->arguments = get_arguments(&cmd_start);
+        return (cmd_simple);
+}
+
+t_cmd *parse_exec(t_list *tokens)
+{
+        t_cmd *exec;
+
+        exec = ast_new();
+        if (exec == NULL)
+                return (NULL);
+        exec->type = NODE_COMMAND;
+        exec->content = create_simple_cmd(tokens);
+        if (exec->content == NULL)
+                return (NULL);
+        return (exec);
+}
+
+t_cmd	*ast(t_list **tokens)
+{
+	t_cmd	*cmd_root;
+	t_list	*root;
 	t_list *right;
 	t_list *left;
 
-	if (tokens == NULL)
-		return (NULL);
-
 	right = left = NULL;
-	remove_front_spaces(&tokens);
-	remove_back_spaces(&tokens);
-	if (tokens == NULL)
+        tokens_clean_up(tokens);
+	if (tokens == NULL || *tokens == NULL)
 		return NULL;
-	if (is_between_per(tokens) == true)
-		remove_per(&tokens);
 
-	tokens_root = get_root(tokens);
-	if (tokens_root == NULL)
-		return parseexec(tokens);
-
-	root = new_ast_node();
+	root = get_root(*tokens);
 	if (root == NULL)
-		return (NULL); // TODO: FREE MEMORY
-	root->type = ((t_token *)tokens_root->content)->type;
-	t_token *token = tokens_root->content;
-	root->command = create_token_node(token->type, token->data);
-	if (root->command == NULL)
-		return (NULL); // TODO: FREE MEMORY
+		return parse_exec(*tokens);
 
+	cmd_root = ast_new();
+	if (cmd_root == NULL)
+		return (NULL);
+        
+        if (is_redirection(root->content) == true)
+        {
+                t_list *redir_start;
+                redir_start = root;
 
-	// not a simple command
-	left = dup_tokens(tokens, tokens_root, false);
-	right = dup_tokens(tokens_root->next, ft_lstlast(tokens_root), true);
-
-
-
-	root->left = ast(left);
-	root->right = ast(right);
-	return (root);
+                cmd_root->type = (t_node_type)((t_token *)root->content)->type;
+                cmd_root->content = create_redir(&redir_start);
+                if (cmd_root->content == NULL)
+                        return (NULL);
+                right = dup_tokens(redir_start, ft_lstlast(root), true);
+                if (right == NULL)
+                        return (NULL);
+                left = dup_tokens(*tokens, root, false);
+                if (left == NULL)
+                        return (ft_lstclear(&right, free_token), NULL);
+                cmd_root->right = ast(&right);
+                cmd_root->left = ast(&left);
+                return cmd_root;
+        }
+        cmd_root->type = (t_node_type)((t_token *)root->content)->type;
+        right = dup_tokens(root->next, ft_lstlast(root), true);
+        if (right == NULL)
+                return (NULL);
+        left = dup_tokens(*tokens, root, false);
+        if (left == NULL)
+                return (ft_lstclear(&right, free_token), NULL);
+        cmd_root->right = ast(&right);
+        cmd_root->left = ast(&left);
+        return cmd_root;
 }
