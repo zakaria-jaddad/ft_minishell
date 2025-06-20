@@ -18,15 +18,6 @@
 #include <sys/wait.h> // wait()
 #include <unistd.h>
 
-typedef struct s_tree {
-  char *command;
-  t_list *arguments;
-  struct s_tree *left;
-  struct s_tree *right;
-  t_token_type type;
-  t_list *infile;
-} t_cmd;
-
 int _echo_(t_list *args, int fd);
 int _cd_(t_list *list, char **args);
 int _pwd_(char *pwd);
@@ -44,5 +35,6 @@ char **envs_list_to_double_pointer(t_list *env_list);
 t_list *expand(char **args, t_list *envs);
 char *manage_pwd(char *value);
 int execution(t_cmd *tree, t_list *env_list);
+char *list_to_string(t_list *list);
 
 #endif

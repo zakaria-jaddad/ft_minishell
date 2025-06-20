@@ -5,7 +5,8 @@ CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
 NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
-EXECUTION = # execution/execution.c
+EXECUTION = execution/execution.c execution/_cd_.c execution/_exit_.c execution/envs_functions.c execution/expend_string.c  execution/sort_envs.c \
+execution/_echo_.c execution/_pwd_.c execution/utiles.c
 
 PARCING = ./parsing/parsing.c \
 	  ./parsing/env/env.c ./parsing/env/env_utils.c \
