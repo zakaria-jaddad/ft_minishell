@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:46:53 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:16:37 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/19 08:25:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_env
 	char	*value;
 }			t_env;
 
-t_list		*envs_init(char **env);
+t_list		*envs_init(char **env, ...);
 t_list		*append_env(t_list **env_lst, char *key, char *value);
 t_env		*get_env(t_list *env_lst, char *key);
 t_env		*edit_env(t_env *env, char *new_value);
