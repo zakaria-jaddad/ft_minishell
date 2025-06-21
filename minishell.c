@@ -160,7 +160,7 @@ int	main(int _, char **__, char **env)
 		print_cmd(cmd, 0);
 		if (cmd == NULL)
 			continue ;
-		execution_mimic(cmd, env_lst);
+		/* execution_mimic(cmd, env_lst); */
 		// execution(cmd, env_lst);
 	}
 	free(line);

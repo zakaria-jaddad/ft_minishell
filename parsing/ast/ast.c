@@ -163,23 +163,20 @@ t_cmd	*ast(t_list **tokens)
                 if (cmd_root->content == NULL)
                         return (NULL);
                 right = dup_tokens(redir_start, ft_lstlast(root), true);
-                if (right == NULL)
-                        return (NULL);
                 left = dup_tokens(*tokens, root, false);
-                if (left == NULL)
-                        return (ft_lstclear(&right, free_token), NULL);
+                print_tokens(left);
                 cmd_root->right = ast(&right);
                 cmd_root->left = ast(&left);
+                ft_lstclear(&right, free_token);
+                ft_lstclear(&left, free_token);
                 return cmd_root;
         }
         cmd_root->type = (t_node_type)((t_token *)root->content)->type;
         right = dup_tokens(root->next, ft_lstlast(root), true);
-        if (right == NULL)
-                return (NULL);
         left = dup_tokens(*tokens, root, false);
-        if (left == NULL)
-                return (ft_lstclear(&right, free_token), NULL);
         cmd_root->right = ast(&right);
         cmd_root->left = ast(&left);
+        ft_lstclear(&right, free_token);
+        ft_lstclear(&left, free_token);
         return cmd_root;
 }
