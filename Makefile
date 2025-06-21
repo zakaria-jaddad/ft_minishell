@@ -18,6 +18,7 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/tokenize_utils_5.c	\
 	  ./parsing/tokenize/tokenize_utils_6.c	\
 	  ./parsing/tokenize/split_line.c \
+	  ./parsing/tokenize/tokens_to_str.c \
 	  ./parsing/pre_ast/pre_ast.c \
 	  ./parsing/pre_ast/enhance_redirection.c \
 	  parsing/wildcards/file_info.c parsing/wildcards/glob.c parsing/wildcards/shell_glob.c parsing/wildcards/shell_glob_escaping_norms_1.c parsing/wildcards/shell_glob_escaping_norms_2.c parsing/wildcards/wildcards_utils_1.c parsing/wildcards/wildcards_utils_2.c parsing/wildcards/wildcards_utils_3.c ./parsing/wildcards/shell_glob_escaping_norms_3.c  \
