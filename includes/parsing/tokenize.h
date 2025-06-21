@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/20 08:24:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:17:48 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define TOKENIZE_H
 
 # include "../../libft/libft.h"
-# include <stdio.h>
 # include <stdbool.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <unistd.h>
 
 typedef enum e_token_type
 {
@@ -75,6 +75,7 @@ t_list				*get_filename(t_list **tokens);
 char				*get_token_type(t_token_type token);
 t_token_type		peak_next(t_list *tokens);
 t_token_type		peak_prev(t_list *tokens);
+char				*get_token_data(t_token *token);
 
 static inline bool	is_redirection(t_token *token)
 {
@@ -89,11 +90,11 @@ static inline void	print_tokens_data(t_list *tokens)
 	t_token	*token;
 
 	if (tokens == NULL)
-        {
+	{
 		ft_fprintf(STDOUT_FILENO, "(null) ");
-                return ;
-        }
-        ft_fprintf(STDOUT_FILENO, "\"");
+		return ;
+	}
+	ft_fprintf(STDOUT_FILENO, "\"");
 	while (tokens)
 	{
 		token = (t_token *)tokens->content;
@@ -101,7 +102,7 @@ static inline void	print_tokens_data(t_list *tokens)
 		fflush(stdout);
 		tokens = tokens->next;
 	}
-        ft_fprintf(STDOUT_FILENO, "\"");
+	ft_fprintf(STDOUT_FILENO, "\"");
 	ft_fprintf(STDOUT_FILENO, "\n");
 }
 

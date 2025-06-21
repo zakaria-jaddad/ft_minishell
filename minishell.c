@@ -12,7 +12,8 @@
 void		expand_simple_cmd(char **command, char ***arguments,
 				t_cmd_simple *cmd);
 char		**list_tokens_to_double_pointer(t_list *list);
-void	expand_simple_cmd(char **command, char ***arguments, t_cmd_simple *cmd);
+void		expand_simple_cmd(char **command, char ***arguments,
+				t_cmd_simple *cmd);
 
 void	execution_mimic(t_cmd *cmd, t_list *env)
 {
@@ -38,7 +39,7 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 	}
 }
 
-bool is_valid_varname(t_list *split_token_data)
+bool	is_valid_varname(t_list *split_token_data)
 {
 	if (split_token_data == NULL)
 		return (false);
@@ -47,10 +48,10 @@ bool is_valid_varname(t_list *split_token_data)
 	return (true);
 }
 
-t_list *create_tokens(t_list *data_lst, t_token_type tokens_type)
+t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 {
-	t_list *new_tokens;
-	t_list *token_node;
+	t_list	*new_tokens;
+	t_list	*token_node;
 
 	new_tokens = NULL;
 	if (data_lst == NULL)
@@ -62,15 +63,15 @@ t_list *create_tokens(t_list *data_lst, t_token_type tokens_type)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
 		ft_lstadd_back(&new_tokens, token_node);
 		data_lst = data_lst->next;
-	}	
+	}
 	return (new_tokens);
 }
-t_list *get_enhanced_command_t(t_list *command_t)
+t_list	*get_enhanced_command_t(t_list *command_t)
 {
-	t_list *enhanced_command_t;
-	t_list *new_tokens;
-	t_token *current_token;
-	t_list *split_token_data;
+	t_list	*enhanced_command_t;
+	t_list	*new_tokens;
+	t_token	*current_token;
+	t_list	*split_token_data;
 
 	enhanced_command_t = NULL;
 	while (command_t)
@@ -88,16 +89,36 @@ t_list *get_enhanced_command_t(t_list *command_t)
 	return (enhanced_command_t);
 }
 
-void expand_command(char **command, t_list *command_t)
+
+
+void	expand_command(char **command, t_list *command_t)
 {
-	t_list *enhanced_command_t;
-	/* t_token *token; */
-	(void) command;
+	t_list	*enhanced_command_t;
+	t_list	*enhanced_command_t_head;
+	t_token	*current_token;
+	t_list *node_to_del;
 
+	(void)command;
 	enhanced_command_t = get_enhanced_command_t(command_t);
-	print_tokens(enhanced_command_t);
-
-	/* for (t_list *tmp = command_lst; tmp != NULL; tmp = tmp->next) */
+	while (enhanced_command_t)
+	{
+		current_token = enhanced_command_t->content;
+		if (ft_strcmp(current_token->data, "$") == 0 &&
+			check_token_type(current_token, TOKEN_WORD)
+				&& (peak_next(enhanced_command_t) == TOKEN_DOUBLE_QUOTE_WORD
+				|| peak_next(enhanced_command_t) == TOKEN_SINGLE_QUOTE_WORD))
+		{
+			node_to_del = enhanced_command_t;
+			enhanced_command_t = enhanced_command_t->next;
+			ft_lst_rm_one(node_to_del, free);
+		}
+		if (enhanced_command_t == NULL)
+			break ;
+		enhanced_command_t_head = ft_lstfirst(enhanced_command_t);
+		enhanced_command_t = enhanced_command_t->next;
+	}
+	print_tokens_data(enhanced_command_t_head);
+	/* for (t_list *tmp = enhanced_command_t; tmp != NULL; tmp = tmp->next) */
 	/* 	printf("%s", (char *) tmp->content); */
 	/* printf("\n"); */
 	exit(0);
@@ -105,21 +126,21 @@ void expand_command(char **command, t_list *command_t)
 
 void	expand_simple_cmd(char **command, char ***arguments, t_cmd_simple *cmd)
 {
+	t_list	*command_t;
+	t_list	*arguments_t;
+
 	if (cmd == NULL)
 		return ;
-	t_list *command_t = cmd->command;
-	
-	(void) command_t;
+	command_t = cmd->command;
+	(void)command_t;
 	if (command_t == NULL)
 		return ;
 	expand_command(command, command_t);
-
-	t_list *arguments_t = cmd->arguments;
-	(void) arguments;
-	(void) arguments_t;
+	arguments_t = cmd->arguments;
+	(void)arguments;
+	(void)arguments_t;
 	return ;
 }
-
 
 int	main(int _, char **__, char **env)
 {
@@ -145,7 +166,6 @@ int	main(int _, char **__, char **env)
 	free(line);
 	return (EXIT_SUCCESS);
 }
-
 
 static int	count_spaces(t_list *tokens)
 {

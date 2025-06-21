@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/20 07:01:23 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:14:59 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/parsing.h"
-#include <stdio.h>
 
 void	remove_es(t_list **tokens)
 {
@@ -115,4 +114,11 @@ t_list *dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
 		ft_lstadd_back(&new_tokens, token_node);
 	}
 	return new_tokens;
+}
+
+char *get_token_data(t_token *token)
+{
+	if (token == NULL)
+		return NULL;
+	return  (token->data);
 }
