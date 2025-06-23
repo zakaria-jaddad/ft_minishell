@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 15:35:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:10:46 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ t_list	*expand_me(t_list *tokens, t_list *env)
 	if (tmp == NULL)
 		return (ft_lstclear(&enhanced_tokens, free_token), NULL);
 	enhanced_tokens = tmp;
-        print_tokens_data(enhanced_tokens);
-        exit(0);
 
 	// Wildcard expanstion
+	//
 	/* enhanced_tokens = enhanced_tokens_head; */
 	/* while (enhanced_tokens) */
 	/* { */

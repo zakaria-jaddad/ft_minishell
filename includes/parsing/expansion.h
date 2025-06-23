@@ -6,25 +6,32 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 09:38:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:09:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXPANSION_H
-#define EXPANSION_H
+# define EXPANSION_H
 
 # include "../../libft/libft.h"
-# include "file_info.h"
 # include "env.h"
+# include "file_info.h"
 # include "tokenize.h"
 # include <stdbool.h>
-#include <stdio.h>
+# include <stdio.h>
+
+# define special_expansion " .,+-!@#$%^&*()[]{};:'\"<>/?|~`= \t\n"
 
 t_list	*expand_me(t_list *tokens, t_list *env);
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim);
 
 // Dolarsign Expansion
 t_list	*expand_dollar(t_list *tokens, t_list *env);
+void	word_expansion(char **str, t_list *env);
+void	digit_expansion(char **str);
+bool	is_valid_dollar_with_qs_next(t_list *current_token_node);
+bool	is_valid_dollar_with_valid_var(t_list *current_token_node);
+bool	is_valid_dollar_with_dollar(t_list *current_token_node);
 
 // Wildcard Expansion
 t_list	*expand_wildcard(char *str);
