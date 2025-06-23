@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 12:34:03 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:54:58 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-#include <stdlib.h>
 
 t_list	*expand_me(t_list *tokens, t_list *env)
 {

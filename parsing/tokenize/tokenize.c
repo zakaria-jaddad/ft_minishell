@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 		t_list *line_lst_head, t_list **tokens)
