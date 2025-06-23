@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 11:00:32 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:14:44 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ static void del_node_and_go_next(t_list **tokens, t_list **token_head)
         node_to_del = *tokens;
         *tokens = (*tokens)->next;
         ft_lst_rm_one(node_to_del, free);
+	*token_head = ft_lstfirst(*tokens);
 }
 
 static void update_current_token(t_list *current_token_node, t_list *env)
@@ -95,6 +96,8 @@ t_list	*expand_dollar(t_list *tokens, t_list *env)
                                 update_current_token(tokens, env);
 			}
 		}
+		if (tokens == NULL)
+			break ;
                 (void)!(tokens = tokens->next);
 	}
 	return (tokens_head);
