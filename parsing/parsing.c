@@ -15,20 +15,19 @@
 t_cmd	*parse_cmd(char *line, t_list *env_lst)
 {
 	t_list	*tokens;
-        t_cmd   *cmd;
+	t_cmd	*cmd;
 
 	(void)env_lst;
-        cmd = NULL;
+	cmd = NULL;
 	tokens = get_tokens(line);
 	if (tokens == NULL)
 		return (NULL);
-
-        // syntax_check() NOTE IMPLEMENTED
-        if (syntax_check(&tokens) == false)
-                return (ft_lstclear(&tokens, free_token), NULL);
-        pre_ast(&tokens);
-        cmd = ast(&tokens);
-        if (cmd == NULL)
-                return (ft_lstclear(&tokens, free_token), NULL);
+	// syntax_check() NOTE IMPLEMENTED
+	if (syntax_check(&tokens) == false)
+		return (ft_lstclear(&tokens, free_token), NULL);
+	pre_ast(&tokens);
+	cmd = ast(&tokens);
+	if (cmd == NULL)
+		return (ft_lstclear(&tokens, free_token), NULL);
 	return (cmd);
 }
