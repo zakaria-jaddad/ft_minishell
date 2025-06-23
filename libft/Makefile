@@ -53,7 +53,8 @@ SRC = ft_isalpha.c	\
       ft_fprintf/ft_fprintf_putnbr_fd.c \
       ft_fprintf/ft_fprintf_putstr_fd.c \
       ft_fprintf/ft_fprintf_strlen.c \
-      ft_gnl/ft_gnl.c
+      ft_gnl/ft_gnl.c \
+      ft_strpbrk.c \
 
 OBJS = $(SRC:.c=.o)
 
