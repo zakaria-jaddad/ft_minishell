@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 18:09:52 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:14:21 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ bool	is_valid_dollar_with_valid_var(t_list *current_token_node);
 bool	is_valid_dollar_with_dollar(t_list *current_token_node);
 
 // Wildcard Expansion
-t_list	*expand_wildcard(char *str);
+t_list	*expand_wildcard(t_list *tokens);
 t_list	*get_dir_content(char *dirname);
 t_list	*sgen(char *p, t_list *pa, t_list *nm, t_list *m);
 char	*join_lst(t_list *lst);

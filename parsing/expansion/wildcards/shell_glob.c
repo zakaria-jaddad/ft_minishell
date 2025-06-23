@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 22:31:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 20:26:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,16 +80,148 @@ static t_list	*get_valid_matches(char *str)
 	return (matches);
 }
 
-t_list	*expand_wildcard(char *str)
+char	*tokens_to_str(t_list *tokens)
+{
+	t_token	*token;
+	char	*rv;
+	char	*tmp;
+
+	rv = NULL;
+	while (tokens)
+	{
+		token = tokens->content;
+		tmp = ft_strjoin(rv, token->data);
+		if (tmp == NULL)
+			return (free(rv), NULL);
+		free(rv);
+		rv = tmp;
+		tokens = tokens->next;
+	}
+	return (rv);
+}
+
+t_list	*get_word(t_list *tokens)
+{
+	if (tokens == NULL)
+		return (NULL);
+	while (tokens && is_word(tokens->content) == true)
+	{
+		if (tokens->prev == NULL)
+			break ;
+		tokens = tokens->prev;
+	}
+	return (get_filename(&tokens));
+}
+
+bool	is_valid_word(t_list *tokens_word)
+{
+	t_token	*token;
+
+	while (tokens_word && tokens_word->content)
+	{
+		token = tokens_word->content;
+		if (check_token_type(token, TOKEN_WORD) == true)
+		{
+			tokens_word = tokens_word->next;
+			continue ;
+		}
+		if (ft_strcmp(token->data, "*") == 0)
+			return (false);
+		tokens_word = tokens_word->next;
+	}
+	return (true);
+}
+
+bool is_valid_wildcard(t_list *current_token_node)
+{
+    t_token *current_token;
+
+    if (current_token_node == NULL)
+        return false;
+    current_token = current_token_node->content;
+    if (check_token_type(current_token, TOKEN_WORD) &&
+        ft_strcmp(current_token->data, "*") == 0)
+        return true;
+    // If quoted, not valid wildcard
+    if (check_token_type(current_token, TOKEN_DOUBLE_QUOTE_WORD) ||
+        check_token_type(current_token, TOKEN_SINGLE_QUOTE_WORD))
+        return false;
+    return false;
+}
+
+void	*set_matches(t_list **matches, t_list *word)
+{
+	char	*unexpanded_name;
+
+	if (matches == NULL || word == NULL)
+		return (NULL);
+	unexpanded_name = tokens_to_str(word);
+	if (unexpanded_name == NULL)
+		return (ft_lstclear(&word, free_token), NULL);
+	*matches = get_valid_matches(unexpanded_name);
+	if (*matches == NULL)
+		return (ft_lstclear(&word, free_token), free(unexpanded_name), NULL);
+	sort_matches(matches);
+	return (NOTNULL);
+}
+
+t_list	*create_tokenized_matches(t_list *filename)
+{
+	t_list	*token_node;
+	t_list	*tokenized_filenames;
+
+	if (filename == NULL)
+		return (NULL);
+	tokenized_filenames = NULL;
+	while (filename)
+	{
+		token_node = create_token_node(TOKEN_WORD, filename->content);
+		if (token_node == NULL)
+			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
+		ft_lstadd_back(&tokenized_filenames, token_node);
+		if (append_tokens(&tokenized_filenames, TOKEN_WHITE_SPACE, " ") == NULL)
+			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
+		filename = filename->next;
+	}
+	return (tokenized_filenames);
+}
+
+void	insert_matches(t_list **tokens, t_list *filenames)
+{
+	t_list	*tokenized_filenames;
+	t_list	*tokens_head;
+	t_list	*tmp;
+
+	if (tokens == NULL || *tokens == NULL || filenames == NULL)
+		return ;
+	tokens_head = *tokens;
+	tokenized_filenames = create_tokenized_matches(filenames);
+	if (tokenized_filenames == NULL)
+		return ;
+	tmp = dup_and_remove_simple_tokens(*tokens);
+}
+
+t_list	*expand_wildcard(t_list *tokens)
 {
 	t_list	*matches;
+	t_list	*word;
 
 	matches = NULL;
-	if (str == NULL)
-		return (NULL);
-	matches = get_valid_matches(str);
-	if (matches == NULL)
-		return (NULL);
-	sort_matches(&matches);
-	return (matches);
+	while (tokens)
+	{
+		if (is_valid_wildcard(tokens) == true)
+		{
+			word = get_word(tokens);
+			if (is_valid_word(word) == true)
+			{
+				if (set_matches(&matches, word) == NULL)
+					return (ft_lstclear(&word, free_token), NULL);
+				ft_lstclear(&word, free_token);
+				return (create_tokenized_matches(matches));
+			}
+			ft_lstclear(&word, free_token);
+		}
+		tokens = tokens->next;
+	}
+	return (sort_matches(&matches), matches);
 }

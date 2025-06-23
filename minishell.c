@@ -17,89 +17,6 @@ void		expand_command(char **command, t_list *command_t, t_list *env);
 void		expand_arguments(char ***arguments, t_list *argument_t,
 				t_list *env);
 
-t_list	*get_word_start(t_list *tokens)
-{
-	if (tokens == NULL)
-		return (NULL);
-	while (tokens && is_word(tokens->content) == true)
-	{
-		if (tokens->prev == NULL)
-			break ;
-		tokens = tokens->prev;
-	}
-	return (tokens);
-}
-
-bool	validate_word(t_list *tokens_word)
-{
-	t_token	*token;
-
-	while (tokens_word && tokens_word->content)
-	{
-		token = tokens_word->content;
-		if (check_token_type(token, TOKEN_WORD) == true)
-		{
-			tokens_word = tokens_word->next;
-			continue ;
-		}
-		if (ft_strcmp(token->data, "*") == 0)
-			return (false);
-		tokens_word = tokens_word->next;
-	}
-	return (true);
-}
-
-char	*get_pre_expanded_file_name(t_list *tokens)
-{
-	t_token	*token;
-	char	*pre_expansion_name;
-
-	pre_expansion_name = NULL;
-	while (tokens && tokens->content && is_word(tokens->content) == true)
-	{
-		token = tokens->content;
-		append_str(&pre_expansion_name, token->data);
-		if (pre_expansion_name == NULL)
-			return (NULL);
-		tokens = tokens->next;
-	}
-	return (pre_expansion_name);
-}
-
-/* void	remove_word_from_tokens(t_list **tokens) */
-/* { */
-/* 	t_list	*node_to_del; */
-/* 	if (tokens == NULL || *tokens == NULL) */
-/* 		return ; */
-/* 	while (*tokens && !is_word((*tokens)->content)) */
-/* 	{ */
-/* 		node_to_del = *tokens; */
-/* 		(*tokens) = (*tokens)->next; */
-/* 		ft_lst_rm_one(node_to_del, free_token); */
-/* 	} */
-/* } */
-/**/
-t_list	*create_tokenized_filenames(t_list *filename)
-{
-	t_list	*token_node;
-	t_list	*tokenized_filenames;
-
-	if (filename == NULL)
-		return (NULL);
-	tokenized_filenames = NULL;
-	while (filename)
-	{
-		token_node = create_token_node(TOKEN_WORD, filename->content);
-		if (token_node == NULL)
-			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
-		ft_lstadd_back(&tokenized_filenames, token_node);
-		if (append_tokens(&tokenized_filenames, TOKEN_WHITE_SPACE, " ") == NULL)
-			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
-		filename = filename->next;
-	}
-	return (tokenized_filenames);
-}
-
 void	execution_mimic(t_cmd *cmd, t_list *env)
 {
 	char			*command;
@@ -128,6 +45,7 @@ void	expand_command(char **command, t_list *command_t, t_list *env)
         printf("command: \n");
 	print_tokens(expanded_command);
 	printf("\n");
+	exit(0);
 }
 
 t_list	*get_tokenize_argument(t_list **tokenized_arguments)

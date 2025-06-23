@@ -10,7 +10,9 @@ execution/_echo_.c execution/_pwd_.c execution/utiles.c
 
 EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/get_enhanced_tokens.c \
+	    parsing/expansion/dollar_expansion_utils.c \
 	    parsing/expansion/dollar_expansion.c \
+	    parsing/expansion/word_expansion.c \
 	    parsing/expansion/wildcards/file_info.c \
 	    parsing/expansion/wildcards/glob.c \
 	    parsing/expansion/wildcards/shell_glob.c \
