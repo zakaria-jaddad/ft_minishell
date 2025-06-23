@@ -5,7 +5,7 @@
 # include "../../libft/libft.h"
 # include "env.h"
 # include "tokenize.h"
-# include "wildcards.h"
+# include "expansion.h"
 # include "ast.h"
 # include "file_info.h"
 # include "pre_ast.h"
@@ -18,7 +18,6 @@
 # include <sys/types.h>
 # include <unistd.h>
 
-# define NOTNULL ((void *)0x1)
 
 bool				syntax_check(t_list **tokens);
 t_cmd				*parse_cmd(char *line, t_list *env);

@@ -8,6 +8,20 @@ MAIN = minishell.c
 EXECUTION = execution/execution.c execution/_cd_.c execution/_exit_.c execution/envs_functions.c execution/expend_string.c  execution/sort_envs.c \
 execution/_echo_.c execution/_pwd_.c execution/utiles.c
 
+EXPANSION = parsing/expansion/expansion.c \
+	    parsing/expansion/get_enhanced_tokens.c \
+	    parsing/expansion/dollar_expansion.c \
+	    parsing/expansion/wildcards/file_info.c \
+	    parsing/expansion/wildcards/glob.c \
+	    parsing/expansion/wildcards/shell_glob.c \
+	    parsing/expansion/wildcards/shell_glob_escaping_norms_1.c \
+	    parsing/expansion/wildcards/shell_glob_escaping_norms_2.c \
+	    parsing/expansion/wildcards/shell_glob_escaping_norms_3.c \
+	    parsing/expansion/wildcards/wildcards_utils_1.c \
+	    parsing/expansion/wildcards/wildcards_utils_2.c \
+	    parsing/expansion/wildcards/wildcards_utils_3.c \
+
+
 PARCING = ./parsing/parsing.c \
 	  ./parsing/env/env.c ./parsing/env/env_utils.c \
 	  ./parsing/tokenize/tokenize.c \
@@ -20,10 +34,10 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/split_line.c \
 	  ./parsing/pre_ast/pre_ast.c \
 	  ./parsing/pre_ast/enhance_redirection.c \
-	  parsing/wildcards/file_info.c parsing/wildcards/glob.c parsing/wildcards/shell_glob.c parsing/wildcards/shell_glob_escaping_norms_1.c parsing/wildcards/shell_glob_escaping_norms_2.c parsing/wildcards/wildcards_utils_1.c parsing/wildcards/wildcards_utils_2.c parsing/wildcards/wildcards_utils_3.c ./parsing/wildcards/shell_glob_escaping_norms_3.c  \
 	  ./parsing/ast/ast.c \
 	  ./parsing/ast/get_root.c \
-	  ./parsing/syntx_check/syntax_check.c
+	  ./parsing/syntx_check/syntax_check.c \
+	  $(EXPANSION)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 

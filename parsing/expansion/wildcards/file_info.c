@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:53:55 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 16:55:47 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:43:01 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../../includes/parsing/file_info.h"
 
 void	free_file_info(void *file_info)
 {

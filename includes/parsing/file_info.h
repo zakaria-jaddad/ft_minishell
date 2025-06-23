@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:57:25 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:16:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 09:44:44 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 # define FILE_INFO_H
 
 # include "../../libft/libft.h"
+# include "tokenize.h"
+# include <dirent.h>
 # include <stdbool.h>
+
 /*
  * @brief hold file information
  * s_file_info is used when expanding "*" wildcards

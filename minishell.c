@@ -3,7 +3,6 @@
 #include "includes/parsing/ast.h"
 #include "includes/parsing/env.h"
 #include "includes/parsing/tokenize.h"
-#include "includes/parsing/wildcards.h"
 #include "libft/libft.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -11,12 +10,9 @@
 #include <string.h>
 #include <unistd.h>
 
-void		expand_simple_cmd(char **command, char ***arguments,
-				t_cmd_simple *cmd);
 char		**list_tokens_to_double_pointer(t_list *list);
 void		expand_simple_cmd(char **command, char ***arguments,
 				t_cmd_simple *cmd);
-t_list		*get_enhanced_tokens(t_list *tokens, char *delim);
 void		expand_command(char **command, t_list *command_t, t_list *env);
 void		expand_arguments(char ***arguments, t_list *argument_t,
 				t_list *env);
@@ -72,12 +68,10 @@ char	*get_pre_expanded_file_name(t_list *tokens)
 
 void	remove_word_from_tokens(t_list **tokens)
 {
-	t_list	*word_start;
 	t_list	*node_to_del;
 
 	if (tokens == NULL || *tokens == NULL)
 		return ;
-	word_start = *tokens;
 	while (*tokens && !is_word((*tokens)->content))
 	{
 		node_to_del = *tokens;
@@ -148,107 +142,7 @@ void	append_filenames(t_list **enhanced_tokens, t_list **tokens_word_start,
 		*tokens_word_start = (*tokens_word_start)->prev;
 }
 
-t_list	*expand_me(t_list *tokens, t_list *env)
-{
-	t_token	*current_token;
-	t_list	*node_to_del;
-	t_list	*enhanced_tokens_head;
-	t_list	*enhanced_tokens;
-	char	*key;
-	t_env	*var;
-	t_list	*current_word;
-	char	*pre_expansion_name;
-	t_list	*filenames;
-	t_list	*tokenized_filename;
 
-	enhanced_tokens = get_enhanced_tokens(tokens, "$*?");
-	if (enhanced_tokens == NULL)
-		return (NULL);
-	enhanced_tokens_head = enhanced_tokens;
-	while (enhanced_tokens)
-	{
-		current_token = enhanced_tokens->content;
-		if (ft_strchr(current_token->data, '$') == NULL)
-		{
-			enhanced_tokens = enhanced_tokens->next;
-			continue ;
-		}
-		if (ft_strcmp(current_token->data, "$") == 0
-			&& check_token_type(current_token, TOKEN_WORD)
-			&& (peak_next(enhanced_tokens) == TOKEN_DOUBLE_QUOTE_WORD
-				|| peak_next(enhanced_tokens) == TOKEN_SINGLE_QUOTE_WORD))
-		{
-			node_to_del = enhanced_tokens;
-			enhanced_tokens = enhanced_tokens->next;
-			ft_lst_rm_one(node_to_del, free);
-			enhanced_tokens_head = ft_lstfirst(enhanced_tokens);
-			continue ;
-		}
-		// TODO: HANDLE * after $
-		if (ft_strcmp(current_token->data, "$") == 0
-			&& (check_token_type(current_token, TOKEN_WORD)
-				|| check_token_type(current_token, TOKEN_DOUBLE_QUOTE_WORD))
-			&& peak_next(enhanced_tokens) == current_token->type)
-		{
-			node_to_del = enhanced_tokens;
-			enhanced_tokens = enhanced_tokens->next;
-			ft_lst_rm_one(node_to_del, free);
-			enhanced_tokens_head = ft_lstfirst(enhanced_tokens);
-			// expanstion
-			current_token = enhanced_tokens->content;
-			key = current_token->data;
-			var = get_env(env, key);
-			free(current_token->data);
-			if (var == NULL)
-				current_token->data = ft_strdup(key);
-			else
-				current_token->data = ft_strdup(var->value);
-			continue ;
-		}
-		enhanced_tokens_head = ft_lstfirst(enhanced_tokens);
-		enhanced_tokens = enhanced_tokens->next;
-	}
-	// Wildcard expanstion
-	enhanced_tokens = enhanced_tokens_head;
-	while (enhanced_tokens)
-	{
-		current_token = enhanced_tokens->content;
-		if (check_token_type(current_token, TOKEN_WORD) == true
-			&& ft_strcmp(current_token->data, "*") != 0)
-		{
-			enhanced_tokens = enhanced_tokens->next;
-			continue ;
-		}
-		if (check_token_type(current_token, TOKEN_DOUBLE_QUOTE_WORD) == true
-			|| check_token_type(current_token, TOKEN_SINGLE_QUOTE_WORD) == true)
-		{
-			enhanced_tokens = enhanced_tokens->next;
-			continue ;
-		}
-		current_word = get_word_start(enhanced_tokens);
-		if (current_word == NULL)
-			break ;
-		if (validate_word(current_word) == false)
-		{
-			enhanced_tokens = enhanced_tokens->next;
-			continue ;
-		}
-		pre_expansion_name = get_pre_expanded_file_name(current_word);
-		if (pre_expansion_name == NULL)
-			return (ft_lstclear(&enhanced_tokens, free_token), NULL);
-		filenames = expand_wildcard(pre_expansion_name);
-		if (filenames == NULL)
-			return (ft_lstclear(&enhanced_tokens, free_token), NULL);
-		tokenized_filename = create_tokenized_filenames(filenames);
-		append_filenames(&enhanced_tokens, &current_word, tokenized_filename);
-		enhanced_tokens_head = ft_lstfirst(current_word);
-		if (enhanced_tokens != NULL)
-			enhanced_tokens = enhanced_tokens->next;
-		else
-			break ;
-	}
-	return (enhanced_tokens_head);
-}
 
 void	execution_mimic(t_cmd *cmd, t_list *env)
 {
@@ -305,11 +199,9 @@ void	expand_arguments(char ***arguments, t_list *tokenized_arguments, t_list *en
 {
 	t_list	*expanded_arguments;
 	t_list	*expanded_argument;
-	t_list	*argument_t_head;
 	t_list	*tokenize_argument;
 
 	(void)arguments;
-	argument_t_head = tokenized_arguments;
 	expanded_arguments = NULL;
         print_tokens_data(tokenized_arguments);
 	while (tokenized_arguments)
@@ -331,62 +223,6 @@ void	expand_arguments(char ***arguments, t_list *tokenized_arguments, t_list *en
         printf("arguments: \n");
         print_tokens(expanded_arguments);
         printf("\n");
-}
-
-bool	is_valid_varname(t_list *split_token_data)
-{
-	if (split_token_data == NULL)
-		return (false);
-	if (ft_strcmp(split_token_data->content, "$") == 0)
-		return (false);
-	return (true);
-}
-
-t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
-{
-	t_list	*new_tokens;
-	t_list	*token_node;
-
-	new_tokens = NULL;
-	if (data_lst == NULL)
-		return (NULL);
-	while (data_lst)
-	{
-		token_node = create_token_node(tokens_type, data_lst->content);
-		if (token_node == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		ft_lstadd_back(&new_tokens, token_node);
-		data_lst = data_lst->next;
-	}
-	return (new_tokens);
-}
-
-t_list	*get_enhanced_tokens(t_list *tokens, char *delim)
-{
-	t_list	*enhanced_tokens;
-	t_list	*new_tokens;
-	t_token	*current_token;
-	t_list	*split_token_data;
-
-	enhanced_tokens = NULL;
-	while (tokens)
-	{
-		current_token = tokens->content;
-		if (current_token->data != NULL && *current_token->data == 0)
-			new_tokens = create_token_node(current_token->type, "");
-		else
-		{
-			split_token_data = ft_split_pro(current_token->data, delim);
-			if (split_token_data == NULL)
-				break ;
-			new_tokens = create_tokens(split_token_data, current_token->type);
-		}
-		if (new_tokens == NULL)
-			ft_lstclear(&enhanced_tokens, free_token);
-		ft_lstadd_back(&enhanced_tokens, new_tokens);
-		tokens = tokens->next;
-	}
-	return (enhanced_tokens);
 }
 
 int	main(int _, char **__, char **env)

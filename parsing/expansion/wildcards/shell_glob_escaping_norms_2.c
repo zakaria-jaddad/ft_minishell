@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../../includes/parsing/expansion.h"
 
 void	*init_pattern_and_matches(char **pattern, t_list **matches,
 		t_list *patterns, char *path)

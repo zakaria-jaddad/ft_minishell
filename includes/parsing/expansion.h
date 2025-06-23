@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcards.h                                        :+:      :+:    :+:   */
+/*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/19 07:55:45 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:17:38 by zajaddad         ###   ########.fr       */
+/*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/06/23 09:38:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WILDCARDS_H
-# define WILDCARDS_H
+#ifndef EXPANSION_H
+#define EXPANSION_H
 
 # include "../../libft/libft.h"
 # include "file_info.h"
+# include "env.h"
+# include "tokenize.h"
 # include <stdbool.h>
+#include <stdio.h>
 
+t_list	*expand_me(t_list *tokens, t_list *env);
+t_list	*get_enhanced_tokens(t_list *tokens, char *delim);
+
+// Dolarsign Expansion
+t_list	*expand_dollar(t_list *tokens, t_list *env);
+
+// Wildcard Expansion
 t_list	*expand_wildcard(char *str);
 t_list	*get_dir_content(char *dirname);
 t_list	*sgen(char *p, t_list *pa, t_list *nm, t_list *m);
@@ -40,4 +50,4 @@ void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches);
 void	append_file_name_to_path(char **path, char *file_name);
 void	*nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches);
 
-#endif // !WILDCARDS_H
+#endif // !EXPANSION_H
