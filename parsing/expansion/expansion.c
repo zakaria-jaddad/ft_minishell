@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 09:47:14 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:34:03 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,3 +75,43 @@ t_list	*expand_me(t_list *tokens, t_list *env)
 	/* } */
 	return (enhanced_tokens);
 }
+/**/
+/* void	append_filenames(t_list **enhanced_tokens, t_list **tokens_word_start, */
+/* 		t_list *tokenized_filenames) */
+/* { */
+/* 	t_list	*start; */
+/* 	t_list	*end; */
+/* 	t_list	*tmp; */
+/* 	t_list	*curr; */
+/* 	t_list	*last; */
+/* 	start = NULL; */
+/* 	end = NULL; */
+/* 	if (!tokens_word_start || !*tokens_word_start || !tokenized_filenames) */
+/* 		return ; */
+/* 	curr = *tokens_word_start; */
+/* 	start = curr->prev; */
+/* 	while (curr && is_word(curr->content)) */
+/* 		curr = curr->next; */
+/* 	end = curr; */
+/* 	curr = (start) ? start->next : *tokens_word_start; */
+/* 	while (curr != end) */
+/* 	{ */
+/* 		tmp = curr->next; */
+/* 		ft_lst_rm_one(curr, free_token); */
+/* 		curr = tmp; */
+/* 	} */
+/* 	if (start) */
+/* 	{ */
+/* 		start->next = tokenized_filenames; */
+/* 		tokenized_filenames->prev = start; */
+/* 	} */
+/* 	else */
+/* 		*tokens_word_start = tokenized_filenames; */
+/* 	*enhanced_tokens = ft_lstlast(tokenized_filenames); */
+/* 	last = ft_lstlast(tokenized_filenames); */
+/* 	last->next = end; */
+/* 	if (end) */
+/* 		end->prev = last; */
+/* 	while ((*tokens_word_start)->prev) */
+/* 		*tokens_word_start = (*tokens_word_start)->prev; */
+/* } */

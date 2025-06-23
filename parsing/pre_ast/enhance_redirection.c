@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 00:57:24 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/21 15:02:57 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/22 00:43:46 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/pre_ast.h"
 
 static void	skip_redirections(t_list **tokens)
 {

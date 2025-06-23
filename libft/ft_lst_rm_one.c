@@ -6,18 +6,20 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:05:21 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/06/23 12:29:05 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:32:22 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lst_rm_one(t_list *node_to_del, void clear_content(void *content))
+void	ft_lst_rm_one(t_list **head, t_list *node_to_del,
+		void clear_content(void *content))
 {
 	t_list	*prev;
 	t_list	*next;
 
-	if (!node_to_del)
+	if (head == NULL || *head == NULL || node_to_del == NULL
+		|| clear_content == NULL)
 		return ;
 	if (node_to_del->content)
 		clear_content(node_to_del->content);
@@ -25,6 +27,8 @@ void	ft_lst_rm_one(t_list *node_to_del, void clear_content(void *content))
 	next = node_to_del->next;
 	if (prev)
 		prev->next = next;
+	else
+		*head = next;
 	if (next)
 		next->prev = prev;
 	free(node_to_del);

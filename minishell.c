@@ -66,20 +66,19 @@ char	*get_pre_expanded_file_name(t_list *tokens)
 	return (pre_expansion_name);
 }
 
-void	remove_word_from_tokens(t_list **tokens)
-{
-	t_list	*node_to_del;
-
-	if (tokens == NULL || *tokens == NULL)
-		return ;
-	while (*tokens && !is_word((*tokens)->content))
-	{
-		node_to_del = *tokens;
-		(*tokens) = (*tokens)->next;
-		ft_lst_rm_one(node_to_del, free_token);
-	}
-}
-
+/* void	remove_word_from_tokens(t_list **tokens) */
+/* { */
+/* 	t_list	*node_to_del; */
+/* 	if (tokens == NULL || *tokens == NULL) */
+/* 		return ; */
+/* 	while (*tokens && !is_word((*tokens)->content)) */
+/* 	{ */
+/* 		node_to_del = *tokens; */
+/* 		(*tokens) = (*tokens)->next; */
+/* 		ft_lst_rm_one(node_to_del, free_token); */
+/* 	} */
+/* } */
+/**/
 t_list	*create_tokenized_filenames(t_list *filename)
 {
 	t_list	*token_node;
@@ -100,49 +99,6 @@ t_list	*create_tokenized_filenames(t_list *filename)
 	}
 	return (tokenized_filenames);
 }
-
-void	append_filenames(t_list **enhanced_tokens, t_list **tokens_word_start,
-		t_list *tokenized_filenames)
-{
-	t_list	*start;
-	t_list	*end;
-	t_list	*tmp;
-	t_list	*curr;
-	t_list	*last;
-
-	start = NULL;
-	end = NULL;
-	if (!tokens_word_start || !*tokens_word_start || !tokenized_filenames)
-		return ;
-	curr = *tokens_word_start;
-	start = curr->prev;
-	while (curr && is_word(curr->content))
-		curr = curr->next;
-	end = curr;
-	curr = (start) ? start->next : *tokens_word_start;
-	while (curr != end)
-	{
-		tmp = curr->next;
-		ft_lst_rm_one(curr, free_token);
-		curr = tmp;
-	}
-	if (start)
-	{
-		start->next = tokenized_filenames;
-		tokenized_filenames->prev = start;
-	}
-	else
-		*tokens_word_start = tokenized_filenames;
-	*enhanced_tokens = ft_lstlast(tokenized_filenames);
-	last = ft_lstlast(tokenized_filenames);
-	last->next = end;
-	if (end)
-		end->prev = last;
-	while ((*tokens_word_start)->prev)
-		*tokens_word_start = (*tokens_word_start)->prev;
-}
-
-
 
 void	execution_mimic(t_cmd *cmd, t_list *env)
 {

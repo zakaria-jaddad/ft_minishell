@@ -6,22 +6,21 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/21 13:14:59 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:51:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 void	remove_es(t_list **tokens)
 {
 	t_list	*th;
 	t_list	*tt;
 	t_token	*token;
-	int		lst_size;
 
 	if (tokens == NULL)
 		return ;
-	(th = *tokens, lst_size = ft_lstsize(*tokens));
+	th = *tokens;
 	while (th)
 	{
 		token = th->content;
@@ -29,16 +28,13 @@ void	remove_es(t_list **tokens)
 				|| token->type == TOKEN_SINGLE_QUOTE_WORD)
 			&& token->data != NULL && *token->data == 0)
 		{
-			(tt = th, th = th->next, ft_lst_rm_one(tt, free_token));
-			lst_size--;
+			(tt = th, th = th->next, ft_lst_rm_one(tokens, tt, free_token));
 			continue ;
 		}
 		if (th == NULL)
 			return ;
 		th = th->next;
 	}
-	if (lst_size == 0)
-		*tokens = NULL;
 }
 
 bool	is_between_per(t_list *tokens)
