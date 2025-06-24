@@ -32,8 +32,8 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 			arguments = arguments->next;
 		}
                 free(command);
+                printf("\n");
                 ft_lstclear(&head, free);
-		exit(0);
 	}
 }
 
@@ -56,8 +56,6 @@ int	main(int _, char **__, char **env)
 		if (cmd == NULL)
 			continue ;
 		execution_mimic(cmd, env_lst);
-                ft_lstclear(&env_lst, free_env);
-                exit(0);
 		/* execution(cmd, env_lst); */
 	}
 	free(line);
