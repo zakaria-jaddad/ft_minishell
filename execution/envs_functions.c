@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/23 10:35:39 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:45:02 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,25 @@ void	_unset_(t_list *envs, char **args)
 	{
 		var = find_node(envs, args[i]);
 		if (var)
-			ft_lst_rm_one(var, free_env);
+			ft_lst_rm_one(&envs, var, free_env);
 		i++;
 	}
 }
 
-int	print_envs(char *declar, t_list *list)
+int	print_envs(char *declare, t_list *list)
 {
 	t_env	*env;
 
 	while (list)
 	{
 		env = list->content;
-		if (!declar)
+		if (!declare)
 		{
 			if (env->value)
 				printf("%s=\"%s\"\n", env->key, env->value);
 		}
 		else
-			printf("%s%s=\"%s\"\n", declar, env->key, env->value);
+			printf("%s%s=\"%s\"\n", declare, env->key, env->value);
 		list = list->next;
 	}
 	return (0);

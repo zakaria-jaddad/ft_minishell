@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/20 08:11:11 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:22:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
 	tokens = get_tokens(line);
 	if (tokens == NULL)
 		return (NULL);
-	// syntax_check() NOTE IMPLEMENTED
-	if (syntax_check(&tokens) == false)
-		return (ft_lstclear(&tokens, free_token), NULL);
-	pre_ast(&tokens);
-	cmd = ast(&tokens);
-	if (cmd == NULL)
-		return (ft_lstclear(&tokens, free_token), NULL);
+        // syntax_check() NOTE IMPLEMENTED
+        if (syntax_check(&tokens) == false)
+                return (ft_lstclear(&tokens, free_token), NULL);
+        pre_ast(&tokens);
+        cmd = ast(&tokens);
+        if (cmd == NULL)
+                return (ft_lstclear(&tokens, free_token), NULL);
 	return (cmd);
 }

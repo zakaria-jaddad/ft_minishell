@@ -1,23 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wildcards.h                                        :+:      :+:    :+:   */
+/*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/19 07:55:45 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:17:38 by zajaddad         ###   ########.fr       */
+/*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/06/24 13:02:30 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef WILDCARDS_H
-# define WILDCARDS_H
+#ifndef EXPANSION_H
+# define EXPANSION_H
 
 # include "../../libft/libft.h"
+# include "env.h"
 # include "file_info.h"
+# include "tokenize.h"
 # include <stdbool.h>
+# include <stdio.h>
 
-t_list	*expand_wildcard(char *str);
+# define SPECIAL_EXPANSION " .,+-!@#$%^&()[]{};:'\"<>/|~`= \t\n"
+
+t_list	*expand_me(t_list *tokens, t_list *env);
+t_list	*get_enhanced_tokens(t_list *tokens, char *delim);
+
+// Dollarsign Expansion
+void	expand_dollar(t_list **tokens, t_list *env);
+void	word_expansion(char **str, t_list *env);
+void	digit_expansion(char **str);
+bool	is_valid_dollar_with_qs_next(t_list *current_token_node);
+bool	is_valid_dollar_with_valid_var(t_list *current_token_node);
+bool	is_valid_dollar_with_dollar(t_list *current_token_node);
+
+// Wildcard Expansion
+t_list	*expand_wildcard(t_list *tokens);
 t_list	*get_dir_content(char *dirname);
 t_list	*sgen(char *p, t_list *pa, t_list *nm, t_list *m);
 char	*join_lst(t_list *lst);
@@ -39,5 +56,16 @@ void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
 void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches);
 void	append_file_name_to_path(char **path, char *file_name);
 void	*nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches);
+t_list	*get_word(t_list *tokens);
+bool	is_valid_word(t_list *tokens_word);
+bool	is_valid_wildcard(t_list *current_token_node);
+void	*set_matches(t_list **matches, t_list *word);
+t_list	*create_tokenized_matches(t_list *filename);
 
-#endif // !WILDCARDS_H
+// Expansion API
+t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env);
+void	expand_filename(char **arguments, t_list *tokenized_filename,
+			t_list *env);
+void	expand_command(char **command, t_list *tokenized_command, t_list *env);
+
+#endif // !EXPANSION_H

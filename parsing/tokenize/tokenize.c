@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:37:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/18 22:06:58 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:51:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 		t_list *line_lst_head, t_list **tokens)
@@ -60,7 +60,7 @@ static void rm_sp(t_list **tokens)
 {
 	remove_front_spaces(tokens);
 	remove_back_spaces(tokens);
-        remove_es(tokens);
+        /* remove_es(tokens); */
 }
 
 t_list	*get_tokens(char *line)

@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 22:31:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 07:59:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../../includes/parsing/expansion.h"
 
 int	get_backslash_pos_before_wildcard(char *str)
 {
@@ -80,16 +80,43 @@ static t_list	*get_valid_matches(char *str)
 	return (matches);
 }
 
-t_list	*expand_wildcard(char *str)
+void	*set_matches(t_list **matches, t_list *word)
+{
+	char	*unexpanded_name;
+
+	if (matches == NULL || word == NULL)
+		return (NULL);
+	unexpanded_name = tokens_to_str(word);
+	if (unexpanded_name == NULL)
+		return (ft_lstclear(&word, free_token), NULL);
+	*matches = get_valid_matches(unexpanded_name);
+	if (*matches == NULL)
+		return (ft_lstclear(&word, free_token), free(unexpanded_name), NULL);
+	sort_matches(matches);
+	return (NOTNULL);
+}
+
+t_list	*expand_wildcard(t_list *tokens)
 {
 	t_list	*matches;
+	t_list	*word;
 
 	matches = NULL;
-	if (str == NULL)
-		return (NULL);
-	matches = get_valid_matches(str);
-	if (matches == NULL)
-		return (NULL);
-	sort_matches(&matches);
-	return (matches);
+	while (tokens)
+	{
+		if (is_valid_wildcard(tokens) == true)
+		{
+			word = get_word(tokens);
+			if (is_valid_word(word) == true)
+			{
+				if (set_matches(&matches, word) == NULL)
+					return (ft_lstclear(&word, free_token), NULL);
+				ft_lstclear(&word, free_token);
+				return (create_tokenized_matches(matches));
+			}
+			ft_lstclear(&word, free_token);
+		}
+		tokens = tokens->next;
+	}
+	return (sort_matches(&matches), matches);
 }

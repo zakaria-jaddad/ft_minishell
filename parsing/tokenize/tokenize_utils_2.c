@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 /*
  * @return: returns a string of the given token

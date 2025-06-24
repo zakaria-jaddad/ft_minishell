@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 08:01:57 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 08:21:16 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:38:54 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 void	remove_front_spaces(t_list **tokens)
 {
@@ -29,7 +29,7 @@ void	remove_front_spaces(t_list **tokens)
 		next = curr->next;
 		if (next)
 			next->prev = NULL;
-		ft_lst_rm_one(curr, free_token);
+		ft_lst_rm_one(tokens, curr, free_token);
 		curr = next;
 	}
 	*tokens = curr;

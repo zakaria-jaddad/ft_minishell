@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../../includes/parsing/expansion.h"
 
 static void	flb(t_list **lst, t_list *new)
 {

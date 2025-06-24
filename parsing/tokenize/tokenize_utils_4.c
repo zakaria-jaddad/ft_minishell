@@ -6,11 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:24:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/19 05:57:08 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/23 12:50:13 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 /*
  * @brief Get the type of the next non white space token
@@ -110,7 +110,7 @@ t_list *dup_and_remove_simple_tokens(t_list *to_start)
                 if (append_tokens(&simple_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
                         return (ft_lstclear(&simple_tokens, free_token), NULL);
                 (void)(node_to_del = to_start, to_start = to_start->next);
-                ft_lst_rm_one(node_to_del, free_token);
+                ft_lst_rm_one(&to_start, node_to_del, free_token);
         }
         if (insert_tokens(&simple_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
                 return (ft_lstclear(&simple_tokens, free_token), NULL);

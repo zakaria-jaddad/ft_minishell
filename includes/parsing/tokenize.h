@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/20 08:24:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:23:41 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ t_list				*get_filename(t_list **tokens);
 char				*get_token_type(t_token_type token);
 t_token_type		peak_next(t_list *tokens);
 t_token_type		peak_prev(t_list *tokens);
+char				*get_token_data(t_token *token);
+t_list				*get_tokenizd_word(t_list **tokens);
 char				*tokens_to_str(t_list *tokens);
 
 static inline bool	is_redirection(t_token *token)

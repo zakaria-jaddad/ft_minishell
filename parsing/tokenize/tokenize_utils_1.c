@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/parsing/parsing.h"
+#include "../../includes/parsing/tokenize.h"
 
 /*
  * @brief frees t_token object
