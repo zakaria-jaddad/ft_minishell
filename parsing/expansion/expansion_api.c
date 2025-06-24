@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:05:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 11:46:08 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:18:42 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,16 @@ void	expand_command(char **command, t_list *tokenized_command, t_list *env)
 	*command = expand_word(tokenized_command, env);
 }
 
-void	expand_filename(char **arguments, t_list *tokenized_filename,
+void	expand_filename(char **filename, t_list *tokenized_filename,
 		t_list *env)
 {
-	char	*filename;
-
-	if (arguments == NULL || tokenized_filename == NULL || env == NULL)
+	if (filename == NULL || tokenized_filename == NULL || env == NULL)
 		return ;
-	filename = expand_word(tokenized_filename, env);
-	if (ft_strchr(filename, ' ') != NULL)
+	*filename = expand_word(tokenized_filename, env);
+	if (ft_strchr(*filename, ' ') != NULL)
 	{
 		ft_fprintf(STDOUT_FILENO, "bash: *: ambiguous redirect");
-		filename = (free(filename), NULL);
+		*filename = (free(filename), NULL);
 		return ;
 	}
 }
