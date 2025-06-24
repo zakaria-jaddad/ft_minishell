@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:03:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 09:47:54 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 12:01:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	is_valid_dollar_with_valid_var(t_list *current_token_node)
 	next_token = next_token_node->content;
 	if (current_token == NULL || next_token == NULL)
 		return (false);
-	if (ft_strchr(special_expansion, *next_token->data) != NULL)
+	if (ft_strchr(SPECIAL_EXPANSION, *next_token->data) != NULL)
 		return (false);
 	return (ft_strcmp(current_token->data, "$") == 0
 		&& ft_strcmp(next_token->data, "$") != 0

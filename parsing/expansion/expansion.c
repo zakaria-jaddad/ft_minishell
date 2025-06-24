@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 11:44:09 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:59:14 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_list	*expand_me(t_list *tokens, t_list *env)
 {
 	t_list	*enhanced_tokens;
-        t_list *tmp;
+	t_list	*tmp;
 
 	enhanced_tokens = get_enhanced_tokens(tokens, "$*?");
 	if (enhanced_tokens == NULL)

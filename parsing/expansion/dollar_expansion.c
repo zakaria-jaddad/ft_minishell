@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 10:39:29 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:59:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,13 @@ static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
 			update_current_token(*tokens, env));
 }
 
-void expand_dollar(t_list **tokens, t_list *env)
+void	expand_dollar(t_list **tokens, t_list *env)
 {
 	t_list	*tokens_head;
 	t_token	*current_token;
 
-        if (tokens == NULL)
-                return ;
+	if (tokens == NULL)
+		return ;
 	tokens_head = *tokens;
 	while (*tokens)
 	{
@@ -75,5 +75,5 @@ void expand_dollar(t_list **tokens, t_list *env)
 			break ;
 		*tokens = (*tokens)->next;
 	}
-        *tokens = tokens_head;
+	*tokens = tokens_head;
 }
