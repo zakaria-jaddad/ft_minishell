@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:51:14 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 08:52:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:48:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_list	*get_enhanced_tokens(t_list *tokens, char *delim)
 			if (split_token_data == NULL)
 				break ;
 			new_tokens = create_tokens(split_token_data, current_token->type);
+                        ft_lstclear(&split_token_data, free);
 		}
 		if (new_tokens == NULL)
 			ft_lstclear(&enhanced_tokens, free_token);

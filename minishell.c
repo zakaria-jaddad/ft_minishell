@@ -12,6 +12,7 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 	char			*command;
 	t_list			*arguments;
 	t_cmd_simple	*simple_command;
+        t_list *head;
 
 	if (cmd == NULL || env == NULL)
 		return ;
@@ -22,6 +23,7 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 		expand_command(&command, simple_command->command, env);
 		printf("command = %s\n", command);
 		arguments = expand_arguments(simple_command->arguments, env);
+                head = arguments;
 		printf("arguments: ");
 		while (arguments)
 		{
@@ -29,7 +31,8 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 			fflush(stdout);
 			arguments = arguments->next;
 		}
-		printf("\n");
+                free(command);
+                ft_lstclear(&head, free);
 		exit(0);
 	}
 }
@@ -53,7 +56,9 @@ int	main(int _, char **__, char **env)
 		if (cmd == NULL)
 			continue ;
 		execution_mimic(cmd, env_lst);
-		execution(cmd, env_lst);
+                ft_lstclear(&env_lst, free_env);
+                exit(0);
+		/* execution(cmd, env_lst); */
 	}
 	free(line);
 	return (EXIT_SUCCESS);

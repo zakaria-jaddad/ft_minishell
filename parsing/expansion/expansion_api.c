@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:05:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 09:42:57 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:46:08 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env)
 		if (expanded_argument == NULL)
 			return (ft_lstclear(&arguments_lst, free), NULL);
 		expanded_argument_node = ft_lstnew(expanded_argument);
-		if (expanded_argument == NULL)
+		if (expanded_argument_node == NULL)
 			return (ft_lstclear(&arguments_lst, free), NULL);
 		ft_lstadd_back(&arguments_lst, expanded_argument_node);
 		if (tokenized_arguments == NULL)

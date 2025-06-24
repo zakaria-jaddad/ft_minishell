@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 08:44:03 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:53:53 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,6 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
         cmd = ast(&tokens);
         if (cmd == NULL)
                 return (ft_lstclear(&tokens, free_token), NULL);
+        /* ft_lstclear(&tokens, free_token); */
 	return (cmd);
 }
