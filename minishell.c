@@ -37,7 +37,7 @@ int main(int _, char **__, char **env) {
     cmd = parse_cmd(line, env_lst);
     if (cmd == NULL)
       continue;
-    print_cmd(cmd, 0);
+    // print_cmd(cmd, 0);
     // printf("%s\n",
     // char *command;
     // char **arguments;
@@ -53,61 +53,4 @@ int main(int _, char **__, char **env) {
   }
   free(line);
   return (EXIT_SUCCESS);
-}
-
-char **list_tokens_to_double_pointer(t_list *list);
-void expand_simple_cmd(char **command, char ***arguments, t_cmd_simple *cmd) {
-  char *comand;
-  char **args;
-
-  comand = ft_strdup(((t_token *)(cmd->command->content))->data);
-  args = list_tokens_to_double_pointer(cmd->arguments);
-  *command = comand;
-  if (args)
-    *arguments = args;
-}
-
-int count_spaces(t_list *tokens) {
-  int counter;
-
-  counter = 0;
-  if (tokens == NULL)
-    return (0);
-  while (tokens) {
-    if (check_token_type(tokens->content, TOKEN_WHITE_SPACE) == true)
-      counter++;
-    tokens = tokens->next;
-  }
-  return (counter);
-}
-
-char **list_tokens_to_double_pointer(t_list *list) {
-  t_token *token;
-  int space_counter;
-  char **double_pointer;
-  int i;
-
-  skip_front_spaces(&list);
-  if (list == NULL)
-    return (NULL);
-  space_counter = count_spaces(list);
-  double_pointer = ft_calloc(space_counter + 1, sizeof(char *));
-  if (double_pointer == NULL)
-    return (NULL);
-  i = 0;
-  while (i < space_counter + 1) {
-    token = list->content;
-    while (list != NULL && !check_token_type(token, TOKEN_WHITE_SPACE)) {
-      append_str(&double_pointer[i], token->data);
-      if (double_pointer[i] == NULL)
-        return (NULL); // TODO: MEMORY
-      list = list->next;
-      if (list)
-        token = list->content;
-    }
-    i++;
-    if (list)
-      list = list->next;
-  }
-  return (double_pointer);
 }

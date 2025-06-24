@@ -16,39 +16,34 @@ void _unset_(t_list *envs, char **args) {
   t_list *var;
   int i;
 
-	i = 0;
-	while (args[i])
-	{
-		var = find_node(envs, args[i]);
-		if (var)
-			ft_lst_rm_one(&envs, var, free_env);
-		i++;
-	}
+  i = 0;
+  while (args[i]) {
+    var = find_node(envs, args[i]);
+    if (var)
+      ft_lst_rm_one(&envs, var, free_env);
+    i++;
+  }
 }
 
-int	print_envs(char *declare, t_list *list)
-{
-	t_env	*env;
+int print_envs(char *declare, t_list *list) {
+  t_env *env;
 
-	while (list)
-	{
-		env = list->content;
-		if (!declare)
-		{
-			if (env->value)
-				printf("%s=\"%s\"\n", env->key, env->value);
-		}
-		else
-			printf("%s%s=\"%s\"\n", declare, env->key, env->value);
-		list = list->next;
-	}
-	return (0);
+  while (list) {
+    env = list->content;
+    if (!declare) {
+      if (env->value)
+        printf("%s=%s\n", env->key, env->value);
+    } else
+      printf("%s%s=\"%s\"\n", declare, env->key, env->value);
+    list = list->next;
+  }
+  return (0);
 }
 
 int _env_(t_list *list) {
   if (!list)
     return (-1);
-  return (print_envs(NULL, list));
+  return (print_envs(NULL, sort_envs(list)));
 }
 
 /* static void	swap_two_envs(t_list *env1, t_list *env2) */

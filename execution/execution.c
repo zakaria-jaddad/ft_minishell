@@ -107,14 +107,16 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
       if (!envs)
         return (0);
       expand_command(&cmd, tree->command, env_list);
-      ft_lstadd_front(&(tree->arguments),
-                      create_token_node(TOKEN_WHITE_SPACE, " "));
-      ft_lstadd_front(&(tree->arguments), ft_lstnew(tree->command->content));
-      args =
-          list_to_double_pointer(expand_arguments(tree->arguments, env_list));
-      if (!cmd) {
+      if (ft_strncmp(cmd, "", ft_strlen(cmd)) == 0) {
+        args =
+            list_to_double_pointer(expand_arguments(tree->arguments, env_list));
         cmd = args[0];
-        args++;
+      } else {
+        ft_lstadd_front(&(tree->arguments),
+                        create_token_node(TOKEN_WHITE_SPACE, " "));
+        ft_lstadd_front(&(tree->arguments), ft_lstnew(tree->command->content));
+        args =
+            list_to_double_pointer(expand_arguments(tree->arguments, env_list));
       }
       path = valid_command(cmd, get_env(env_list, "PATH")->value);
       if (execve(path, args, envs) < 0) {

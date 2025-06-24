@@ -12,12 +12,19 @@
 
 #include "../includes/execution.h"
 
-int	_pwd_(char *pwd)
-{
-	if (!pwd)
-		pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (1);
-	printf("%s\n", pwd);
-	return (0);
+int status_x(int value, int modify) {
+  static int s;
+
+  if (modify)
+    s = value;
+  return (s);
+}
+
+int _pwd_(char *pwd) {
+  if (!pwd)
+    pwd = getcwd(NULL, 0);
+  if (!pwd)
+    return (1);
+  printf("%s\n", pwd);
+  return (0);
 }

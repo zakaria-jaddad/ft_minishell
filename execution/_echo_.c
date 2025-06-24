@@ -13,23 +13,39 @@
 #include "../includes/execution.h"
 #include <unistd.h>
 
+void handel_args(int *i, int *nl, char **args) {
+  int j;
+
+  while (args[*i]) {
+    j = 0;
+    if (args[*i][j++] == '-')
+      while (args[*i][j] == 'n')
+        j++;
+    if (!args[*i][j] && j > 1)
+      *nl += 1;
+    else
+      break;
+    *i += 1;
+  }
+}
+
 int _echo_(char **args) {
   int i;
+  int nl;
 
+  nl = 0;
   if (!args || !*args) {
     write(STDOUT_FILENO, "\n", 1);
     return (1);
   }
   i = 0;
-  if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
-    i++;
   while (args[i]) {
     if (args[i])
       ft_fprintf(STDOUT_FILENO, "%s", args[i]);
     if (args[++i])
       ft_fprintf(STDOUT_FILENO, "%s", " ");
   }
-  if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) != 0 || !args[0])
+  if (!nl || !args[0])
     ft_fprintf(STDOUT_FILENO, "\n");
   free_double_pointer((void **)args);
   return (0);
