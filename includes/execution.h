@@ -14,11 +14,16 @@
 #define EXECUTION_H
 
 #include "./parsing/parsing.h"
-#include <fcntl.h>    // open
+#include <errno.h>
+#include <fcntl.h> // open
+#include <signal.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <sys/wait.h> // wait()
+#include <termios.h>
 #include <unistd.h>
 
-int _echo_(t_list *args, int fd);
+int _echo_(char **args);
 int _cd_(t_list *list, char **args);
 int _pwd_(char *pwd);
 int _export_(t_list *list, char **args);
@@ -36,5 +41,6 @@ t_list *expand(char **args, t_list *envs);
 char *manage_pwd(char *value);
 int execution(t_cmd *tree, t_list *env_list);
 char *list_to_string(t_list *list);
+int status_x(int value, int modify);
 
 #endif
