@@ -94,6 +94,7 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
   char **envs;
   char **args;
   char *path;
+  char *cmd;
 
   if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value) {
     pid = fork();
@@ -105,12 +106,17 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
       envs = envs_list_to_double_pointer(env_list);
       if (!envs)
         return (0);
+      expand_command(&cmd, tree->command, env_list);
       ft_lstadd_front(&(tree->arguments),
                       create_token_node(TOKEN_WHITE_SPACE, " "));
       ft_lstadd_front(&(tree->arguments), ft_lstnew(tree->command->content));
-      args = tokens_to_args(tree->arguments);
-      path = valid_command(tokens_to_str(tree->command),
-                           get_env(env_list, "PATH")->value);
+      args =
+          list_to_double_pointer(expand_arguments(tree->arguments, env_list));
+      if (!cmd) {
+        cmd = args[0];
+        args++;
+      }
+      path = valid_command(cmd, get_env(env_list, "PATH")->value);
       if (execve(path, args, envs) < 0) {
         free(path);
         display_execve_error();
@@ -131,7 +137,7 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
 int execution_simple_commad(t_cmd_simple *cmd, t_list *envs) {
   char **args;
 
-  args = tokens_to_args(cmd->arguments);
+  args = list_to_double_pointer(expand_arguments(cmd->arguments, envs));
   if (ft_strcmp(tokens_to_str(cmd->command), "cd") == 0)
     return (_cd_(envs, args));
   if (ft_strcmp(tokens_to_str(cmd->command), "export") == 0)
@@ -192,29 +198,22 @@ int open_file(char *file, int flags) {
   return (fd);
 }
 
-void get_last_redir_fd(t_cmd *t, t_node_type flag, int *out, int *in);
-
-int found_file(t_cmd *t, t_node_type flag) {
+int found_file(t_cmd *t, t_node_type flag, t_list *envs) {
   int fd;
-  char **files;
-  int i;
+  char *file;
 
-  files = tokens_to_args(((t_cmd_redir *)t->content)->filename);
+  expand_filename(&file, ((t_cmd_redir *)t->content)->filename, envs);
   fd = -1;
-  i = 0;
-  while (files[i]) {
-    if (flag == NODE_OUT_REDIR) // >
-      fd = open_file(files[i], O_RDONLY | O_WRONLY | O_CREAT);
-    else if (flag == NODE_IN_REDIR) // <
-      fd = open_file(files[i], O_RDONLY);
-    if (fd == -1)
-      return (-1);
-    i++;
-  }
+  if (flag == NODE_OUT_REDIR) // >
+    fd = open_file(file, O_RDONLY | O_WRONLY | O_CREAT);
+  else if (flag == NODE_IN_REDIR) // <
+    fd = open_file(file, O_RDONLY);
+  if (fd == -1)
+    return (-1);
   return (fd);
 }
 
-void get_last_redir_fd(t_cmd *t, t_node_type flag, int *out, int *in) {
+void get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs) {
   int fd;
 
   fd = -1;
@@ -222,17 +221,17 @@ void get_last_redir_fd(t_cmd *t, t_node_type flag, int *out, int *in) {
     return;
   if (NODE_OUT_REDIR == t->type) // >
   {
-    *out = found_file(t, flag);
+    *out = found_file(t, t->type, envs);
     if (*out == -1)
       return;
   } else if (NODE_IN_REDIR == t->type) // <
   {
-    *in = found_file(t, flag);
+    *in = found_file(t, t->type, envs);
     if (*in == -1)
       return;
   }
   if (t->right)
-    get_last_redir_fd(t->right, t->right->type, out, in);
+    get_last_redir_fd(t->right, out, in, envs);
 }
 
 int run_redir(t_cmd *t, t_list *envs) {
@@ -244,7 +243,7 @@ int run_redir(t_cmd *t, t_list *envs) {
   status = 0;
   in_fd = 0;
   out_fd = 0;
-  get_last_redir_fd(t, t->type, &out_fd, &in_fd);
+  get_last_redir_fd(t, &out_fd, &in_fd, envs);
   if (in_fd == -1 || out_fd == -1)
     return (status_x(1, 1));
   pid = fork();
