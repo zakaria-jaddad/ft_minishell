@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/21 13:17:48 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 09:40:59 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char				*get_token_type(t_token_type token);
 t_token_type		peak_next(t_list *tokens);
 t_token_type		peak_prev(t_list *tokens);
 char				*get_token_data(t_token *token);
+t_list	*get_tokenizd_word(t_list **tokens);
 
 static inline bool	is_redirection(t_token *token)
 {
@@ -126,6 +127,26 @@ static inline bool	is_token_special(t_token *token)
 	if (token == NULL)
 		return (false);
 	return (!(is_word(token) || check_token_type(token, TOKEN_WHITE_SPACE)));
+}
+
+static inline char	*tokens_to_str(t_list *tokens)
+{
+	t_token	*token;
+	char	*rv;
+	char	*tmp;
+
+	rv = NULL;
+	while (tokens)
+	{
+		token = tokens->content;
+		tmp = ft_strjoin(rv, token->data);
+		if (tmp == NULL)
+			return (free(rv), NULL);
+		free(rv);
+		rv = tmp;
+		tokens = tokens->next;
+	}
+	return (rv);
 }
 
 #endif // !TOKENIZE_H
