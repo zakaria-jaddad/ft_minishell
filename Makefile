@@ -9,6 +9,7 @@ EXECUTION = execution/execution.c execution/_cd_.c execution/_exit_.c execution/
 execution/_echo_.c execution/_pwd_.c execution/utiles.c
 
 EXPANSION = parsing/expansion/expansion.c \
+	    parsing/expansion/expansion_api.c \
 	    parsing/expansion/get_enhanced_tokens.c \
 	    parsing/expansion/dollar_expansion_utils.c \
 	    parsing/expansion/dollar_expansion.c \
@@ -16,6 +17,7 @@ EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/wildcards/file_info.c \
 	    parsing/expansion/wildcards/glob.c \
 	    parsing/expansion/wildcards/shell_glob.c \
+	    parsing/expansion/wildcards/shell_glob_utils.c \
 	    parsing/expansion/wildcards/shell_glob_escaping_norms_1.c \
 	    parsing/expansion/wildcards/shell_glob_escaping_norms_2.c \
 	    parsing/expansion/wildcards/shell_glob_escaping_norms_3.c \
@@ -33,6 +35,7 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/tokenize_utils_4.c \
 	  ./parsing/tokenize/tokenize_utils_5.c	\
 	  ./parsing/tokenize/tokenize_utils_6.c	\
+	  ./parsing/tokenize/tokenize_utils_7.c	\
 	  ./parsing/tokenize/split_line.c \
 	  ./parsing/pre_ast/pre_ast.c \
 	  ./parsing/pre_ast/enhance_redirection.c \

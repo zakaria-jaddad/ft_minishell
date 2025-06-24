@@ -1,8 +1,5 @@
 
 #include "includes/minishell.h"
-#include "includes/parsing/ast.h"
-#include "includes/parsing/env.h"
-#include "includes/parsing/tokenize.h"
 #include "libft/libft.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -10,17 +7,10 @@
 #include <string.h>
 #include <unistd.h>
 
-char		**list_tokens_to_double_pointer(t_list *list);
-void		expand_simple_cmd(char **command, char ***arguments,
-				t_cmd_simple *cmd);
-void		expand_command(char **command, t_list *command_t, t_list *env);
-void		expand_arguments(char ***arguments, t_list *argument_t,
-				t_list *env);
-
 void	execution_mimic(t_cmd *cmd, t_list *env)
 {
 	char			*command;
-	char			**arguments;
+	t_list			*arguments;
 	t_cmd_simple	*simple_command;
 
 	if (cmd == NULL || env == NULL)
@@ -29,74 +19,19 @@ void	execution_mimic(t_cmd *cmd, t_list *env)
 	{
 		simple_command = cmd->content;
 		command = NULL;
-		arguments = NULL;
 		expand_command(&command, simple_command->command, env);
-		expand_arguments(&arguments, simple_command->arguments, env);
-                exit(0);
+		printf("command = %s\n", command);
+		arguments = expand_arguments(simple_command->arguments, env);
+		printf("arguments: ");
+		while (arguments)
+		{
+			printf("%s ", (char *)arguments->content);
+			fflush(stdout);
+			arguments = arguments->next;
+		}
+		printf("\n");
+		exit(0);
 	}
-}
-
-void	expand_command(char **command, t_list *command_t, t_list *env)
-{
-	t_list	*expanded_command;
-
-	(void)command;
-	expanded_command = expand_me(command_t, env);
-        printf("command: \n");
-	print_tokens(expanded_command);
-	printf("\n");
-	exit(0);
-}
-
-t_list	*get_tokenize_argument(t_list **tokenized_arguments)
-{
-	t_list	*tokenized_argument;
-	t_list	*argument_node;
-	t_token	*token;
-
-	tokenized_argument = NULL;
-	if (tokenized_arguments == NULL || *tokenized_arguments == NULL)
-		return (NULL);
-	while (tokenized_arguments && *tokenized_arguments && is_word((*tokenized_arguments)->content))
-	{
-		token = (*tokenized_arguments)->content;
-		argument_node = create_token_node(token->type, token->data);
-		if (argument_node == NULL)
-			return (ft_lstclear(&tokenized_argument, free_token), NULL);
-		ft_lstadd_back(&tokenized_argument, argument_node);
-		(*tokenized_arguments) = (*tokenized_arguments)->next;
-	}
-	return (tokenized_argument);
-}
-
-void	expand_arguments(char ***arguments, t_list *tokenized_arguments, t_list *env)
-{
-	t_list	*expanded_arguments;
-	t_list	*expanded_argument;
-	t_list	*tokenize_argument;
-
-	(void)arguments;
-	expanded_arguments = NULL;
-        print_tokens_data(tokenized_arguments);
-	while (tokenized_arguments)
-	{
-		tokenize_argument = get_tokenize_argument(&tokenized_arguments);
-		if (tokenize_argument == NULL)
-			return (void)(ft_lstclear(&expanded_arguments, free_token), NULL);
-		expanded_argument = expand_me(tokenize_argument, env);
-		if (expanded_argument == NULL)
-			return (void)(ft_lstclear(&tokenize_argument, free_token),
-				ft_lstclear(&expanded_arguments, free_token), NULL);
-		ft_lstadd_back(&expanded_arguments, expanded_argument);
-                append_tokens(&expanded_argument, TOKEN_WHITE_SPACE, " ");
-                skip_front_spaces(&tokenized_arguments);
-                if (tokenized_arguments == NULL)
-                        break ;
-		tokenized_arguments = tokenized_arguments->next;
-	}
-        printf("arguments: \n");
-        print_tokens(expanded_arguments);
-        printf("\n");
 }
 
 int	main(int _, char **__, char **env)
@@ -118,58 +53,8 @@ int	main(int _, char **__, char **env)
 		if (cmd == NULL)
 			continue ;
 		execution_mimic(cmd, env_lst);
-		// execution(cmd, env_lst);
+		execution(cmd, env_lst);
 	}
 	free(line);
 	return (EXIT_SUCCESS);
-}
-
-static int	count_spaces(t_list *tokens)
-{
-	int	counter;
-
-	counter = 0;
-	if (tokens == NULL)
-		return (0);
-	while (tokens)
-	{
-		if (check_token_type(tokens->content, TOKEN_WHITE_SPACE) == true)
-			counter++;
-		tokens = tokens->next;
-	}
-	return (counter);
-}
-
-char	**list_tokens_to_double_pointer(t_list *list)
-{
-	t_token	*token;
-	int		space_counter;
-	char	**double_pointer;
-	int		i;
-
-	skip_front_spaces(&list);
-	if (list == NULL)
-		return (NULL);
-	space_counter = count_spaces(list);
-	double_pointer = ft_calloc(space_counter + 1, sizeof(char *));
-	if (double_pointer == NULL)
-		return (NULL);
-	i = 0;
-	while (i < space_counter + 1)
-	{
-		token = list->content;
-		while (list != NULL && !check_token_type(token, TOKEN_WHITE_SPACE))
-		{
-			append_str(&double_pointer[i], token->data);
-			if (double_pointer[i] == NULL)
-				return (NULL); // TODO: MEMORY
-			list = list->next;
-			if (list)
-				token = list->content;
-		}
-		i++;
-		if (list)
-			list = list->next;
-	}
-	return (double_pointer);
 }

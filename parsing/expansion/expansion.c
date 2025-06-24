@@ -6,13 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 20:19:24 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 09:48:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-#include <stdlib.h>
-
 
 t_list	*expand_me(t_list *tokens, t_list *env)
 {
@@ -26,10 +24,8 @@ t_list	*expand_me(t_list *tokens, t_list *env)
 	if (tmp == NULL)
 		return (ft_lstclear(&enhanced_tokens, free_token), NULL);
 	enhanced_tokens = tmp;
-
-
 	tmp = expand_wildcard(enhanced_tokens);
-	if (tmp  == NULL)
+	if (tmp == NULL)
 		return (enhanced_tokens);
 	ft_lstclear(&enhanced_tokens, free_token);
 	enhanced_tokens = tmp;
