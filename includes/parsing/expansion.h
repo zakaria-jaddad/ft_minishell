@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 09:42:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:38:27 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_list	*expand_me(t_list *tokens, t_list *env);
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim);
 
 // Dollarsign Expansion
-t_list	*expand_dollar(t_list *tokens, t_list *env);
+void expand_dollar(t_list **tokens, t_list *env);
 void	word_expansion(char **str, t_list *env);
 void	digit_expansion(char **str);
 bool	is_valid_dollar_with_qs_next(t_list *current_token_node);

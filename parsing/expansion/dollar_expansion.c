@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 18:10:13 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/24 10:39:29 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,29 +49,31 @@ static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
 			update_current_token(*tokens, env));
 }
 
-t_list	*expand_dollar(t_list *tokens, t_list *env)
+void expand_dollar(t_list **tokens, t_list *env)
 {
 	t_list	*tokens_head;
 	t_token	*current_token;
 
-	tokens_head = tokens;
-	while (tokens)
+        if (tokens == NULL)
+                return ;
+	tokens_head = *tokens;
+	while (*tokens)
 	{
-		current_token = tokens->content;
+		current_token = (*tokens)->content;
 		if (ft_strchr(current_token->data, '$') != NULL)
 		{
-			if (is_valid_dollar_with_qs_next(tokens) == true
-				|| is_valid_dollar_with_valid_var(tokens) == true)
+			if (is_valid_dollar_with_qs_next(*tokens) == true
+				|| is_valid_dollar_with_valid_var(*tokens) == true)
 			{
-				expand_dollar_escaping_norms(&tokens, &tokens_head, env);
+				expand_dollar_escaping_norms(tokens, &tokens_head, env);
 				continue ;
 			}
-			else if (is_valid_dollar_with_dollar(tokens) == true)
-				tokens = tokens->next;
+			else if (is_valid_dollar_with_dollar(*tokens) == true)
+				*tokens = (*tokens)->next;
 		}
-		if (tokens == NULL)
+		if (*tokens == NULL)
 			break ;
-		tokens = tokens->next;
+		*tokens = (*tokens)->next;
 	}
-	return (tokens_head);
+        *tokens = tokens_head;
 }
