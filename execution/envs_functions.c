@@ -12,10 +12,9 @@
 
 #include "../includes/execution.h"
 
-void	_unset_(t_list *envs, char **args)
-{
-	t_list	*var;
-	int		i;
+void _unset_(t_list *envs, char **args) {
+  t_list *var;
+  int i;
 
 	i = 0;
 	while (args[i])
@@ -46,11 +45,10 @@ int	print_envs(char *declare, t_list *list)
 	return (0);
 }
 
-int	_env_(t_list *list)
-{
-	if (!list)
-		return (-1);
-	return (print_envs(NULL, list));
+int _env_(t_list *list) {
+  if (!list)
+    return (-1);
+  return (print_envs(NULL, list));
 }
 
 /* static void	swap_two_envs(t_list *env1, t_list *env2) */
@@ -62,18 +60,31 @@ int	_env_(t_list *list)
 /* 	env2->content = tmp; */
 /* } */
 
-int	_export_(t_list *list, char **args)
-{
-	t_env	*env;
+void add_export(t_list *list, char **args) {
+  t_env *env;
 
-	if (!list)
-		return (-1);
-	if (!args || !args[0])
-		return (print_envs("declare -x ", list));
-	env = get_env(list->content, args[0]);
-	if (env)
-		edit_env(env, args[1]);
-	else
-		append_env(&list, args[0], args[1]);
-	return (0);
+  env = get_env(list, args[0]);
+  if (env)
+    edit_env(env, args[1]);
+  else {
+    if (args[1])
+      append_env(&list, args[0], args[1]);
+    else
+      append_env(&list, args[0], "\0");
+  }
+}
+
+int _export_(t_list *list, char **args) {
+  int i;
+
+  if (!list)
+    return (-1);
+  if (!args || !args[0])
+    return (print_envs("declare -x ", list));
+  i = 0;
+  while (args[i]) {
+    add_export(list, ft_split(args[i], '='));
+    i++;
+  }
+  return (0);
 }

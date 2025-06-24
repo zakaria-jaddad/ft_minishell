@@ -11,27 +11,26 @@
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include <unistd.h>
 
-int	_echo_(t_list *args, int fd)
-{
-	t_list	*s;
+int _echo_(char **args) {
+  int i;
 
-	if (!args || !args->content)
-	{
-		write(fd, "\n", 1);
-		return (1);
-	}
-	s = args;
-	if (ft_strncmp(args->content, "-n", ft_strlen(args->content)) == 0)
-		args = args->next;
-	while (args)
-	{
-		if (args->content)
-			ft_fprintf(fd, "%s", args->content);
-		args = args->next;
-	}
-	if (ft_strncmp(s->content, "-n", ft_strlen(s->content)) != 0 || !s->content)
-		ft_fprintf(fd, "\n");
-	ft_lstclear(&s, free);
-	return (0);
+  if (!args || !*args) {
+    write(STDOUT_FILENO, "\n", 1);
+    return (1);
+  }
+  i = 0;
+  if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) == 0)
+    i++;
+  while (args[i]) {
+    if (args[i])
+      ft_fprintf(STDOUT_FILENO, "%s", args[i]);
+    if (args[++i])
+      ft_fprintf(STDOUT_FILENO, "%s", " ");
+  }
+  if (ft_strncmp(args[0], "-n", ft_strlen(args[0])) != 0 || !args[0])
+    ft_fprintf(STDOUT_FILENO, "\n");
+  free_double_pointer((void **)args);
+  return (0);
 }
