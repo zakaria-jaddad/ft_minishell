@@ -56,29 +56,6 @@ int count_args(t_list *tokens) {
   return (i);
 }
 
-char **tokens_to_args(t_list *tokens) {
-  t_token *token;
-  char **rv;
-  char *tmp;
-  int i;
-
-  rv = NULL;
-  rv = ft_calloc(count_args(tokens) + 1, sizeof(char *));
-  i = 0;
-  while (tokens) {
-    token = tokens->content;
-    if (token->type == TOKEN_WHITE_SPACE)
-      i++;
-    else {
-      tmp = ft_strjoin(rv[i], token->data);
-      free(rv[i]);
-      rv[i] = tmp;
-    }
-    tokens = tokens->next;
-  }
-  return (rv);
-}
-
 void handle_ctrC_fork(int sig) {
   (void)sig;
   exit(status_x(130, 1));
@@ -112,7 +89,7 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
             list_to_double_pointer(expand_arguments(tree->arguments, env_list));
         if (!args || !args[0])
           exit(status_x(1, 1));
-        cmd = args[0];
+        cmd = ft_strdup(args[0]);
       } else {
         ft_lstadd_front(&(tree->arguments),
                         create_token_node(TOKEN_WHITE_SPACE, " "));
@@ -186,6 +163,10 @@ int execution(t_cmd *tree, t_list *env_list) {
     return (run_redir(tree, env_list));
   } else if (tree->type == NODE_OUT_REDIR) {
     return (run_redir(tree, env_list));
+  } else if (tree->type == NODE_APPEND_REDIR) {
+    return (run_redir(tree, env_list));
+  } else if (tree->type == NODE_HEREDOC) {
+    return (run_heredoc(tree, env_list));
   }
   return (execution_simple_commad(tree->content, env_list));
 }
@@ -193,7 +174,7 @@ int execution(t_cmd *tree, t_list *env_list) {
 int open_file(char *file, int flags) {
   int fd;
 
-  fd = open(file, flags, 0644);
+  fd = open(file, flags);
   if (fd == -1) {
     ft_fprintf(STDERR_FILENO, "minishell: %s: no such file or directory\n",
                file);
@@ -209,9 +190,11 @@ int found_file(t_cmd *t, t_node_type flag, t_list *envs) {
   expand_filename(&file, ((t_cmd_redir *)t->content)->filename, envs);
   fd = -1;
   if (flag == NODE_OUT_REDIR) // >
-    fd = open_file(file, O_RDONLY | O_WRONLY | O_CREAT);
+    fd = open_file(file, O_TRUNC | O_WRONLY | O_CREAT);
   else if (flag == NODE_IN_REDIR) // <
     fd = open_file(file, O_RDONLY);
+  else if (flag == NODE_APPEND_REDIR) // >>
+    fd = open_file(file, O_APPEND | O_CREAT | O_WRONLY);
   if (fd == -1)
     return (-1);
   return (fd);
@@ -223,7 +206,7 @@ void get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs) {
   fd = -1;
   if (!t)
     return;
-  if (NODE_OUT_REDIR == t->type) // >
+  if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR) // > ou >>
   {
     *out = found_file(t, t->type, envs);
     if (*out == -1)

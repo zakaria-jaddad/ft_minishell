@@ -27,6 +27,8 @@ void add_pwd_manual(char *path) {
 }
 
 int cd_helper(char *path, t_list *list) {
+  if (!path || ft_strcmp(path, "") == 0)
+    return (1);
   if (chdir(path) < 0) {
     ft_fprintf(2, "shell: cd: %s: No such file or directory\n", path);
     return (1);
@@ -48,7 +50,7 @@ int _cd_(t_list *envs, char **args) {
   if (!args || !*args) {
     env = get_env(envs, "HOME");
     if (!env) {
-      ft_fprintf(STDERR_FILENO, "bash: cd: HOME not set");
+      ft_fprintf(STDERR_FILENO, "bash: cd: HOME not set\n");
       return (1);
     }
     if (cd_helper((char *)env->value, envs))
