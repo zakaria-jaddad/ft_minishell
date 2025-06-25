@@ -110,6 +110,8 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
       if (ft_strncmp(cmd, "", ft_strlen(cmd)) == 0) {
         args =
             list_to_double_pointer(expand_arguments(tree->arguments, env_list));
+        if (!args || !args[0])
+          exit(status_x(1, 1));
         cmd = args[0];
       } else {
         ft_lstadd_front(&(tree->arguments),
