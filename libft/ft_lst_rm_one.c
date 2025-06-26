@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/08 01:05:21 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/06/23 12:32:22 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/25 21:48:04 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_lst_rm_one(t_list **head, t_list *node_to_del,
 	t_list	*prev;
 	t_list	*next;
 
-	if (head == NULL || *head == NULL || node_to_del == NULL
+	if (node_to_del == NULL
 		|| clear_content == NULL)
 		return ;
 	if (node_to_del->content)
@@ -27,7 +27,7 @@ void	ft_lst_rm_one(t_list **head, t_list *node_to_del,
 	next = node_to_del->next;
 	if (prev)
 		prev->next = next;
-	else
+	else if (head != NULL)
 		*head = next;
 	if (next)
 		next->prev = prev;
