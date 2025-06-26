@@ -7,7 +7,7 @@ NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 EXECUTION = execution/execution.c execution/_cd_.c execution/_exit_.c execution/envs_functions.c execution/sort_envs.c \
-execution/_echo_.c execution/_pwd_.c execution/utiles.c
+execution/_echo_.c execution/_pwd_.c execution/utiles.c execution/heredoc.c 
 
 EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/expansion_api.c \

@@ -174,7 +174,7 @@ int execution(t_cmd *tree, t_list *env_list) {
 int open_file(char *file, int flags) {
   int fd;
 
-  fd = open(file, flags);
+  fd = open(file, flags, 0644);
   if (fd == -1) {
     ft_fprintf(STDERR_FILENO, "minishell: %s: no such file or directory\n",
                file);

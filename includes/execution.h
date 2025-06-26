@@ -37,10 +37,9 @@ void free_double_pointer(void **p);
 void _unset_(t_list *envs, char **args);
 t_list *sort_envs(t_list *list);
 char **envs_list_to_double_pointer(t_list *env_list);
-t_list *expand(char **args, t_list *envs);
 char *manage_pwd(char *value);
 int execution(t_cmd *tree, t_list *env_list);
 char *list_to_string(t_list *list);
 int status_x(int value, int modify);
-
+int run_heredoc(t_cmd *t, t_list *env_list);
 #endif
