@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 13:02:30 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:35:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,9 @@
 
 # define SPECIAL_EXPANSION " .,+-!@#$%^&()[]{};:'\"<>/|~`= \t\n"
 
-t_list	*expand_me(t_list *tokens, t_list *env);
+t_list	*expand(t_list *tokens, t_list *env);
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim);
+t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type);
 
 // Dollarsign Expansion
 void	expand_dollar(t_list **tokens, t_list *env);
@@ -64,8 +65,8 @@ t_list	*create_tokenized_matches(t_list *filename);
 
 // Expansion API
 t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env);
-void	expand_filename(char **arguments, t_list *tokenized_filename,
+void	expand_filename(char **filename, t_list *tokenized_filename,
 			t_list *env);
-void	expand_command(char **command, t_list *tokenized_command, t_list *env);
+t_list *expand_command(t_list *tokenized_command, t_list *env);
 
 #endif // !EXPANSION_H
