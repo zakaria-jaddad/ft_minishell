@@ -56,14 +56,39 @@ int count_args(t_list *tokens) {
   return (i);
 }
 
-void handle_ctrC_fork(int sig) {
-  (void)sig;
-  exit(status_x(130, 1));
-}
-
 // TODO: USE errno to get the err status and print its error :))
 void display_execve_error(void) {
   ft_fprintf(2, "execve error: %s\n", strerror(status_x(errno, 1)));
+}
+
+char **arr_add_front(char **to_add, char **arr) {
+  char **rv;
+  int i;
+  int j;
+
+  if (!to_add)
+    return (arr);
+  if (!arr)
+    return (to_add);
+  i = 0;
+  j = 0;
+  while (arr[i])
+    i++;
+  while (to_add[j++])
+    i++;
+  rv = malloc(sizeof(char *) * (i + 1));
+  if (!rv)
+    return (NULL);
+  i = -1;
+  while (to_add[++i])
+    rv[i] = ft_strdup(to_add[i]);
+  j = -1;
+  while (arr[++j])
+    rv[i++] = ft_strdup(arr[j]);
+  rv[i] = NULL;
+  free_double_pointer((void **)arr);
+  free_double_pointer((void **)to_add);
+  return (rv);
 }
 
 int not_builtin(t_cmd_simple *tree, t_list *env_list) {
@@ -83,21 +108,15 @@ int not_builtin(t_cmd_simple *tree, t_list *env_list) {
       envs = envs_list_to_double_pointer(env_list);
       if (!envs)
         return (0);
-      expand_command(&cmd, tree->command, env_list);
-      if (ft_strncmp(cmd, "", ft_strlen(cmd)) == 0) {
-        args =
-            list_to_double_pointer(expand_arguments(tree->arguments, env_list));
-        if (!args || !args[0])
-          exit(status_x(1, 1));
-        cmd = ft_strdup(args[0]);
-      } else {
-        ft_lstadd_front(&(tree->arguments),
-                        create_token_node(TOKEN_WHITE_SPACE, " "));
-        ft_lstadd_front(&(tree->arguments), ft_lstnew(tree->command->content));
-        args =
-            list_to_double_pointer(expand_arguments(tree->arguments, env_list));
-      }
-      path = valid_command(cmd, get_env(env_list, "PATH")->value);
+      args =
+          list_to_double_pointer(expand_arguments(tree->arguments, env_list));
+      args = arr_add_front(
+          list_to_double_pointer(expand_command(tree->command, env_list)),
+          args);
+      if (!args)
+        exit(1);
+      cmd = ft_strdup(args[0]);
+      path = valid_command((char *)cmd, get_env(env_list, "PATH")->value);
       if (execve(path, args, envs) < 0) {
         free(path);
         display_execve_error();
@@ -169,130 +188,4 @@ int execution(t_cmd *tree, t_list *env_list) {
     return (run_heredoc(tree, env_list));
   }
   return (execution_simple_commad(tree->content, env_list));
-}
-
-int open_file(char *file, int flags) {
-  int fd;
-
-  fd = open(file, flags, 0644);
-  if (fd == -1) {
-    ft_fprintf(STDERR_FILENO, "minishell: %s: no such file or directory\n",
-               file);
-    return (-1);
-  }
-  return (fd);
-}
-
-int found_file(t_cmd *t, t_node_type flag, t_list *envs) {
-  int fd;
-  char *file;
-
-  expand_filename(&file, ((t_cmd_redir *)t->content)->filename, envs);
-  fd = -1;
-  if (flag == NODE_OUT_REDIR) // >
-    fd = open_file(file, O_TRUNC | O_WRONLY | O_CREAT);
-  else if (flag == NODE_IN_REDIR) // <
-    fd = open_file(file, O_RDONLY);
-  else if (flag == NODE_APPEND_REDIR) // >>
-    fd = open_file(file, O_APPEND | O_CREAT | O_WRONLY);
-  if (fd == -1)
-    return (-1);
-  return (fd);
-}
-
-void get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs) {
-  int fd;
-
-  fd = -1;
-  if (!t)
-    return;
-  if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR) // > ou >>
-  {
-    *out = found_file(t, t->type, envs);
-    if (*out == -1)
-      return;
-  } else if (NODE_IN_REDIR == t->type) // <
-  {
-    *in = found_file(t, t->type, envs);
-    if (*in == -1)
-      return;
-  }
-  if (t->right)
-    get_last_redir_fd(t->right, out, in, envs);
-}
-
-int run_redir(t_cmd *t, t_list *envs) {
-  int status;
-  int out_fd;
-  int in_fd;
-  pid_t pid;
-
-  status = 0;
-  in_fd = 0;
-  out_fd = 0;
-  get_last_redir_fd(t, &out_fd, &in_fd, envs);
-  if (in_fd == -1 || out_fd == -1)
-    return (status_x(1, 1));
-  pid = fork();
-  if (0 == pid) {
-    if (signal(SIGINT, handle_ctrC_fork) == SIG_ERR)
-      ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
-    if (in_fd)
-      dup2(in_fd, STDIN_FILENO);
-    if (out_fd)
-      dup2(out_fd, STDOUT_FILENO);
-    status = execution(t->left, envs);
-    if (in_fd)
-      close(in_fd);
-    if (out_fd)
-      close(out_fd);
-    exit(status);
-  } else if (pid > 0) {
-    waitpid(pid, &status, 0);
-    if (in_fd)
-      close(in_fd);
-    if (out_fd)
-      close(out_fd);
-  } else
-    return (ft_fprintf(2, "fork error!\n"), 1);
-  return (status_x(status, 0));
-}
-
-int run_in_pipe(t_cmd *t, t_list *envs) {
-  pid_t pid_left;
-  pid_t pid_right;
-  int status;
-  int fd[2];
-
-  if (pipe(fd) < 0)
-    return (ft_fprintf(2, "pipe: error!\n"), 1);
-  status = 0;
-  pid_left = fork();
-  if (pid_left < 0)
-    return (close(fd[0]), close(fd[1]), ft_fprintf(2, "fork: error!!\n"), 1);
-  if (pid_left == 0) {
-    close(fd[0]);
-    dup2(fd[1], STDOUT_FILENO);
-    close(fd[1]);
-    status = execution(t->left, envs);
-    exit(status);
-  }
-  pid_right = fork();
-  if (pid_right < 0)
-    return (close(fd[0]), close(fd[1]), waitpid(pid_left, 0, 0),
-            ft_fprintf(2, "fork: error!!\n"), 1);
-  if (pid_right == 0) {
-    if (signal(SIGINT, handle_ctrC_fork) == SIG_ERR)
-      ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
-    close(fd[1]);
-    dup2(fd[0], STDIN_FILENO);
-    close(fd[0]);
-    status = execution(t->right, envs);
-    exit(status);
-  }
-  close(fd[0]);
-  close(fd[1]);
-  waitpid(pid_left, NULL, 0);
-  waitpid(pid_right, NULL, 0);
-  return (status_x(status, 0));
 }

@@ -42,4 +42,14 @@ int execution(t_cmd *tree, t_list *env_list);
 char *list_to_string(t_list *list);
 int status_x(int value, int modify);
 int run_heredoc(t_cmd *t, t_list *env_list);
+int run_redir(t_cmd *t, t_list *envs);
+
+// file handling
+int open_file(char *file, int flags);
+int open_file(char *file, int flags);
+int found_file(t_cmd *t, t_node_type flag, t_list *envs);
+
+// signals
+void handle_ctrC_fork(int sig);
+
 #endif
