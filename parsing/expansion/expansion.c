@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/27 16:08:11 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:46:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ t_list	*expand(t_list *tokens, t_list *env)
 	t_list	*enhanced_tokens;
 	t_list	*tmp;
 
-	enhanced_tokens = get_enhanced_tokens(tokens, "$?");
+	enhanced_tokens = get_enhanced_tokens(tokens, "$*?");
 	if (enhanced_tokens == NULL)
 		return (NULL);
 	expand_dollar(&enhanced_tokens, env);
