@@ -2,15 +2,34 @@
 #include <readline/readline.h>
 #include <unistd.h>
 
-int run_heredoc(t_cmd *t, t_list *env_list) {
+char *get_address(void *var) {
+  static char str[19];
+  char *hex;
+  unsigned long ptr;
+  int i;
+
+  hex = "0123456789ABCDEF";
+  ptr = (unsigned long)var;
+  str[0] = '0';
+  str[1] = 'x';
+  i = 17;
+  while (i > 1) {
+    str[i] = hex[ptr % 16];
+    ptr /= 16;
+    i--;
+  }
+  str[18] = '\0';
+  return (ft_strdup(str));
+}
+
+int run_heredoc(char *dilimiter, int expand, t_list *env_list) {
   char *line;
   char *tmp;
   char *res;
-  char *dilimiter;
   int fd[2];
 
   (void)env_list;
-  dilimiter = ((t_token *)((t_cmd_redir *)t->content)->filename->content)->data;
+  (void)expand;
   line = readline(">");
   res = NULL;
   while (ft_strcmp(line, dilimiter) != 0) {
@@ -24,23 +43,33 @@ int run_heredoc(t_cmd *t, t_list *env_list) {
     line = readline(">");
   }
   free(line);
-  if (!t->left)
-    return (0);
-  fd[0] = open("/tmp/test.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  fd[1] = open("/tmp/test.txt", O_RDONLY);
+  line = get_address(dilimiter);
+  fd[0] = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  fd[1] = open(line, O_RDONLY);
+  unlink(line);
+  free(line);
   if (fd[0] < 0 || fd[1] < 0)
     return (ft_fprintf(2, "error heredoc file\n"), 1);
   write(fd[0], res, ft_strlen(res));
   close(fd[0]);
-  fd[0] = fork();
-  if (fd[0] == 0) {
-    dup2(fd[1], STDIN_FILENO);
-    execution(t->left, env_list);
-    execution(t->right, env_list);
-    close(fd[1]);
-    exit(0);
-  } else
-    wait(NULL);
-  close(fd[1]);
-  return (0);
+  return (fd[1]);
+}
+
+int handle_heredoc(t_list *tokens, t_list *env_list) {
+  t_token *token;
+  int expand;
+  char *str;
+
+  if (!tokens)
+    return (-1);
+  expand = 1;
+  str = tokens_to_str(tokens);
+  while (tokens) {
+    token = tokens->content;
+    if (token->type == TOKEN_DOUBLE_QUOTE_WORD ||
+        token->type == TOKEN_DOUBLE_QUOTE_WORD)
+      expand = 0;
+    tokens = tokens->next;
+  }
+  return (run_heredoc(str, expand, env_list));
 }
