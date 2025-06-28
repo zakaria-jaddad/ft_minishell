@@ -41,7 +41,7 @@ char *manage_pwd(char *value);
 int execution(t_cmd *tree, t_list *env_list);
 char *list_to_string(t_list *list);
 int status_x(int value, int modify);
-int run_heredoc(t_cmd *t, t_list *env_list);
+int run_heredoc(char *dilimiter, int expand, t_list *env_list);
 int run_redir(t_cmd *t, t_list *envs);
 
 // file handling
