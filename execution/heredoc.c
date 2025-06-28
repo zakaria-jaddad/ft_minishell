@@ -44,9 +44,11 @@ char *run_heredoc(char *dilimiter, int expand, t_list *env_list) {
   }
   free(line);
   line = get_address(dilimiter);
+  if (access(line, F_OK) == -1)
+    line = run_heredoc(dilimiter + 1, expand, env_list);
   fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd < 0 || fd < 0)
-    return (free(line), ft_fprintf(2, "error heredoc file\n"), NULL);
+    line = run_heredoc(line, expand, env_list);
   write(fd, res, ft_strlen(res));
   close(fd);
   return (line);
