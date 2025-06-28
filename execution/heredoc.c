@@ -3,14 +3,14 @@
 #include <unistd.h>
 
 char *get_address(void *var) {
-  static char str[19];
+  char str[19];
   char *hex;
   unsigned long ptr;
   int i;
 
   hex = "0123456789ABCDEF";
   ptr = (unsigned long)var;
-  str[0] = '0';
+  str[0] = '.';
   str[1] = 'x';
   i = 17;
   while (i > 1) {
@@ -19,14 +19,14 @@ char *get_address(void *var) {
     i--;
   }
   str[18] = '\0';
-  return (ft_strdup(str));
+  return (ft_strjoin("/tmp/", str));
 }
 
-int run_heredoc(char *dilimiter, int expand, t_list *env_list) {
+char *run_heredoc(char *dilimiter, int expand, t_list *env_list) {
   char *line;
   char *tmp;
   char *res;
-  int fd[2];
+  int fd;
 
   (void)env_list;
   (void)expand;
@@ -44,24 +44,21 @@ int run_heredoc(char *dilimiter, int expand, t_list *env_list) {
   }
   free(line);
   line = get_address(dilimiter);
-  fd[0] = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-  fd[1] = open(line, O_RDONLY);
-  unlink(line);
-  free(line);
-  if (fd[0] < 0 || fd[1] < 0)
-    return (ft_fprintf(2, "error heredoc file\n"), 1);
-  write(fd[0], res, ft_strlen(res));
-  close(fd[0]);
-  return (fd[1]);
+  fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+  if (fd < 0 || fd < 0)
+    return (free(line), ft_fprintf(2, "error heredoc file\n"), NULL);
+  write(fd, res, ft_strlen(res));
+  close(fd);
+  return (line);
 }
 
-int handle_heredoc(t_list *tokens, t_list *env_list) {
+char *handle_heredoc(t_list *tokens, t_list *env_list) {
   t_token *token;
   int expand;
   char *str;
 
   if (!tokens)
-    return (-1);
+    return (NULL);
   expand = 1;
   str = tokens_to_str(tokens);
   while (tokens) {
