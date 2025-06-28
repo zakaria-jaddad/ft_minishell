@@ -185,7 +185,7 @@ int execution(t_cmd *tree, t_list *env_list) {
   } else if (tree->type == NODE_APPEND_REDIR) {
     return (run_redir(tree, env_list));
   } else if (tree->type == NODE_HEREDOC) {
-    return (run_heredoc(tree, env_list));
+    return (run_redir(tree, env_list));
   }
   return (execution_simple_commad(tree->content, env_list));
 }
