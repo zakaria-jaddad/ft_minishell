@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 13:23:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/28 15:03:46 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,13 @@ static inline bool	is_word(t_token *token)
 		|| token->type == TOKEN_SINGLE_QUOTE_WORD);
 }
 
+
 static inline bool	is_token_special(t_token *token)
 {
 	if (token == NULL)
 		return (false);
 	return (!(is_word(token) || check_token_type(token, TOKEN_WHITE_SPACE)));
 }
+
 
 #endif // !TOKENIZE_H

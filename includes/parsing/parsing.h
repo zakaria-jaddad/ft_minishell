@@ -19,7 +19,7 @@
 # include <unistd.h>
 
 
-bool				syntax_check(t_list **tokens);
+bool				syntax_check(t_list *tokens);
 t_cmd				*parse_cmd(char *line, t_list *env);
 
 static inline void	panic(char *s)
