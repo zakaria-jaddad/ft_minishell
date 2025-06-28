@@ -14,7 +14,6 @@ EXECUTION = execution/execution.c \
 						execution/_echo_.c \
 						execution/_pwd_.c \
 						execution/utiles.c \
-						execution/heredoc.c \
 						execution/redirections.c \
 						execution/handling_files.c\
 						execution/signals.c
@@ -34,6 +33,7 @@ EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/wildcards/wildcards_utils_1.c \
 	    parsing/expansion/wildcards/wildcards_utils_2.c \
 	    parsing/expansion/wildcards/wildcards_utils_3.c \
+	    parsing/pre_ast/heredoc.c
 
 
 PARCING = ./parsing/parsing.c \

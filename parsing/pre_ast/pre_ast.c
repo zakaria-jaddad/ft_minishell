@@ -12,11 +12,11 @@
 
 #include "../../includes/parsing/pre_ast.h"
 
-void	pre_ast(t_list **tokens)
+static void	enhance_redirections(t_list **tokens)
 {
 	t_list	*current_token;
 
-	if (tokens == NULL)
+	if (tokens == NULL || *tokens == NULL)
 		return ;
 	current_token = *tokens;
 	while (current_token)
@@ -28,4 +28,38 @@ void	pre_ast(t_list **tokens)
 		}
 		current_token = current_token->next;
 	}
+}
+
+static void	handle_heredocs(t_list **tokens)
+{
+	t_list	*current_token;
+	char	*filename;
+	t_list	*tokenized_file_name;
+
+	if (tokens == NULL || *tokens == NULL)
+		return ;
+	current_token = *tokens;
+	while (current_token)
+	{
+		if (check_token_type(current_token->content, TOKEN_HEREDOC) == true)
+		{
+			current_token = current_token->next;
+			tokenized_file_name = get_filename(&current_token);
+			filename = handle_heredoc(tokenized_file_name, NULL);
+			if (filename == NULL)
+				return (ft_lstclear(&tokenized_file_name, free_token));
+			printf("filename: %s\n", filename);
+		}
+		if (current_token == NULL)
+			break ;
+		current_token = current_token->next;
+	}
+}
+
+void	pre_ast(t_list **tokens)
+{
+	if (tokens == NULL)
+		return ;
+	enhance_redirections(tokens);
+	handle_heredocs(tokens);
 }
