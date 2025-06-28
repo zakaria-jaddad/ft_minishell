@@ -44,7 +44,7 @@ char *run_heredoc(char *dilimiter, int expand, t_list *env_list) {
   }
   free(line);
   line = get_address(dilimiter);
-  if (access(line, F_OK) == -1)
+  if (access(line, F_OK) == 0)
     line = run_heredoc(line, expand, env_list);
   fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
   if (fd < 0 || fd < 0)
