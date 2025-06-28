@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/26 22:33:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/28 11:43:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/parsing/parsing.h"
-#include <stdlib.h>
 
 t_cmd	*parse_cmd(char *line, t_list *env_lst)
 {
@@ -24,11 +23,9 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
 	if (tokens == NULL)
 		return (NULL);
         // syntax_check() NOTE IMPLEMENTED
-        if (syntax_check(&tokens) == false)
+        if (syntax_check(tokens) == false)
                 return (ft_lstclear(&tokens, free_token), NULL);
         pre_ast(&tokens);
-	/* print_tokens(tokens); */
-	/* exit(0); */
         cmd = ast(&tokens);
         if (cmd == NULL)
                 return (ft_lstclear(&tokens, free_token), NULL);
