@@ -1,28 +1,48 @@
 #include "../../includes/execution.h"
 #include <readline/readline.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <unistd.h>
+
+uintptr_t open_and_read_urandom()
+{
+        uintptr_t c;
+
+        int fd = open("/dev/urandom", O_RDONLY);
+        if (fd == -1) {
+                return 1;
+        }
+        int bytes_read = read(fd, &c, sizeof(uintptr_t));
+        if (bytes_read != (sizeof(uintptr_t)))
+        {
+                close(fd);
+                return 1;
+        }
+        close(fd);
+        return c; 
+}
 
 char	*get_address(void *var)
 {
 	char			str[19];
-	char			*hex;
+	char			*charset;
 	unsigned long	ptr;
 	int				i;
 
-	hex = "0123456789ABCDEF";
+	charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXUZabcdefghijklmnopqrstuvwxyz";
 	ptr = (unsigned long)var;
-	str[0] = '.';
-	str[1] = 'x';
-	i = 17;
+	i = 19;
 	while (i > 1)
 	{
-		str[i] = hex[ptr % 16];
-		ptr /= 16;
+		int idx = ((ptr % 62) + (open_and_read_urandom() % 62)) % 62;
+		str[i] = charset[idx];
+		ptr /= 62;
 		i--;
 	}
 	str[18] = '\0';
 	return (ft_strjoin("/tmp/", str));
 }
+
 
 char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 {
@@ -33,7 +53,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 
 	(void)env_list;
 	(void)expand;
-	line = readline(">");
+	line = readline("> ");
 	res = NULL;
 	while (ft_strcmp(line, dilimiter) != 0)
 	{
@@ -44,16 +64,17 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		free(res);
 		res = tmp;
 		free(line);
-		line = readline(">");
+		line = readline("> ");
 	}
 	free(line);
 	line = get_address(dilimiter);
 	if (access(line, F_OK) == 0)
-		line = run_heredoc(line, expand, env_list);
+                line = get_address(dilimiter);
 	fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd < 0 || fd < 0)
-		line = run_heredoc(line, expand, env_list);
-	write(fd, res, ft_strlen(res));
+	if (fd < 0)
+                line = get_address(dilimiter);
+        if (res != NULL)
+                ft_fprintf(fd, res);
 	close(fd);
 	return (line);
 }
