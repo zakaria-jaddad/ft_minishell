@@ -2,23 +2,45 @@
 #include <readline/readline.h>
 #include <unistd.h>
 
+uintptr_t	open_and_read_urandom(void)
+{
+	uintptr_t	c;
+	int			fd;
+	int			bytes_read;
+
+	fd = open("/dev/urandom", O_RDONLY);
+	if (fd == -1)
+	{
+		return (1);
+	}
+	bytes_read = read(fd, &c, sizeof(uintptr_t));
+	if (bytes_read != (sizeof(uintptr_t)))
+	{
+		close(fd);
+		return (1);
+	}
+	close(fd);
+	return (c);
+}
+
 char	*get_address(void *var)
 {
 	char			str[19];
 	char			*hex;
 	unsigned long	ptr;
 	int				i;
+	int				idx;
 
 	hex = "0123456789ABCDEF";
 	ptr = (unsigned long)var;
 	str[0] = '.';
-	str[1] = 'x';
-	i = 17;
-	while (i > 1)
+	i = 1;
+	while (i < 18)
 	{
-		str[i] = hex[ptr % 16];
+		idx = ((ptr % 16) + (open_and_read_urandom() % 16)) % 16;
+		str[i] = hex[idx];
 		ptr /= 16;
-		i--;
+		i++;
 	}
 	str[18] = '\0';
 	return (ft_strjoin("/tmp/", str));
@@ -33,7 +55,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 
 	(void)env_list;
 	(void)expand;
-	line = readline(">");
+	line = readline("> ");
 	res = NULL;
 	while (ft_strcmp(line, dilimiter) != 0)
 	{
@@ -44,7 +66,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		free(res);
 		res = tmp;
 		free(line);
-		line = readline(">");
+		line = readline("> ");
 	}
 	free(line);
 	line = get_address(dilimiter);
@@ -52,7 +74,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		line = get_address(line);
 	fd = open(line, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		line = run_heredoc(line, expand, env_list);
+		return (free(line), NULL);
 	if (res)
 		write(fd, res, ft_strlen(res));
 	close(fd);

@@ -41,7 +41,7 @@ int	main(int _, char **__, char **env)
 		cmd = parse_cmd(line, env_lst);
 		if (cmd == NULL)
 			continue ;
-		print_cmd(cmd, 0);
+		// print_cmd(cmd, 0);
 		// printf("%s\n",
 		// char *command;
 		// char **arguments;
@@ -52,7 +52,7 @@ int	main(int _, char **__, char **env)
 		// printf("cmd: %s\n", command);
 		// printf("args1: %s\n", arguments[0]);
 		// printf("args2: %s\n", arguments[1]);
-		status_x(execution(cmd, env_lst), 1);
+		execution(cmd, env_lst);
 		// printf("$?: %d\n", status_x(0, 0));
 	}
 	free(line);
