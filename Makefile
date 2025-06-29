@@ -16,7 +16,8 @@ EXECUTION = execution/execution.c \
 						execution/utiles.c \
 						execution/redirections.c \
 						execution/handling_files.c\
-						execution/signals.c
+						execution/signals.c \
+						execution/helpers.c
 EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/expansion_api.c \
 	    parsing/expansion/get_enhanced_tokens.c \
