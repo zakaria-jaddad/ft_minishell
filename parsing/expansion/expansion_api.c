@@ -27,9 +27,9 @@ static int	count_spaces(char *s)
 	}
 	return (spaces);
 }
-static bool check_spaces(char *str)
+static bool	check_spaces(char *str)
 {
-	return (count_spaces(str) == (int) ft_strlen(str));
+	return (count_spaces(str) == (int)ft_strlen(str));
 }
 
 static int	is_valid_word_token(int type)
@@ -37,8 +37,6 @@ static int	is_valid_word_token(int type)
 	return (type == TOKEN_WORD || type == TOKEN_DOUBLE_QUOTE_WORD
 		|| type == TOKEN_SINGLE_QUOTE_WORD);
 }
-
-
 
 t_list	*extract_words_list(t_list *tokens)
 {
@@ -82,7 +80,6 @@ static t_list	*expand_word(t_list *tokenized_word, t_list *env)
 	if (tokenized_word == NULL || env == NULL)
 		return (NULL);
 	expanded_tokenized_word = expand(tokenized_word, env);
-
 	if (expanded_tokenized_word == NULL)
 		return (NULL);
 	expansion_lst = extract_words_list(expanded_tokenized_word);
@@ -104,7 +101,7 @@ void	expand_filename(char **filename, t_list *tokenized_filename,
 {
 	if (filename == NULL || tokenized_filename == NULL || env == NULL)
 		return ;
-	*filename = (char *)expand_word(tokenized_filename, env);
+	*filename = (char *)expand_word(tokenized_filename, env)->content;
 	if (ft_strchr(*filename, ' ') != NULL)
 	{
 		ft_fprintf(STDOUT_FILENO, "bash: *: ambiguous redirect");
