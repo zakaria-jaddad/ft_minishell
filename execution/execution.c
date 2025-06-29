@@ -162,19 +162,8 @@ int	execution(t_cmd *tree, t_list *env_list)
 	{
 		return (run_in_pipe(tree, env_list));
 	}
-	else if (tree->type == NODE_IN_REDIR)
-	{
-		return (run_redir(tree, env_list));
-	}
-	else if (tree->type == NODE_OUT_REDIR)
-	{
-		return (run_redir(tree, env_list));
-	}
-	else if (tree->type == NODE_APPEND_REDIR)
-	{
-		return (run_redir(tree, env_list));
-	}
-	else if (tree->type == NODE_HEREDOC)
+	else if (tree->type == NODE_IN_REDIR || tree->type == NODE_HEREDOC
+		|| tree->type == NODE_OUT_REDIR || tree->type == NODE_APPEND_REDIR)
 	{
 		return (run_redir(tree, env_list));
 	}

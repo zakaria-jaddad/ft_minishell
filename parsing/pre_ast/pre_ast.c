@@ -92,6 +92,4 @@ void	pre_ast(t_list **tokens)
 		return ;
 	enhance_redirections(tokens);
 	handle_heredocs(tokens);
-	print_tokens_data(*tokens);
-	exit(0);
 }

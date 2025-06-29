@@ -13,7 +13,7 @@ void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 		if (*out == -1)
 			return ;
 	}
-	else if (NODE_IN_REDIR == t->type || NODE_IN_REDIR == t->type) // < or <<
+	else if (NODE_IN_REDIR == t->type || NODE_HEREDOC == t->type) // < or <<
 	{
 		*in = found_file(t, t->type, envs);
 		if (*in == -1)
@@ -31,8 +31,8 @@ int	run_redir(t_cmd *t, t_list *envs)
 	pid_t	pid;
 
 	status = 0;
-	in_fd = 0;
-	out_fd = 0;
+	in_fd = STDIN_FILENO;
+	out_fd = STDOUT_FILENO;
 	get_last_redir_fd(t, &out_fd, &in_fd, envs);
 	if (in_fd == -1 || out_fd == -1)
 		return (status_x(1, 1));
@@ -46,19 +46,19 @@ int	run_redir(t_cmd *t, t_list *envs)
 		if (out_fd)
 			dup2(out_fd, STDOUT_FILENO);
 		status = execution(t->left, envs);
-		if (in_fd)
-			close(in_fd);
-		if (out_fd)
+		if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
 			close(out_fd);
+		if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
+			close(in_fd);
 		exit(status);
 	}
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
-		if (in_fd)
-			close(in_fd);
-		if (out_fd)
+		if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
 			close(out_fd);
+		if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
+			close(in_fd);
 	}
 	else
 		return (ft_fprintf(2, "fork error!\n"), 1);
