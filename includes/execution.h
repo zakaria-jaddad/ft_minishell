@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 17:01:43 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/13 16:38:43 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:34:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ char	**envs_list_to_double_pointer(t_list *env_list);
 char	*manage_pwd(char *value);
 int		execution(t_cmd *tree, t_list *env_list);
 char	*list_to_string(t_list *list);
-int		status_x(int value, int modify);
 char	*run_heredoc(char *dilimiter, int expand, t_list *env_list);
 int		run_redir(t_cmd *t, t_list *envs);
 int		run_in_pipe(t_cmd *t, t_list *envs);

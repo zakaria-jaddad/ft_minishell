@@ -6,11 +6,12 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:27:26 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/27 09:29:09 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:36:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include "../includes/minishell.h"
 
 void _exit_(char **args) {
   int i;

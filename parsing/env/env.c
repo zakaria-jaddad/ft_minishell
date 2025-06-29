@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/21 19:31:39 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:52:39 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ static t_list	*simple_env(t_list *env_lst)
 		return (ft_lstclear(&env_lst, free_env), NULL);
 	if (append_env(&env_lst, "_", "/usr/bin/env") == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
+	if (append_env(&env_lst, "PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:. ") == NULL)
+		return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }
 
@@ -90,7 +92,5 @@ t_list	*envs_init(char **env, ...)
 			return (ft_lstclear(&env_lst, free_env), NULL);
 		(ft_lstadd_back(&env_lst, node), env++);
 	}
-	if (append_env(&env_lst, "?", "0") == NULL)
-		return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }

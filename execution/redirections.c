@@ -1,4 +1,5 @@
 #include "../includes/execution.h"
+#include "../includes/minishell.h"
 
 void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 {

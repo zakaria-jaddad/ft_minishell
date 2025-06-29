@@ -6,11 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:04:48 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 12:01:31 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:39:40 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include "../../includes/minishell.h"
+#include <stdio.h>
 
 static char	*get_key(char *str, char *special)
 {
@@ -51,6 +53,8 @@ static void	simple_word_expansion(char **str, t_list *env)
 
 	if (str == NULL || *str == NULL || env == NULL)
 		return ;
+	if (ft_strcmp(*str, "?") == 0)
+		return (void)(*str = ft_itoa(status_x(0, false)));
 	var = get_env(env, *str);
 	tmp = *str;
 	if (var == NULL)

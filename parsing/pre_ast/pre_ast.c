@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/29 16:13:36 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/29 21:20:15 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static void	handle_heredocs(t_list **tokens)
 	t_list	*tokenized_file_name;
 	t_list	*start;
 
-	(void)start;
 	if (tokens == NULL || *tokens == NULL)
 		return ;
 	current_token = *tokens;
@@ -70,8 +69,7 @@ static void	handle_heredocs(t_list **tokens)
 	{
 		if (check_token_type(current_token->content, TOKEN_HEREDOC) == true)
 		{
-			current_token = current_token->next;
-			start = current_token;
+			(void)!(current_token = current_token->next, start = current_token);
 			tokenized_file_name = get_filename(&current_token);
 			filename = handle_heredoc(tokenized_file_name, NULL);
 			ft_lstclear(&tokenized_file_name, free_token);

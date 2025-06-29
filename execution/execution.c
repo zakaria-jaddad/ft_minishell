@@ -9,6 +9,7 @@
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include "../includes/minishell.h"
 
 char	*valid_command(char *cmd, char *path)
 {
@@ -41,7 +42,7 @@ char	*valid_command(char *cmd, char *path)
 // TODO: USE errno to get the err status and print its error :))
 int	display_execve_error(char *command)
 {
-	if (errno == ENOENT)
+	if (errno == ENOENT || errno == EACCES)
 	{
 		if (ft_strnstr(command, "/", ft_strlen(command)))
 			return (ft_fprintf(2, "minishell: %s: No such file or directory\n",
