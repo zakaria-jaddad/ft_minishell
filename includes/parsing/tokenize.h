@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 07:49:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/28 15:03:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/30 19:52:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct s_token
 
 bool				check_equal_in_last_token(t_list *tokens);
 bool				is_last_token_type_space(t_list *tokens);
-bool				is_between_per(t_list *tokens);
+bool				is_wrapped_by_single_paren_pair(t_list *tokens);
 void				print_split(t_list *line_lst);
 void				print_tokens(t_list *tokens);
 void				free_token(void *token);

@@ -62,6 +62,7 @@ static void	handle_heredocs(t_list **tokens)
 	t_list	*tokenized_file_name;
 	t_list	*start;
 
+        (void) start;
 	if (tokens == NULL || *tokens == NULL)
 		return ;
 	current_token = *tokens;
