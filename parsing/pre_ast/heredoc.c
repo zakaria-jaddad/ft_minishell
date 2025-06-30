@@ -1,5 +1,7 @@
 #include "../../includes/execution.h"
 #include <readline/readline.h>
+#include <stdint.h>
+#include <stdio.h>
 #include <unistd.h>
 
 uintptr_t	open_and_read_urandom(void)
@@ -26,12 +28,12 @@ uintptr_t	open_and_read_urandom(void)
 char	*get_address(void *var)
 {
 	char			str[19];
-	char			*hex;
+	char			*charset;
 	unsigned long	ptr;
 	int				i;
 	int				idx;
 
-	hex = "0123456789ABCDEF";
+	charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXUZabcdefghijklmnopqrstuvwxyz";
 	ptr = (unsigned long)var;
 	str[0] = '.';
 	i = 1;
@@ -45,6 +47,7 @@ char	*get_address(void *var)
 	str[18] = '\0';
 	return (ft_strjoin("/tmp/", str));
 }
+
 
 char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 {

@@ -74,13 +74,8 @@ void	tokens_clean_up(t_list **tokens)
 		return ;
 	remove_front_spaces(tokens);
 	remove_back_spaces(tokens);
-	while (true)
-	{
-		if (is_between_per(*tokens) == false)
-			break ;
-		else
-			remove_per(tokens);
-	}
+        while (is_wrapped_by_single_paren_pair(*tokens))
+                remove_per(tokens);
 }
 
 t_cmd_redir	*create_redir(t_list **redir_start)
