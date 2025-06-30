@@ -57,7 +57,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	(void)expand;
 	line = readline("> ");
 	res = NULL;
-	while (ft_strcmp(line, dilimiter) != 0)
+	while (line != NULL && ft_strcmp(line, dilimiter) != 0)
 	{
 		tmp = ft_strjoin(res, line);
 		free(res);
