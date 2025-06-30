@@ -6,13 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/29 16:13:36 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/30 18:15:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/pre_ast.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 static void	enhance_redirections(t_list **tokens)
 {
@@ -91,6 +89,4 @@ void	pre_ast(t_list **tokens)
 		return ;
 	enhance_redirections(tokens);
 	handle_heredocs(tokens);
-        print_tokens_data(*tokens);
-        exit(0);
 }

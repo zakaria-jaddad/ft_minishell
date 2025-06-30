@@ -1,7 +1,6 @@
 CC = cc
 MAKE = make -C
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g
-# CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME = minishell
 LIBFT_DIR = libft

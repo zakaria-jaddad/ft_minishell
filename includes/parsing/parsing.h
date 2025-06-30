@@ -22,10 +22,4 @@
 bool				syntax_check(t_list *tokens);
 t_cmd				*parse_cmd(char *line, t_list *env);
 
-static inline void	panic(char *s)
-{
-	ft_fprintf(STDERR_FILENO, s);
-	exit(EXIT_FAILURE);
-}
-
 #endif // PARSING_H

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 12:51:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/06/30 20:00:37 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,28 @@ void	remove_es(t_list **tokens)
 	}
 }
 
-bool	is_between_per(t_list *tokens)
+bool	is_wrapped_by_single_paren_pair(t_list *tokens)
 {
-	t_list	*first_token_node;
-	t_list	*last_token_node;
+	t_list	*token_node;
+	int		depth;
 
-	if (tokens == NULL)
+        if (tokens == NULL)
+                return false;
+	if (check_token_type(tokens->content, TOKEN_PAR_OPEN) == false)
 		return (false);
-	first_token_node = tokens;
-	last_token_node = ft_lstlast(tokens);
-	if (last_token_node == NULL)
-		return (false);
-	if (check_token_type(first_token_node->content, TOKEN_PAR_OPEN)
-		&& check_token_type(last_token_node->content, TOKEN_PAR_CLOSE))
+	token_node = tokens->next;
+	depth = 1;
+	while (token_node && token_node->next)
+	{
+		if (check_token_type(token_node->content, TOKEN_PAR_OPEN))
+			depth++;
+		else if (check_token_type(token_node->content, TOKEN_PAR_CLOSE))
+			depth--;
+		if (depth == 0 && token_node->next)
+			return (false);
+		token_node = token_node->next;
+	}
+	if (depth == 1 && check_token_type(token_node->content, TOKEN_PAR_CLOSE))
 		return (true);
 	return (false);
 }
@@ -80,18 +89,17 @@ void	remove_per(t_list **tokens)
 	ft_lstdelone(last, free_token);
 }
 
-t_list *dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
+t_list	*dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
 {
-	t_list *new_tokens;
-	t_list *token_node;
-	t_token *token;
+	t_list	*new_tokens;
+	t_list	*token_node;
+	t_token	*token;
 
-        if (tokens_start == NULL || token_end == NULL)
-                return (NULL);
-
+	if (tokens_start == NULL || token_end == NULL)
+		return (NULL);
 	(new_tokens = NULL, token = NULL);
 	while (tokens_start && tokens_start != token_end)
-        {
+	{
 		token = tokens_start->content;
 		if (token == NULL)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
@@ -109,12 +117,12 @@ t_list *dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
 		ft_lstadd_back(&new_tokens, token_node);
 	}
-	return new_tokens;
+	return (new_tokens);
 }
 
-char *get_token_data(t_token *token)
+char	*get_token_data(t_token *token)
 {
 	if (token == NULL)
-		return NULL;
-	return  (token->data);
+		return (NULL);
+	return (token->data);
 }
