@@ -6,12 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 08:05:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/29 22:23:31 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/01 12:52:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 #include "../../includes/minishell.h"
+#include <stdlib.h>
 #include <unistd.h>
 
 static int	count_spaces(char *s)
@@ -105,12 +106,6 @@ void	expand_filename(char **filename, t_list *tokenized_filename,
 	filename_lst = expand_word(tokenized_filename, env);
 	if (filename_lst == NULL)
 		return ;
-	/* for (t_list *tmp = filename_lst; tmp != NULL; tmp = tmp->next) */
-	/* { */
-	/* 	printf("\"%s\" ", (char *)tmp->content); */
-	/* 	fflush(stdout); */
-	/* } */
-	/* printf("\n"); */
 	if (ft_lstsize(filename_lst) > 1)
 	{
 		ft_fprintf(STDERR_FILENO, "bash: *: ambiguous redirect\n");
@@ -143,12 +138,19 @@ t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env)
 			break ;
 		tokenized_arguments = tokenized_arguments->next;
 	}
-	/* for (t_list *tmp = arguments_lst; tmp != NULL; tmp = tmp->next) */
-	/* { */
-	/* 	printf("\"%s\" ", (char *)tmp->content); */
-	/* 	fflush(stdout); */
-	/* } */
-	/* printf("\n"); */
-	/* exit(0); */
 	return (arguments_lst);
+}
+
+t_list	*expand_arguments_v2(t_list *cmd_lst, t_list *tokenized_arguments, t_list *env)
+{
+	if (cmd_lst == NULL)
+		return (expand_arguments(tokenized_arguments, env));
+	
+	for (t_list *tmp = cmd_lst; tmp != NULL; tmp = tmp->next)
+	{
+		printf("\"%s\" ", (char *)tmp->content);
+		fflush(stdout);
+	}
+	printf("\n");
+	return (NULL);
 }

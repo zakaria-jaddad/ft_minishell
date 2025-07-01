@@ -86,7 +86,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 			envs = envs_list_to_double_pointer(env_list);
 			if (!envs)
 				return (0);
-			args = list_to_double_pointer(expand_arguments(tree->arguments,
+			args = list_to_double_pointer(expand_arguments_v2(tree->arguments,
 						env_list));
 			args = arr_add_front(list_to_double_pointer(expand_command(tree->command,
 							env_list)), args);

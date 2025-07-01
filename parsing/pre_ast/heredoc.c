@@ -40,7 +40,7 @@ char	*get_address(void *var)
 	while (i < 18)
 	{
 		idx = ((ptr % 16) + (open_and_read_urandom() % 16)) % 16;
-		str[i] = hex[idx];
+		str[i] = charset[idx];
 		ptr /= 16;
 		i++;
 	}
