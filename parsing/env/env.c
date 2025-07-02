@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/29 21:52:39 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/01 16:39:16 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,9 @@ t_list	*envs_init(char **env, ...)
 			return (ft_lstclear(&env_lst, free_env), NULL);
 		(ft_lstadd_back(&env_lst, node), env++);
 	}
+	if (append_env(&env_lst, "a", "$c export") == NULL)
+		return (ft_lstclear(&env_lst, free_env), NULL);
+	if (append_env(&env_lst, "b", "-lah") == NULL)
+		return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }

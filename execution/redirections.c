@@ -14,9 +14,6 @@
 
 void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 {
-	int	fd;
-
-	fd = -1;
 	if (!t)
 		return ;
 	if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR)

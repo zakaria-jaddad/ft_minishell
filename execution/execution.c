@@ -97,6 +97,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 {
 	pid_t	pid;
 	int		status;
+        t_list *cmd_lst;
 
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 	{
@@ -116,7 +117,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 	return (0);
 }
 
-int	execution_simple_commad(t_cmd_simple *cmd, t_list *envs)
+int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 	char	*command;
@@ -164,5 +165,5 @@ int	execution(t_cmd *tree, t_list *env_list)
 	{
 		return (run_redir(tree, env_list));
 	}
-	return (execution_simple_commad(tree->content, env_list));
+	return (execution_simple_command(tree->content, env_list));
 }
