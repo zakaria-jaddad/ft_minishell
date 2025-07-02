@@ -172,6 +172,7 @@ t_list	*locate_eq(t_list *tokens)
 bool	key_validation(t_list *tokens)
 {
 	t_token	*tok;
+
 	if (tokens == NULL)
 		return (false);
 	while (tokens)
@@ -241,7 +242,7 @@ void	pre_expansion(t_list **tokens)
 	wordt = NULL;
 	while (tmp)
 	{
-		if (((t_token *)tmp->content)->type ==  TOKEN_WHITE_SPACE)
+		if (((t_token *)tmp->content)->type == TOKEN_WHITE_SPACE)
 		{
 			tmp = tmp->next;
 			continue ;
@@ -253,18 +254,23 @@ void	pre_expansion(t_list **tokens)
 		{
 			argt = create_enhanced_tokens(wordt, true);
 			if (argt == NULL)
-				return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt, free_token));
+				return (ft_lstclear(&new_tokens, free_token),
+					ft_lstclear(&wordt, free_token));
 			ft_lstadd_back(&new_tokens, argt);
 			if (append_tokens(&new_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
-				return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt, free_token), ft_lstclear(&argt, free_token));
+				return (ft_lstclear(&new_tokens, free_token),
+					ft_lstclear(&wordt, free_token), ft_lstclear(&argt,
+						free_token));
 			continue ;
 		}
 		argt = create_enhanced_tokens(wordt, false);
 		if (argt == NULL)
-			return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt, free_token));
+			return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt,
+					free_token));
 		ft_lstadd_back(&new_tokens, argt);
 		if (append_tokens(&new_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
-				return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt, free_token), ft_lstclear(&argt, free_token));
+			return (ft_lstclear(&new_tokens, free_token), ft_lstclear(&wordt,
+					free_token), ft_lstclear(&argt, free_token));
 		ft_lstclear(&wordt, free_token);
 		if (tmp == NULL)
 			break ;
@@ -274,22 +280,30 @@ void	pre_expansion(t_list **tokens)
 	*tokens = new_tokens;
 }
 
+// TODO: FIX LEAKS
 char	**expand_all(t_list *cmdt, t_list *argt, t_list *env)
 {
 	t_list	*cmd;
-	t_list 	*args_lst;
-
-	t_list *argt_dup = dup_tokens(argt, ft_lstlast(argt), true);
-	if (argt_dup == NULL)
-		return (NULL);
+	t_list	*args_lst;
+	t_list	*argt_dup;
+	char	**cmds;
+	char	**args;
 
 	cmd = expand_command(cmdt, env);
+	argt_dup = dup_tokens(argt, ft_lstlast(argt), true);
+	if (argt_dup == NULL)
+	{
+		cmds = list_to_double_pointer(cmd);
+		ft_lstclear(&cmd, free);
+		return (cmds);
+	}
 	if (cmd != NULL && check_cmdt(argt_dup) == false)
 		pre_expansion(&argt_dup);
 	args_lst = expand_arguments(argt_dup, env);
 	ft_lstclear(&argt_dup, free_token);
-	char **cmds = list_to_double_pointer(cmd);
-	char **args = list_to_double_pointer(args_lst);
-
+	cmds = list_to_double_pointer(cmd);
+	ft_lstclear(&cmd, free);
+	args = list_to_double_pointer(args_lst);
+	ft_lstclear(&args_lst, free);
 	return (arr_add_front(cmds, args));
 }
