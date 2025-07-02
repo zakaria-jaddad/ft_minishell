@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/01 18:33:49 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/03 00:29:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	digit_expansion(char **str);
 bool	is_valid_dollar_with_qs_next(t_list *current_token_node);
 bool	is_valid_dollar_with_valid_var(t_list *current_token_node);
 bool	is_valid_dollar_with_dollar(t_list *current_token_node);
+void	split_enhanced_tokens(t_list **tokens);
 
 // Wildcard Expansion
 t_list	*expand_wildcard(t_list *tokens);
@@ -65,7 +66,7 @@ t_list	*create_tokenized_matches(t_list *filename);
 
 // Expansion API
 t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env);
-t_list	*expand_all(t_list *cmd_lst, t_list *tokenized_arguments, t_list *tokenized_command, t_list *env);
+char **expand_all(t_list *cmdt, t_list *argt, t_list *env);
 void	expand_filename(char **filename, t_list *tokenized_filename,
 			t_list *env);
 t_list *expand_command(t_list *tokenized_command, t_list *env);
