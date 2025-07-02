@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helpers.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/01 10:36:41 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/07/01 10:36:41 by mouait-e         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/execution.h"
 
 int	count_args(t_list *tokens)
@@ -19,6 +31,16 @@ int	count_args(t_list *tokens)
 	return (i);
 }
 
+int	count_arr(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+		i++;
+	return (i);
+}
+
 char	**arr_add_front(char **to_add, char **arr)
 {
 	char	**rv;
@@ -29,12 +51,7 @@ char	**arr_add_front(char **to_add, char **arr)
 		return (arr);
 	if (!arr)
 		return (to_add);
-	i = 0;
-	j = 0;
-	while (arr[i])
-		i++;
-	while (to_add[j++])
-		i++;
+	i = count_arr(arr) + count_arr(to_add);
 	rv = malloc(sizeof(char *) * (i + 1));
 	if (!rv)
 		return (NULL);

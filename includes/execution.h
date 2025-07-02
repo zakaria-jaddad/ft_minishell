@@ -55,6 +55,7 @@ int		open_file(char *file, int flags);
 int		found_file(t_cmd *t, t_node_type flag, t_list *envs);
 
 // signals
-void	handle_ctrC_fork(int sig);
+void	handle_ctr_c_fork(int sig);
+void	handle_ctr_c(int sig);
 
 #endif

@@ -1,5 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handling_files.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/01 10:30:23 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/07/01 10:30:23 by mouait-e         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/execution.h"
-#include <stdio.h>
 #include <sys/fcntl.h>
 
 int	open_file(char *file, int flags)
@@ -9,13 +20,13 @@ int	open_file(char *file, int flags)
 	fd = open(file, flags, 0644);
 	if (fd == -1)
 	{
-		(void)access(file, R_OK);
+		if (access(file, R_OK))
+			return (ft_fprintf(STDERR_FILENO, "access: error"), -1);
 		if (errno == EACCES)
 			ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
-			file);
+				file);
 		else
-			ft_fprintf(STDERR_FILENO, "minishell: %s: no such file or directory\n",
-			file);
+			ft_fprintf(2, "minishell: %s: no such file or directory\n", file);
 		return (-1);
 	}
 	return (fd);
@@ -31,13 +42,13 @@ int	found_file(t_cmd *t, t_node_type flag, t_list *envs)
 	if (file == NULL)
 		return (-1);
 	fd = -1;
-	if (flag == NODE_OUT_REDIR) // >
+	if (flag == NODE_OUT_REDIR)
 		fd = open_file(file, O_TRUNC | O_WRONLY | O_CREAT);
-	else if (flag == NODE_IN_REDIR) // <
+	else if (flag == NODE_IN_REDIR)
 		fd = open_file(file, O_RDONLY);
-	else if (flag == NODE_APPEND_REDIR) // >>
+	else if (flag == NODE_APPEND_REDIR)
 		fd = open_file(file, O_APPEND | O_CREAT | O_WRONLY);
-	else if (flag == NODE_HEREDOC) // >>
+	else if (flag == NODE_HEREDOC)
 	{
 		fd = open_file(file, O_RDONLY);
 		unlink(file);

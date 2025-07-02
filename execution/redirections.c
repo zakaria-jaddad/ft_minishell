@@ -1,4 +1,15 @@
-#include "../includes/execution.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirections.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/01 10:41:29 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/07/01 10:41:29 by mouait-e         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minishell.h"
 
 void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
@@ -8,13 +19,13 @@ void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 	fd = -1;
 	if (!t)
 		return ;
-	if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR) // > or >>
+	if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR)
 	{
 		*out = found_file(t, t->type, envs);
 		if (*out == -1)
 			return ;
 	}
-	else if (NODE_IN_REDIR == t->type || NODE_HEREDOC == t->type) // < or <<
+	else if (NODE_IN_REDIR == t->type || NODE_HEREDOC == t->type)
 	{
 		*in = found_file(t, t->type, envs);
 		if (*in == -1)
@@ -40,7 +51,7 @@ int	run_redir(t_cmd *t, t_list *envs)
 	pid = fork();
 	if (0 == pid)
 	{
-		if (signal(SIGINT, handle_ctrC_fork) == SIG_ERR)
+		if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
 			ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		if (in_fd)
 			dup2(in_fd, STDIN_FILENO);
@@ -94,7 +105,7 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 			ft_fprintf(2, "fork: error!!\n"), 1);
 	if (pid_right == 0)
 	{
-		if (signal(SIGINT, handle_ctrC_fork) == SIG_ERR)
+		if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
 			ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);

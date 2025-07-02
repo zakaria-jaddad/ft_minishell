@@ -1,6 +1,6 @@
 CC = cc
 MAKE = make -C
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
 
 NAME = minishell
 LIBFT_DIR = libft
@@ -16,7 +16,8 @@ EXECUTION = execution/execution.c \
 						execution/redirections.c \
 						execution/handling_files.c\
 						execution/signals.c \
-						execution/helpers.c
+						execution/helpers.c \
+						execution/list_management.c
 EXPANSION = parsing/expansion/expansion.c \
 	    parsing/expansion/expansion_api.c \
 	    parsing/expansion/get_enhanced_tokens.c \

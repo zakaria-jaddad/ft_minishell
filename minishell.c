@@ -1,20 +1,7 @@
 
 #include "includes/minishell.h"
 #include "libft/libft.h"
-#include <readline/history.h>
-#include <readline/readline.h>
 #include <stdlib.h>
-
-int		status_x(int value, int modify);
-void	handle_ctrC(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	status_x(1, 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
 
 int	main(int _, char **__, char **env)
 {
@@ -26,16 +13,16 @@ int	main(int _, char **__, char **env)
 	if (env_lst == NULL)
 		return (EXIT_FAILURE);
 	// Register signal handler for SIGINT (Ctrl+C)
-	if (signal(SIGINT, handle_ctrC) == SIG_ERR)
+	if (signal(SIGINT, handle_ctr_c) == SIG_ERR)
 	{
 		ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		return (1);
 	};
 	while (true)
 	{
-		line = readline("Hello Shell >> ");
+		line = readline("ft_minishell -> ");
 		if (line == NULL)
-			break ;
+			_exit_(NULL);
 		if (*line)
 			add_history(line);
 		cmd = parse_cmd(line, env_lst);

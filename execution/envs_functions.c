@@ -6,44 +6,53 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/06/23 12:45:02 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/02 21:36:53 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/execution.h"
+#include "../includes/minishell.h"
 
-void _unset_(t_list *envs, char **args) {
-  t_list *var;
-  int i;
+void	_unset_(t_list *envs, char **args)
+{
+	t_list	*var;
+	int		i;
 
-  i = 0;
-  while (args[i]) {
-    var = find_node(envs, args[i]);
-    if (var)
-      ft_lst_rm_one(&envs, var, free_env);
-    i++;
-  }
+	i = 0;
+	while (args[i])
+	{
+		var = find_node(envs, args[i]);
+		if (var)
+			ft_lst_rm_one(&envs, var, free_env);
+		i++;
+	}
 }
 
-int print_envs(char *declare, t_list *list) {
-  t_env *env;
+int	print_envs(char *declare, t_list *list)
+{
+	t_env	*env;
 
-  while (list) {
-    env = list->content;
-    if (!declare) {
-      if (env->value)
-        printf("%s=%s\n", env->key, env->value);
-    } else
-      printf("%s%s=\"%s\"\n", declare, env->key, env->value);
-    list = list->next;
-  }
-  return (0);
+	while (list)
+	{
+		env = list->content;
+		if (!declare)
+		{
+			if (env->value && ft_strcmp(env->value, ""))
+				printf("%s=%s\n", env->key, env->value);
+		}
+		else if (env->value && ft_strcmp(env->value, ""))
+			printf("%s%s=\"%s\"\n", declare, env->key, env->value);
+		else
+			printf("%s%s\n", declare, env->key);
+		list = list->next;
+	}
+	return (0);
 }
 
-int _env_(t_list *list) {
-  if (!list)
-    return (-1);
-  return (print_envs(NULL, sort_envs(list)));
+int	_env_(t_list *list)
+{
+	if (!list)
+		return (-1);
+	return (print_envs(NULL, sort_envs(list)));
 }
 
 /* static void	swap_two_envs(t_list *env1, t_list *env2) */
@@ -55,31 +64,95 @@ int _env_(t_list *list) {
 /* 	env2->content = tmp; */
 /* } */
 
-void add_export(t_list *list, char **args) {
-  t_env *env;
+void	add_export(t_list *list, char **args, int append)
+{
+	t_env	*env;
 
-  env = get_env(list, args[0]);
-  if (env)
-    edit_env(env, args[1]);
-  else {
-    if (args[1])
-      append_env(&list, args[0], args[1]);
-    else
-      append_env(&list, args[0], "\0");
-  }
+	env = get_env(list, args[0]);
+	if (append && env)
+		args[1] = ft_strjoin(env->value, args[1]);
+	if (env && (!args[1] || !ft_strcmp(args[1], "")))
+		return ;
+	if (env)
+		edit_env(env, args[1]);
+	else
+	{
+		if (args[1])
+			append_env(&list, args[0], args[1]);
+		else
+			append_env(&list, args[0], "\0");
+	}
 }
 
-int _export_(t_list *list, char **args) {
-  int i;
+int	check_args(char **args)
+{
+	int	i;
+	int	j;
 
-  if (!list)
-    return (-1);
-  if (!args || !args[0])
-    return (print_envs("declare -x ", list));
-  i = 0;
-  while (args[i]) {
-    add_export(list, ft_split(args[i], '='));
-    i++;
-  }
-  return (0);
+	i = 0;
+	while (args[i])
+	{
+		if (((args[i][0] >= '0' && args[i][0] <= '9') || args[i][0] == '=')
+			&& !ft_strchr(args[i], '-'))
+			return (ft_fprintf(2,
+					"minishell: export: `%s`: not a valid identifier\n",
+					args[i]), 0);
+		j = -1;
+		while (args[i][++j] && args[i][j] != '=')
+			if (!(args[i][j] >= 'a' && args[i][j] <= 'z') && !(args[i][j] >= 'A'
+					&& args[i][j] <= 'Z') && !(args[i][j] >= '0'
+					&& args[i][j] <= '9' && j > 0))
+				return (ft_fprintf(2,
+						"minishell: export: `%s`: not a valid identifier\n",
+						args[i]), 0);
+		i++;
+	}
+	return (1);
+}
+
+char	**split_by_first_equal(char *arg, t_list *list)
+{
+	char	**rv;
+	int		i;
+	int		append_;
+
+	i = -1;
+	append_ = 0;
+	while (arg[++i])
+		if (arg[i] == '=')
+			break ;
+	if (!i)
+		return (NULL);
+	if (arg[i - 1] == '+')
+	{
+		append_++;
+		i--;
+	}
+	rv = malloc(sizeof(char *) * 2 + 1);
+	rv[0] = ft_substr(arg, 0, i);
+	if (append_)
+		i++;
+	rv[1] = ft_substr(arg, i + 1, ft_strlen(arg));
+	rv[2] = NULL;
+	add_export(list, rv, append_);
+	return (rv);
+}
+
+int	_export_(t_list *list, char **args)
+{
+	int	i;
+
+	if (!list)
+		return (-1);
+	if (!args || !args[0])
+		return (print_envs("declare -x ", list));
+	i = 0;
+	if (!check_args(args))
+		return (status_x(1, 1));
+	while (args[i])
+	{
+		split_by_first_equal(args[i], list);
+		i++;
+	}
+	return (0);
 }

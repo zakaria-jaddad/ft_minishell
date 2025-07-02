@@ -1,7 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/07/01 16:27:40 by mouait-e         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/execution.h"
 #include <readline/readline.h>
 #include <stdint.h>
-#include <stdio.h>
 #include <unistd.h>
 
 uintptr_t	open_and_read_urandom(void)
@@ -40,7 +51,7 @@ char	*get_address(void *var)
 	while (i < 18)
 	{
 		idx = ((ptr % 16) + (open_and_read_urandom() % 16)) % 16;
-		str[i] = hex[idx];
+		str[i] = charset[idx];
 		ptr /= 16;
 		i++;
 	}
@@ -48,16 +59,12 @@ char	*get_address(void *var)
 	return (ft_strjoin("/tmp/", str));
 }
 
-
-char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
+char	*open_heredoc(char *dilimiter)
 {
-	char	*line;
-	char	*tmp;
 	char	*res;
-	int		fd;
+	char	*tmp;
+	char	*line;
 
-	(void)env_list;
-	(void)expand;
 	line = readline("> ");
 	res = NULL;
 	while (line != NULL && ft_strcmp(line, dilimiter) != 0)
@@ -72,6 +79,18 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		line = readline("> ");
 	}
 	free(line);
+	return (res);
+}
+
+char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
+{
+	char	*line;
+	char	*res;
+	int		fd;
+
+	(void)env_list;
+	(void)expand;
+	res = open_heredoc(dilimiter);
 	line = get_address(dilimiter);
 	if (access(line, F_OK) == 0)
 		line = get_address(line);

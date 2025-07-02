@@ -1,14 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/19 15:56:52 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/29 10:40:16 by mouait-e         ###   ########.fr       */
+/*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
+/*   Updated: 2025/07/02 16:45:42 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/execution.h"
 #include "../includes/minishell.h"
 
 char	*valid_command(char *cmd, char *path)
@@ -39,7 +40,6 @@ char	*valid_command(char *cmd, char *path)
 	return (ft_strdup(cmd));
 }
 
-// TODO: USE errno to get the err status and print its error :))
 int	display_execve_error(char *command)
 {
 	if (errno == ENOENT || errno == EACCES)
@@ -65,13 +65,37 @@ int	display_execve_error(char *command)
 		return (ft_fprintf(2, "minishell: %s: Not a directory\n", command), 1);
 	return (ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno)), 1);
 }
+
+void	execve_fork(t_cmd_simple *tree, t_list *env_list, char *path)
+{
+	char	**args;
+	char	**envs;
+
+	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
+		ft_fprintf(STDERR_FILENO, "signal: error: ctr+c!!\n");
+	envs = envs_list_to_double_pointer(env_list);
+	if (!envs)
+		exit(1);
+	args = expand_all(tree->command, tree->arguments, envs);
+	if (!args)
+		ft_fprintf(2, "minishell: : Command not found\n");
+	if (!args)
+		exit(127);
+	path = valid_command(args[0], get_env(env_list, "PATH")->value);
+	if (execve(path, args, envs) < 0)
+	{
+		free(path);
+		exit(display_execve_error(args[0]));
+	}
+	free(path);
+	free_double_pointer((void **)args);
+	free_double_pointer((void **)envs);
+	exit(0);
+}
+
 int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 {
 	pid_t	pid;
-	char	**envs;
-	char	**args;
-	char	*path;
-	char	*cmd;
 	int		status;
 
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
@@ -80,34 +104,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 		if (pid < 0)
 			return (ft_fprintf(2, "fork failed\n"), 1);
 		if (pid == 0)
-		{
-			if (signal(SIGINT, handle_ctrC_fork) == SIG_ERR)
-				ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
-			envs = envs_list_to_double_pointer(env_list);
-			if (!envs)
-				return (0);
-			args = list_to_double_pointer(expand_arguments(tree->arguments,
-						env_list));
-			args = arr_add_front(list_to_double_pointer(expand_command(tree->command,
-							env_list)), args);
-			if (!args)
-			{
-				ft_fprintf(2, "minishell: : Command not found\n");
-				exit(127);
-			}
-			cmd = args[0];
-			path = valid_command((char *)cmd, get_env(env_list, "PATH")->value);
-			if (execve(path, args, envs) < 0)
-			{
-				free(path);
-				// perror("error");
-				exit(display_execve_error(cmd));
-			}
-			free(path);
-			free_double_pointer((void **)args);
-			free_double_pointer((void **)envs);
-			exit(0);
-		}
+			execve_fork(tree, env_list, "");
 		else
 		{
 			wait(&status);
@@ -122,24 +119,23 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 int	execution_simple_commad(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
+	char	*command;
 
-	args = list_to_double_pointer(expand_arguments(cmd->arguments, envs));
-	if (ft_strcmp(tokens_to_str(cmd->command), "cd") == 0)
-		return (_cd_(envs, args));
-	if (ft_strcmp(tokens_to_str(cmd->command), "export") == 0)
-		return (_export_(envs, args));
-	if (ft_strcmp(tokens_to_str(cmd->command), "env") == 0)
+	args = expand_all(cmd->command, cmd->arguments, envs);
+	if (ft_strcmp(args[0], "cd") == 0)
+		return (_cd_(envs, args + 1));
+	if (ft_strcmp(args[0], "export") == 0)
+		return (_export_(envs, args + 1));
+	if (ft_strcmp(args[0], "env") == 0)
 		return (_env_(envs));
-	if (ft_strcmp(tokens_to_str(cmd->command), "echo") == 0)
-		return (_echo_(args), 0);
-	if (ft_strcmp(tokens_to_str(cmd->command), "pwd") == 0)
+	if (ft_strcmp(args[0], "echo") == 0)
+		return (_echo_(args + 1), 0);
+	if (ft_strcmp(args[0], "pwd") == 0)
 		return (_pwd_(manage_pwd(NULL)));
-	if (ft_strcmp(tokens_to_str(cmd->command), "unset") == 0)
-		return (_unset_(envs, args), 0);
-	if (ft_strcmp(tokens_to_str(cmd->command), "exit") == 0)
-	{
-		_exit_(args);
-	}
+	if (ft_strcmp(args[0], "unset") == 0)
+		return (_unset_(envs, args + 1), 0);
+	if (ft_strcmp(args[0], "exit") == 0)
+		_exit_(args + 1);
 	return (free_double_pointer((void **)args), not_builtin(cmd, envs));
 }
 
