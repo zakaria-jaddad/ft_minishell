@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/01 12:53:11 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:33:49 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ t_list	*create_tokenized_matches(t_list *filename);
 
 // Expansion API
 t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env);
-t_list	*expand_arguments_v2(t_list *cmd_lst, t_list *tokenized_arguments, t_list *env);
+t_list	*expand_all(t_list *cmd_lst, t_list *tokenized_arguments, t_list *tokenized_command, t_list *env);
 void	expand_filename(char **filename, t_list *tokenized_filename,
 			t_list *env);
 t_list *expand_command(t_list *tokenized_command, t_list *env);

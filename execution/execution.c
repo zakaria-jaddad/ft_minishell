@@ -73,6 +73,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 	char	*path;
 	char	*cmd;
 	int		status;
+        t_list *cmd_lst;
 
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 	{
@@ -86,10 +87,12 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 			envs = envs_list_to_double_pointer(env_list);
 			if (!envs)
 				return (0);
-			args = list_to_double_pointer(expand_arguments_v2(tree->arguments,
+                        cmd_lst = expand_command(tree->command, env_list);
+
+			args = list_to_double_pointer(expand_all(cmd_lst, tree->command, tree->arguments,
 						env_list));
-			args = arr_add_front(list_to_double_pointer(expand_command(tree->command,
-							env_list)), args);
+			/* args = arr_add_front(list_to_double_pointer(expand_command(tree->command, */
+			/* 				env_list)), args); */
 			if (!args)
 			{
 				ft_fprintf(2, "minishell: : Command not found\n");
@@ -119,11 +122,13 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 	return (0);
 }
 
-int	execution_simple_commad(t_cmd_simple *cmd, t_list *envs)
+int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 
-	args = list_to_double_pointer(expand_arguments(cmd->arguments, envs));
+        t_list *command_lst = expand_command(cmd->command, envs);
+
+	args = list_to_double_pointer(expand_all(command_lst, cmd->command, cmd->arguments, envs));
 	if (ft_strcmp(tokens_to_str(cmd->command), "cd") == 0)
 		return (_cd_(envs, args));
 	if (ft_strcmp(tokens_to_str(cmd->command), "export") == 0)
@@ -168,5 +173,5 @@ int	execution(t_cmd *tree, t_list *env_list)
 	{
 		return (run_redir(tree, env_list));
 	}
-	return (execution_simple_commad(tree->content, env_list));
+	return (execution_simple_command(tree->content, env_list));
 }

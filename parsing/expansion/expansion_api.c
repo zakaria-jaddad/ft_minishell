@@ -1,19 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   expansion_api.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 08:05:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/01 12:52:25 by zajaddad         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "../../includes/parsing/expansion.h"
 #include "../../includes/minishell.h"
+#include "../../includes/parsing/expansion.h"
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 
 static int	count_spaces(char *s)
 {
@@ -100,7 +89,8 @@ t_list	*expand_command(t_list *tokenized_command, t_list *env)
 void	expand_filename(char **filename, t_list *tokenized_filename,
 		t_list *env)
 {
-	t_list *filename_lst;
+	t_list	*filename_lst;
+
 	if (filename == NULL || tokenized_filename == NULL || env == NULL)
 		return ;
 	filename_lst = expand_word(tokenized_filename, env);
@@ -141,16 +131,161 @@ t_list	*expand_arguments(t_list *tokenized_arguments, t_list *env)
 	return (arguments_lst);
 }
 
-t_list	*expand_arguments_v2(t_list *cmd_lst, t_list *tokenized_arguments, t_list *env)
+void check_expansion(t_list *command_tokens, bool *split)
 {
-	if (cmd_lst == NULL)
-		return (expand_arguments(tokenized_arguments, env));
-	
-	for (t_list *tmp = cmd_lst; tmp != NULL; tmp = tmp->next)
+        t_token *tok;
+
+        while (command_tokens)
+        {
+                tok = command_tokens->content;
+                if (tok->type == TOKEN_DOUBLE_QUOTE_WORD || tok->type == TOKEN_SINGLE_QUOTE_WORD)
+                {
+                        *split = true;
+                        return ;
+                }
+                command_tokens = command_tokens->next;
+        } 
+}
+
+t_list *get_first_equal_node(t_list *tokens)
+{
+        if (tokens == NULL)
+                return (NULL);
+        while (tokens)
+        {
+                if (ft_strchr(tokens->content, '=') != NULL)
+                        return tokens;
+                tokens = tokens->next;
+        }
+        return (NULL);
+}
+
+
+char	*get_string_command(t_list *command_lst, t_list *tokenized_command, t_list **tokenized_arguments, bool* split)
+{
+	t_list	*command_tokens;
+        t_list *tmp;
+	char	*command;
+
+        tmp = tokenized_command;
+	if (tokenized_arguments == NULL || tokenized_command == NULL)
+		return (NULL);
+	if (command_lst == NULL)
+	{
+		command_tokens = get_tokenizd_word(tokenized_arguments);
+		if (command_tokens == NULL)
+			return (NULL);
+		command = tokens_to_str(command_tokens);
+                *split = true;
+		ft_lstclear(&command_tokens, free_token);
+		return (command);
+	}
+        command_tokens = get_tokenizd_word(&tmp);
+        print_tokens(command_tokens);
+        if (command_tokens == NULL)
+                return (NULL);
+        check_expansion(command_tokens, split);
+	command = tokens_to_str(command_tokens);
+        /* if(ft_strcmp(command, command_lst->content) != 0) */
+        /*         *split = true; */
+        ft_lstclear(&command_tokens, free_token);
+	return (ft_strdup(command_lst->content));
+}
+
+bool should_split(t_list *tokens)
+{
+        t_token *tok;
+
+        while (tokens)
+        {
+                tok = tokens->content;
+                if (tok->type == TOKEN_DOUBLE_QUOTE_WORD || tok->type == TOKEN_SINGLE_QUOTE_WORD)
+                        return (true);
+                tokens = tokens->prev;
+        }
+        return (false);
+}
+
+void pre_expansion(t_list **tokens)
+{
+        t_list *enhance_tokens_list;
+        t_list *arg;
+        if (tokens == NULL || *tokens == NULL)
+                return ;
+        while (*tokens)
+        {
+                arg = get_tokenizd_word(tokens);
+                if (arg == NULL)
+                        return ;
+                t_list *locate_first_equal_node = get_first_equal_node(arg);
+                if (locate_first_equal_node == NULL)
+                        continue;
+                if (should_split(locate_first_equal_node) == false)
+                {
+                        while (arg)
+                        {
+                                t_token *token = arg->content;
+                                if (arg == locate_first_equal_node)
+                                {
+                                        while (arg) 
+                                        {
+                                                t_list *token_node  = create_token_node(TOKEN_DOUBLE_QUOTE_WORD, token->data);
+                                                ft_lstadd_back(&enhance_tokens_list, token_node);
+                                                arg = arg->next;
+                                        }               
+                                        break ;
+                                }
+                                t_list *token_node  = create_token_node(token->type, token->data);
+                                ft_lstadd_back(&enhance_tokens_list, token_node);
+                                arg = arg->next;
+                        }
+                }
+                else
+                {
+                        while (arg)
+                        {
+                                t_token *token = arg->content;
+                                t_list *token_node  = create_token_node(token->type, token->data);
+                                ft_lstadd_back(&enhance_tokens_list, token_node);
+                                arg = arg->next;
+                        }
+                }
+                if (*tokens == NULL)
+                        break ;
+                *tokens = (*tokens)->next;
+        }
+        exit(0);
+        *tokens = enhance_tokens_list;
+}
+
+// export'' will split ✓ 
+// $av export will split X $av is nothing
+// export will not split unless change in charset found
+
+t_list	*expand_all(t_list *command_lst, t_list *tokenized_command, t_list *tokenized_arguments, 
+		t_list *env)
+{
+        bool split = false;
+	char	*command;
+
+        (void) env;
+	command = get_string_command(command_lst, tokenized_command, &tokenized_arguments, &split);
+        if (command == NULL)
+                return (NULL);
+
+        // 
+        printf("this is the current command : %s, will split %s\n", command, split == true ? "true" : "false");
+        if (ft_strcmp(command, "export") == 0 && split == false)
+                pre_expansion(&tokenized_arguments);
+        exit(0);
+	for (t_list *tmp = command_lst; tmp != NULL; tmp = tmp->next)
 	{
 		printf("\"%s\" ", (char *)tmp->content);
 		fflush(stdout);
 	}
 	printf("\n");
+	exit(0);
 	return (NULL);
 }
+
+// export $a=$b --> export a b c=c d e
