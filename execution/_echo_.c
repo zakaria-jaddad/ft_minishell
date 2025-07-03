@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:26:10 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/23 12:15:01 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/03 15:48:34 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ int	_echo_(char **args)
 	}
 	if (!nl || !args[0])
 		ft_fprintf(STDOUT_FILENO, "\n");
-	free_double_pointer((void **)args);
 	return (0);
 }

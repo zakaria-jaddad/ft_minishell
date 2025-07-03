@@ -18,7 +18,8 @@ void	_exit_(char **args)
 	int	i;
 
 	i = -1;
-	write(1, "exit\n", 5);
+	if (isatty(STDOUT_FILENO))
+		write(STDOUT_FILENO, "exit\n", 5);
 	if (args && args[0])
 	{
 		while (args[0][++i])
@@ -30,7 +31,7 @@ void	_exit_(char **args)
 		if (args[0][i])
 		{
 			print_error("bash: exit: ", args[0], ": numiric argument required");
-			exit(2);
+			exit(255);
 		}
 		if (args[1])
 		{

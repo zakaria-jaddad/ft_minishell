@@ -66,9 +66,8 @@ int	display_execve_error(char *command)
 	return (ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno)), 1);
 }
 
-void	execve_fork(t_cmd_simple *tree, t_list *env_list, char *path)
+void	execve_fork(char **args, t_list *env_list, char *path)
 {
-	char	**args;
 	char	**envs;
 
 	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
@@ -76,7 +75,6 @@ void	execve_fork(t_cmd_simple *tree, t_list *env_list, char *path)
 	envs = envs_list_to_double_pointer(env_list);
 	if (!envs)
 		exit(1);
-	args = expand_all(tree->command, tree->arguments, env_list);
 	if (!args)
 		ft_fprintf(2, "minishell: : Command not found\n");
 	if (!args)
@@ -93,7 +91,7 @@ void	execve_fork(t_cmd_simple *tree, t_list *env_list, char *path)
 	exit(0);
 }
 
-int	not_builtin(t_cmd_simple *tree, t_list *env_list)
+int	not_builtin(char **args, t_list *env_list)
 {
 	pid_t	pid;
 	int		status;
@@ -104,7 +102,7 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 		if (pid < 0)
 			return (ft_fprintf(2, "fork failed\n"), 1);
 		if (pid == 0)
-			execve_fork(tree, env_list, "");
+			execve_fork(args, env_list, "");
 		else
 		{
 			wait(&status);
@@ -119,25 +117,30 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
+	int		status;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
+	status = 0;
 	if (!args)
-		return (ft_fprintf(2, "error: expand_all: return (null)\n"), 1);
-	if (ft_strcmp(args[0], "cd") == 0)
-		return (_cd_(envs, args + 1));
-	if (ft_strcmp(args[0], "export") == 0)
-		return (_export_(envs, args + 1));
-	if (ft_strcmp(args[0], "env") == 0)
-		return (_env_(envs));
-	if (ft_strcmp(args[0], "echo") == 0)
-		return (_echo_(args + 1), 0);
-	if (ft_strcmp(args[0], "pwd") == 0)
-		return (_pwd_(manage_pwd(NULL)));
-	if (ft_strcmp(args[0], "unset") == 0)
-		return (_unset_(envs, args + 1), 0);
-	if (ft_strcmp(args[0], "exit") == 0)
+		status = ft_fprintf(2, "error: expand_all: return (null)\n");
+	else if (ft_strcmp(args[0], "cd") == 0)
+		status = _cd_(envs, args + 1);
+	else if (ft_strcmp(args[0], "export") == 0)
+		status = _export_(envs, args + 1);
+	else if (ft_strcmp(args[0], "env") == 0)
+		status = _env_(envs);
+	else if (ft_strcmp(args[0], "echo") == 0)
+		status = _echo_(args + 1);
+	else if (ft_strcmp(args[0], "pwd") == 0)
+		status = _pwd_(manage_pwd(NULL));
+	else if (ft_strcmp(args[0], "unset") == 0)
+		_unset_(envs, args + 1);
+	else if (ft_strcmp(args[0], "exit") == 0)
 		_exit_(args + 1);
-	return (free_double_pointer((void **)args), not_builtin(cmd, envs));
+	else
+		return (not_builtin(args, envs));
+	free_double_pointer((void **)args);
+	return (status);
 }
 
 int	execution(t_cmd *tree, t_list *env_list)
