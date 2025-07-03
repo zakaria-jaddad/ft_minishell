@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/02 16:45:42 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/03 00:54:19 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	execve_fork(t_cmd_simple *tree, t_list *env_list, char *path)
 	envs = envs_list_to_double_pointer(env_list);
 	if (!envs)
 		exit(1);
-	args = expand_all(tree->command, tree->arguments, envs);
+	args = expand_all(tree->command, tree->arguments, env_list);
 	if (!args)
 		ft_fprintf(2, "minishell: : Command not found\n");
 	if (!args)
@@ -97,7 +97,6 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 {
 	pid_t	pid;
 	int		status;
-        t_list *cmd_lst;
 
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 	{
@@ -120,9 +119,10 @@ int	not_builtin(t_cmd_simple *tree, t_list *env_list)
 int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
-	char	*command;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
+	if (!args)
+		return (ft_fprintf(2, "error: expand_all: return (null)\n"), 1);
 	if (ft_strcmp(args[0], "cd") == 0)
 		return (_cd_(envs, args + 1));
 	if (ft_strcmp(args[0], "export") == 0)
