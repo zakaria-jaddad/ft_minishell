@@ -49,6 +49,7 @@ void	free_double_pointer(void **p)
 	while (p[i])
 	{
 		free(p[i]);
+		p[i] = NULL;
 		i++;
 	}
 	free(p);
