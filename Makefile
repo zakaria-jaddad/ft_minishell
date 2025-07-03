@@ -1,40 +1,45 @@
 CC = cc
 MAKE = make -C
-CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 EXECUTION = execution/execution.c \
-						execution/_cd_.c \
-						execution/_exit_.c \
-						execution/envs_functions.c \
-						execution/sort_envs.c \
-						execution/_echo_.c \
-						execution/_pwd_.c \
-						execution/utiles.c \
-						execution/redirections.c \
-						execution/handling_files.c\
-						execution/signals.c \
-						execution/helpers.c \
-						execution/list_management.c
-EXPANSION = parsing/expansion/expansion.c \
-	    parsing/expansion/expansion_api.c \
-	    parsing/expansion/get_enhanced_tokens.c \
-	    parsing/expansion/dollar_expansion_utils.c \
-	    parsing/expansion/dollar_expansion.c \
-	    parsing/expansion/word_expansion.c \
-	    parsing/expansion/wildcards/file_info.c \
-	    parsing/expansion/wildcards/glob.c \
-	    parsing/expansion/wildcards/shell_glob.c \
-	    parsing/expansion/wildcards/shell_glob_utils.c \
-	    parsing/expansion/wildcards/shell_glob_escaping_norms_1.c \
-	    parsing/expansion/wildcards/shell_glob_escaping_norms_2.c \
-	    parsing/expansion/wildcards/shell_glob_escaping_norms_3.c \
-	    parsing/expansion/wildcards/wildcards_utils_1.c \
-	    parsing/expansion/wildcards/wildcards_utils_2.c \
-	    parsing/expansion/wildcards/wildcards_utils_3.c \
-	    parsing/pre_ast/heredoc.c
+	    execution/_cd_.c \
+	    execution/_exit_.c \
+	    execution/envs_functions.c \
+	    execution/sort_envs.c \
+	    execution/_echo_.c \
+	    execution/_pwd_.c \
+	    execution/utiles.c \
+	    execution/redirections.c \
+	    execution/handling_files.c\
+	    execution/signals.c \
+	    execution/helpers.c \
+	    execution/list_management.c \
+
+EXPANSION = ./parsing/expansion/dollar_expansion.c \
+	    ./parsing/expansion/dollar_expansion_utils.c \
+	    ./parsing/expansion/expand_word.c \
+	    ./parsing/expansion/expand_word_utils.c \
+	    ./parsing/expansion/expansion.c \
+	    ./parsing/expansion/expansion_api.c \
+	    ./parsing/expansion/get_enhanced_tokens.c \
+	    ./parsing/expansion/is_assignment_statement.c \
+	    ./parsing/expansion/pre_expansion.c \
+	    ./parsing/expansion/pre_expansion_utils_1.c \
+	    ./parsing/expansion/word_expansion.c \
+	    ./parsing/expansion/wildcards/file_info.c \
+	    ./parsing/expansion/wildcards/glob.c \
+	    ./parsing/expansion/wildcards/shell_glob.c \
+	    ./parsing/expansion/wildcards/shell_glob_escaping_norms_1.c \
+	    ./parsing/expansion/wildcards/shell_glob_escaping_norms_2.c \
+	    ./parsing/expansion/wildcards/shell_glob_escaping_norms_3.c \
+	    ./parsing/expansion/wildcards/shell_glob_utils.c \
+	    ./parsing/expansion/wildcards/wildcards_utils_1.c \
+	    ./parsing/expansion/wildcards/wildcards_utils_2.c \
+	    ./parsing/expansion/wildcards/wildcards_utils_3.c \
 
 
 PARCING = ./parsing/parsing.c \
@@ -54,6 +59,7 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/ast/ast.c \
 	  ./parsing/ast/get_root.c \
 	  ./parsing/syntx_check/syntax_check.c \
+	  ./parsing/pre_ast/heredoc.c \
 	  $(EXPANSION)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)

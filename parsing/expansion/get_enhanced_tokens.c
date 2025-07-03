@@ -6,29 +6,16 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:51:14 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/27 16:14:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/04 00:40:41 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 
-static int	count_spaces(char *s)
-{
-	int	spaces;
 
-	spaces = 0;
-	while (*s)
-	{
-		if (*s == ' ')
-			spaces++;
-		s++;
-	}
-	return (spaces);
-}
-
-static bool check_spaces(char *str)
+static bool	check_spaces(char *str)
 {
-	return (count_spaces(str) == (int) ft_strlen(str));
+	return (count_spaces(str) == (int)ft_strlen(str));
 }
 
 t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
@@ -42,7 +29,8 @@ t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 	while (data_lst)
 	{
 		if (check_spaces(data_lst->content) == true)
-			token_node = create_token_node(TOKEN_WHITE_SPACE, data_lst->content);
+			token_node = create_token_node(TOKEN_WHITE_SPACE,
+					data_lst->content);
 		else
 			token_node = create_token_node(tokens_type, data_lst->content);
 		if (token_node == NULL)

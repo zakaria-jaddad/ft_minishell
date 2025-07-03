@@ -6,25 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 16:08:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/04 00:37:22 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-
-static int	count_spaces(char *s)
-{
-	int	spaces;
-
-	spaces = 0;
-	while (*s)
-	{
-		if (*s == ' ')
-			spaces++;
-		s++;
-	}
-	return (spaces);
-}
 
 t_list	*get_word_tokens(t_token *token)
 {
@@ -64,7 +50,8 @@ void	insert_split_tokens(t_list **tokens, t_list **tokens_tmp,
 	t_list	*next;
 	t_list	*word_tail;
 
-	if (tokens == NULL || tokens_tmp == NULL || *tokens_tmp == NULL || word_tokens == NULL)
+	if (tokens == NULL || tokens_tmp == NULL || *tokens_tmp == NULL
+		|| word_tokens == NULL)
 		return ;
 	node_to_del = *tokens_tmp;
 	prev = (*tokens_tmp)->prev;
@@ -83,23 +70,20 @@ void	insert_split_tokens(t_list **tokens, t_list **tokens_tmp,
 void	split_enhanced_tokens(t_list **tokens)
 {
 	t_list	*tokens_tmp;
-	t_token	*current_token;
+	t_token	*tok;
 	t_list	*word_tokens;
 
-	if (tokens == NULL || *tokens == NULL)
-		return ;
 	tokens_tmp = *tokens;
 	while (tokens_tmp)
 	{
-		current_token = tokens_tmp->content;
-		if (check_token_type(current_token, TOKEN_WORD) == true
-			&& ft_strchr(current_token->data, ' ') != NULL)
+		tok = tokens_tmp->content;
+		if (is_word_and_space_found(tok))
 		{
-			if (count_spaces(current_token->data) != (int)ft_strlen(current_token->data))
+			if (count_spaces(tok->data) != (int) ft_strlen(tok->data))
 			{
-				word_tokens = get_word_tokens(current_token);
+				word_tokens = get_word_tokens(tok);
 				if (word_tokens == NULL)
-					return ; 
+					return ;
 				insert_split_tokens(tokens, &tokens_tmp, word_tokens);
 			}
 			else
@@ -122,6 +106,8 @@ t_list	*expand(t_list *tokens, t_list *env)
 	tmp = expand_wildcard(enhanced_tokens);
 	if (tmp == NULL)
 	{
+		if (enhanced_tokens == NULL)
+			return (NULL);
 		split_enhanced_tokens(&enhanced_tokens);
 		return (enhanced_tokens);
 	}
