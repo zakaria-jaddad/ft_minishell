@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:11:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/21 18:37:27 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/04 00:44:16 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/env.h"
+#include <stdlib.h>
 
 void	free_env(void *env)
 {
@@ -48,20 +49,28 @@ t_env	*edit_env(t_env *env, char *new_value)
 	return (env);
 }
 
+// FIX: LEAK
 t_list	*append_env(t_list **env_lst, char *key, char *value)
 {
 	t_env	*env_content;
 	t_list	*env_node;
+	char *tmp;
 
 	env_content = (t_env *)malloc(sizeof(t_env));
 	if (env_content == NULL)
 		return (NULL);
+	ft_bzero(env_content, sizeof(t_env));
 	env_content->key = ft_strdup(key);
 	if (env_content->key == NULL)
 		return (NULL);
-	env_content->value = ft_strdup(value);
-	if (env_content->value == NULL)
-		return (free(env_content->key), NULL);
+	if (value == NULL)
+		env_content->value = NULL;
+	else
+	{
+		tmp = env_content->value ;
+		env_content->value = ft_strdup(value);
+		free(tmp);
+	}
 	env_node = ft_lstnew(env_content);
 	if (env_node == NULL)
 		return (free(env_content), free_env(env_content), NULL);
