@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 07:55:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 09:48:22 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:19:50 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,21 +25,23 @@ t_list	*get_word(t_list *tokens)
 	return (get_filename(&tokens));
 }
 
-bool	is_valid_word(t_list *tokens_word)
+bool	is_valid_word(t_list *wordt)
 {
 	t_token	*token;
 
-	while (tokens_word && tokens_word->content)
+	while (wordt)
 	{
-		token = tokens_word->content;
+		token = wordt->content;
+		if (token == NULL)
+			return (false);
 		if (check_token_type(token, TOKEN_WORD) == true)
 		{
-			tokens_word = tokens_word->next;
+			wordt = wordt->next;
 			continue ;
 		}
 		if (ft_strcmp(token->data, "*") == 0)
 			return (false);
-		tokens_word = tokens_word->next;
+		wordt = wordt->next;
 	}
 	return (true);
 }

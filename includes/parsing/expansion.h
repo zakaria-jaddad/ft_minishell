@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 00:29:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:08:58 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 
-# define SPECIAL_EXPANSION " .,+-!@#$%^&()[]{};:'\"<>/|~`= \t\n"
+# define SPECIAL_EXPANSION " .,+-!@#$%^?*&()[]{};:'\"<>/|~`= \t\n"
 
 t_list	*expand(t_list *tokens, t_list *env);
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim);

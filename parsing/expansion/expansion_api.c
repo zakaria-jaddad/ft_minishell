@@ -1,5 +1,7 @@
 #include "../../includes/minishell.h"
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 static int	count_spaces(char *s)
 {
@@ -106,17 +108,17 @@ void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 t_list	*expand_arguments(t_list *argt, t_list *env)
 {
 	t_list	*arguments_lst;
-	t_list	*word;
+	t_list	*wordt;
 	t_list	*expanded_argument;
 
 	arguments_lst = NULL;
 	while (argt)
 	{
-		word = get_tokenizd_word(&argt);
-		if (word == NULL)
+		wordt = get_tokenizd_word(&argt);
+		if (wordt == NULL)
 			return (ft_lstclear(&arguments_lst, free), NULL);
-		expanded_argument = expand_word(word, env);
-		ft_lstclear(&word, free_token);
+		expanded_argument = expand_word(wordt, env);
+		ft_lstclear(&wordt, free_token);
 		if (expanded_argument == NULL)
 			return (ft_lstclear(&arguments_lst, free), NULL);
 		ft_lstadd_back(&arguments_lst, expanded_argument);
@@ -130,6 +132,7 @@ t_list	*expand_arguments(t_list *argt, t_list *env)
 bool	check_cmdt(t_list *cmdt)
 {
 	t_list	*wordt;
+	char *word;
 	t_list	*wordt_head;
 	t_token	*tok;
 
@@ -139,6 +142,9 @@ bool	check_cmdt(t_list *cmdt)
 	if (wordt == NULL)
 		return (false);
 	wordt_head = wordt;
+	word = tokens_to_str(wordt);
+	if (word == NULL)
+		return (ft_lstclear(&wordt, free), false);
 	while (wordt)
 	{
 		tok = wordt->content;
@@ -228,6 +234,35 @@ t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq)
 	return (new_enhanced_tokens);
 }
 
+void wildcard_pre_expansion(t_list **tokens)
+{
+	t_list *et;
+	t_list *prev;
+	t_list *next;
+	t_token *tok;
+	t_list *head;
+
+	if (tokens == NULL || *tokens == NULL)
+		return ;
+
+	et = get_enhanced_tokens(*tokens, "=*");
+	head = et;
+	while (et)
+	{
+		tok = et->content;
+		if (ft_strcmp(tok->data, "*") == 0)
+		{
+			prev = et->prev;
+			next = et->next;
+			if (prev != NULL && ft_strcmp(((t_token *) (prev->content))->data, "=") == 0)
+				tok->type = TOKEN_DOUBLE_QUOTE_WORD;
+		}
+		et = et->next;
+	}
+	ft_lstclear(tokens, free_token);
+	*tokens = head;
+}
+
 void	pre_expansion(t_list **tokens)
 {
 	t_list	*tmp;
@@ -280,7 +315,6 @@ void	pre_expansion(t_list **tokens)
 	*tokens = new_tokens;
 }
 
-// TODO: FIX LEAKS
 char	**expand_all(t_list *cmdt, t_list *argt, t_list *env)
 {
 	t_list	*cmd;
@@ -299,11 +333,20 @@ char	**expand_all(t_list *cmdt, t_list *argt, t_list *env)
 	}
 	if (cmd != NULL && check_cmdt(argt_dup) == false)
 		pre_expansion(&argt_dup);
+	wildcard_pre_expansion(&argt_dup);
+
 	args_lst = expand_arguments(argt_dup, env);
 	ft_lstclear(&argt_dup, free_token);
 	cmds = list_to_double_pointer(cmd);
 	ft_lstclear(&cmd, free);
 	args = list_to_double_pointer(args_lst);
 	ft_lstclear(&args_lst, free);
-	return (arr_add_front(cmds, args));
+
+	char **foo = arr_add_front(cmds, args);
+	while (*foo)
+	{
+		printf("*foo++ = %s\n", *foo++);
+	}
+	exit(0);
+	return (foo);
 }

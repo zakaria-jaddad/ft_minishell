@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 07:59:07 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:26:24 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,18 +80,18 @@ static t_list	*get_valid_matches(char *str)
 	return (matches);
 }
 
-void	*set_matches(t_list **matches, t_list *word)
+void	*set_matches(t_list **matches, t_list *wordt)
 {
 	char	*unexpanded_name;
 
-	if (matches == NULL || word == NULL)
+	if (matches == NULL || wordt == NULL)
 		return (NULL);
-	unexpanded_name = tokens_to_str(word);
+	unexpanded_name = tokens_to_str(wordt);
 	if (unexpanded_name == NULL)
-		return (ft_lstclear(&word, free_token), NULL);
+		return (NULL);
 	*matches = get_valid_matches(unexpanded_name);
 	if (*matches == NULL)
-		return (ft_lstclear(&word, free_token), free(unexpanded_name), NULL);
+		return (free(unexpanded_name), NULL);
 	sort_matches(matches);
 	return (NOTNULL);
 }
@@ -99,22 +99,22 @@ void	*set_matches(t_list **matches, t_list *word)
 t_list	*expand_wildcard(t_list *tokens)
 {
 	t_list	*matches;
-	t_list	*word;
+	t_list	*wordt;
 
 	matches = NULL;
 	while (tokens)
 	{
 		if (is_valid_wildcard(tokens) == true)
 		{
-			word = get_word(tokens);
-			if (is_valid_word(word) == true)
+			wordt = get_word(tokens);
+			if (is_valid_word(wordt) == true)
 			{
-				if (set_matches(&matches, word) == NULL)
-					return (ft_lstclear(&word, free_token), NULL);
-				ft_lstclear(&word, free_token);
+				if (set_matches(&matches, wordt) == NULL)
+					return (ft_lstclear(&wordt, free_token), NULL);
+				ft_lstclear(&wordt, free_token);
 				return (create_tokenized_matches(matches));
 			}
-			ft_lstclear(&word, free_token);
+			ft_lstclear(&wordt, free_token);
 		}
 		tokens = tokens->next;
 	}
