@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/02 21:36:53 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/03 22:08:47 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,15 @@ void	add_export(t_list *list, char **args, int append)
 
 	env = get_env(list, args[0]);
 	if (append && env)
-		args[1] = ft_strjoin(env->value, args[1]);
+		args[1] = ft_strjoin(env->value, args[1] + 1);
 	if (env && (!args[1] || !ft_strcmp(args[1], "")))
 		return ;
 	if (env)
-		edit_env(env, args[1]);
+		edit_env(env, args[1] + 1);
 	else
 	{
-		if (args[1])
-			append_env(&list, args[0], args[1]);
+		if (args[1] && args[1] + 1)
+			append_env(&list, args[0], args[1] + 1);
 		else
 			append_env(&list, args[0], "\0");
 	}
@@ -123,16 +123,16 @@ char	**split_by_first_equal(char *arg, t_list *list)
 			break ;
 	if (!i)
 		return (NULL);
-	if (arg[i - 1] == '+')
+	if (arg[i - 1] == '+' && arg[i] == '=')
 	{
 		append_++;
 		i--;
 	}
-	rv = malloc(sizeof(char *) * 2 + 1);
+	rv = malloc(sizeof(char *) * (2 + 1));
 	rv[0] = ft_substr(arg, 0, i);
 	if (append_)
 		i++;
-	rv[1] = ft_substr(arg, i + 1, ft_strlen(arg));
+	rv[1] = ft_substr(arg, i, ft_strlen(arg));
 	rv[2] = NULL;
 	add_export(list, rv, append_);
 	return (rv);

@@ -23,6 +23,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-int	status_x(int value, int modify);
+int		status_x(int value, int modify);
+void	signals_handling(void);
 
 #endif

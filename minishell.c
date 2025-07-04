@@ -2,6 +2,7 @@
 #include "includes/minishell.h"
 #include "libft/libft.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 int	main(int _, char **__, char **env)
 {
@@ -17,9 +18,12 @@ int	main(int _, char **__, char **env)
 	{
 		ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		return (1);
-	};
+	}
+	if (!isatty(0) && !isatty(1))
+		return (0);
 	while (true)
 	{
+		signals_handling();
 		line = readline("ft_minishell -> ");
 		if (line == NULL)
 			_exit_(NULL);

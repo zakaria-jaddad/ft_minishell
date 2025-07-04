@@ -80,7 +80,7 @@ char	**envs_list_to_double_pointer(t_list *env_list)
 	while (env_list)
 	{
 		env = env_list->content;
-		if (env && env->key)
+		if (env && env->value && ft_strcmp(env->value, ""))
 			if (!join_the_str(res, i++, &env))
 				return (NULL);
 		env_list = env_list->next;

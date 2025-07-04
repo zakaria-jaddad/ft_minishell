@@ -96,6 +96,7 @@ int	not_builtin(char **args, t_list *env_list)
 	pid_t	pid;
 	int		status;
 
+	status = 0;
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 	{
 		pid = fork();
@@ -111,7 +112,7 @@ int	not_builtin(char **args, t_list *env_list)
 	}
 	else
 		return (1);
-	return (0);
+	return (status);
 }
 
 int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
@@ -122,7 +123,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	args = expand_all(cmd->command, cmd->arguments, envs);
 	status = 0;
 	if (!args)
-		status = ft_fprintf(2, "error: expand_all: return (null)\n");
+		return (status);
 	else if (ft_strcmp(args[0], "cd") == 0)
 		status = _cd_(envs, args + 1);
 	else if (ft_strcmp(args[0], "export") == 0)
