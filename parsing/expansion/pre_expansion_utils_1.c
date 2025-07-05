@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:06 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 22:55:02 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 06:21:03 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq)
 bool	check_cmdt(t_list *cmdt)
 {
 	t_list	*wordt;
-	char	*word;
 	t_list	*wordt_head;
 	t_token	*tok;
 
@@ -52,9 +51,6 @@ bool	check_cmdt(t_list *cmdt)
 	if (wordt == NULL)
 		return (false);
 	wordt_head = wordt;
-	word = tokens_to_str(wordt);
-	if (word == NULL)
-		return (ft_lstclear(&wordt, free), false);
 	while (wordt)
 	{
 		tok = wordt->content;
