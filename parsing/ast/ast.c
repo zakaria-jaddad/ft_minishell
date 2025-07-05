@@ -1,7 +1,5 @@
 
 #include "../../includes/parsing/parsing.h"
-#include <stdbool.h>
-#include <stdlib.h>
 
 t_list	*get_command(t_list **tokens)
 {
@@ -155,6 +153,8 @@ t_cmd	*ast(t_list **tokens)
 		left = dup_tokens(*tokens, root, false);
 		cmd_root->right = ast(&right);
 		cmd_root->left = ast(&left);
+		ft_lstclear(&right, free_token);
+		ft_lstclear(&left, free_token);
 		return (cmd_root);
 	}
 	cmd_root->type = (t_node_type)((t_token *)root->content)->type;
@@ -162,5 +162,7 @@ t_cmd	*ast(t_list **tokens)
 	left = dup_tokens(*tokens, root, false);
 	cmd_root->right = ast(&right);
 	cmd_root->left = ast(&left);
+	ft_lstclear(&right, free_token);
+	ft_lstclear(&left, free_token);
 	return (cmd_root);
 }

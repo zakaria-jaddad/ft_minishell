@@ -1,6 +1,6 @@
 CC = cc
 MAKE = make -C
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror  -fsanitize=address -g
 
 NAME = minishell
 LIBFT_DIR = libft
@@ -60,6 +60,7 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/ast/get_root.c \
 	  ./parsing/syntx_check/syntax_check.c \
 	  ./parsing/pre_ast/heredoc.c \
+	  ./parsing/ast/free_ast.c \
 	  $(EXPANSION)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)

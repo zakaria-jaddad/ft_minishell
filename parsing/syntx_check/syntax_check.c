@@ -151,7 +151,8 @@ bool	syntax_check(t_list *tokens)
 				return (false);
 			if (syntax_check(subshell) == false)
 				return (ft_lstclear(&subshell, free_token), false);
-                        continue ;
+			ft_lstclear(&subshell, free_token);
+			continue ;
 		}
 		if (is_logical_op(tok->type) == true)
 		{

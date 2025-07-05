@@ -20,7 +20,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 
-# define SPECIAL_EXPANSION " .,+-!@#$%^?*&()[]{};:'\"<>/|~`= \t\n"
+# define SPECIAL_EXPANSION " .,+-!@#$%^&()[]{};:'\"<>/|~`= \t\n" // ?*
 
 t_list	*expand(t_list *tokens, t_list *env);
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim);

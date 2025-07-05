@@ -1,11 +1,15 @@
 
 #include "includes/minishell.h"
 #include "libft/libft.h"
+#include <includes/parsing/parsing.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
+
 int	main(int _, char **__, char **env)
 {
+
 	char	*line;
 	t_cmd	*cmd;
 	t_list	*env_lst;
@@ -26,25 +30,20 @@ int	main(int _, char **__, char **env)
 		signals_handling();
 		line = readline("ft_minishell -> ");
 		if (line == NULL)
-			_exit_(NULL);
+			(ft_lstclear(&env_lst, free_env), _exit_(NULL));
+		// TODO: SKIP SPACES 
 		if (*line)
 			add_history(line);
 		cmd = parse_cmd(line, env_lst);
 		if (cmd == NULL)
+		{
+			line = (free(line), NULL);
 			continue ;
+		}
 		print_cmd(cmd, 0);
-		// printf("%s\n",
-		// char *command;
-		// char **arguments;
-		// list_to_string(((t_cmd_simple *)cmd->content)->command));
-		// print_tokens_data(((t_cmd_simple *)cmd->content)->command);
-		// expand_simple_cmd(&command, &arguments,
-		// (t_cmd_simple *)cmd->content);
-		// printf("cmd: %s\n", command);
-		// printf("args1: %s\n", arguments[0]);
-		// printf("args2: %s\n", arguments[1]);
 		execution(cmd, env_lst);
-		// printf("$?: %d\n", status_x(0, 0));
+		clear_cmd(cmd);
+		line = (free(line), NULL);
 	}
 	free(line);
 	return (EXIT_SUCCESS);

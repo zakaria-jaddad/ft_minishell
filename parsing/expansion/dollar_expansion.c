@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/24 11:59:31 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 03:36:27 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ static void	del_node_and_go_next(t_list **tokens, t_list **token_head)
 
 static void	update_current_token(t_list *current_token_node, t_list *env)
 {
-	t_token	*current_token;
+	t_token	*tok;
 
 	if (current_token_node == NULL)
 		return ;
-	current_token = current_token_node->content;
-	if (current_token == NULL)
+	tok = current_token_node->content;
+	if (tok == NULL)
 		return ;
-	if (ft_isdigit(*current_token->data) == true)
-		return (digit_expansion(&current_token->data));
-	word_expansion(&current_token->data, env);
+	if (ft_isdigit(*tok->data) == true)
+		return (digit_expansion(&tok->data));
+	word_expansion(&tok->data, env);
 }
 
 static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
@@ -51,12 +51,12 @@ static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
 
 void	expand_dollar(t_list **tokens, t_list *env)
 {
-	t_list	*tokens_head;
+	t_list	*th;
 	t_token	*current_token;
 
 	if (tokens == NULL)
 		return ;
-	tokens_head = *tokens;
+	th = *tokens;
 	while (*tokens)
 	{
 		current_token = (*tokens)->content;
@@ -65,7 +65,7 @@ void	expand_dollar(t_list **tokens, t_list *env)
 			if (is_valid_dollar_with_qs_next(*tokens) == true
 				|| is_valid_dollar_with_valid_var(*tokens) == true)
 			{
-				expand_dollar_escaping_norms(tokens, &tokens_head, env);
+				expand_dollar_escaping_norms(tokens, &th, env);
 				continue ;
 			}
 			else if (is_valid_dollar_with_dollar(*tokens) == true)
@@ -75,5 +75,5 @@ void	expand_dollar(t_list **tokens, t_list *env)
 			break ;
 		*tokens = (*tokens)->next;
 	}
-	*tokens = tokens_head;
+	*tokens = th;
 }

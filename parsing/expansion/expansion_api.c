@@ -29,9 +29,9 @@ t_list	*expand_command(t_list *tokenized_command, t_list *env)
 {
 	t_list	*expanded_word;
 
-	expanded_word = expand_word(tokenized_command, env);
 	if (tokenized_command == NULL || env == NULL)
 		return (NULL);
+	expanded_word = expand_word(tokenized_command, env);
 	return (expanded_word);
 }
 

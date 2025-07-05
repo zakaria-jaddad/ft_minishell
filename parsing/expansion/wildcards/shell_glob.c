@@ -90,8 +90,9 @@ void	*set_matches(t_list **matches, t_list *wordt)
 	if (unexpanded_name == NULL)
 		return (NULL);
 	*matches = get_valid_matches(unexpanded_name);
+	free(unexpanded_name);
 	if (*matches == NULL)
-		return (free(unexpanded_name), NULL);
+		return (NULL);
 	sort_matches(matches);
 	return (NOTNULL);
 }

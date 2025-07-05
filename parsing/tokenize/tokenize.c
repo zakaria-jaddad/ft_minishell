@@ -73,7 +73,7 @@ t_list	*get_tokens(char *line)
 		line_lst_head = line_lst);
 	if (line_lst == NULL)
 		return (NULL);
-	while (line_lst != NULL)
+	while (line_lst != NULL && line_lst->content)
 	{
 		if (ft_strcmp(line_lst->content, "\"") == 0
 			|| ft_strcmp(line_lst->content, "\'") == 0)

@@ -69,6 +69,7 @@ static void	*split_pre_expansion_escapint_norms_v1(t_list **new_tokens,
 	if (append_tokens(new_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
 				free_token), ft_lstclear(&argt, free_token), NULL);
+	ft_lstclear(wordt, free_token);
 	return (NOTNULL);
 }
 
@@ -90,10 +91,12 @@ static void	split_pre_expansion(t_list **tokens)
 				return (ft_lstclear(&new_tokens, free_token));
 			if (is_assignment_statement(wordt) == true)
 			{
-				split_pre_expansion_escapint_norms_v1(&new_tokens, &wordt);
-				continue ;
+				if (!split_pre_expansion_escapint_norms_v1(&new_tokens, &wordt))
+					return;
+				continue;
 			}
-			split_pre_expansion_escapint_norms_v2(&new_tokens, &wordt);
+			if (!split_pre_expansion_escapint_norms_v2(&new_tokens, &wordt))
+				return;
 		}
 		if (tmp != NULL)
 			tmp = tmp->next;

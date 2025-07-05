@@ -6,11 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/20 08:24:20 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:05:56 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/tokenize.h"
+#include "../../includes/parsing/parsing.h"
+#include "../../includes/minishell.h"
 
 /*
  * @brief frees t_token object
@@ -102,14 +104,21 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 			return (free(token_data), token_data = NULL, NULL);
 		*line_lst = (*line_lst)->next;
 	}
-	token = create_token(token_type, token_data);
+	if (*line_lst != NULL && ft_strcmp((*line_lst)->content, quote_type) == 0)
+	{
+		token = create_token(token_type, token_data);
+		token_data = (free(token_data), NULL);
+		if (token == NULL)
+			return (NULL);
+		node = ft_lstnew(token);
+		if (node == NULL)
+			return (free_token(token), token = NULL, NULL);
+		return (node);
+	}
+	ft_fprintf(STDERR_FILENO, SYNTAX_E, quote_type);
+	status_x(258, true);
 	token_data = (free(token_data), NULL);
-	if (token == NULL)
-		return (NULL);
-	node = ft_lstnew(token);
-	if (node == NULL)
-		return (free_token(token), token = NULL, NULL);
-	return (node);
+	return (NULL);
 }
 
 void	print_tokens(t_list *tokens)

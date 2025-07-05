@@ -29,6 +29,7 @@ static void	special_word_expansion(char **str, char *special, t_list *env)
 	char	*key;
 	char	*tmp;
 	t_env	*var;
+	char *foo;
 
 	if (str == NULL || *str == NULL || env == NULL || special == NULL)
 		return ;
@@ -38,9 +39,12 @@ static void	special_word_expansion(char **str, char *special, t_list *env)
 	var = get_env(env, key);
 	tmp = *str;
 	if (var == NULL)
-		*str = ft_strjoin("", special);
+		foo = ft_strjoin("", special);
 	else
-		*str = ft_strjoin(var->value, special);
+		foo  = ft_strjoin(var->value, special);
+	if (foo == NULL)
+		return;
+	*str = foo;
 	free(tmp);
 	free(key);
 	return ;
@@ -50,20 +54,29 @@ static void	simple_word_expansion(char **str, t_list *env)
 {
 	char	*tmp;
 	t_env	*var;
+	char *foo;
 
 	if (str == NULL || *str == NULL || env == NULL)
 		return ;
+	tmp = *str;
 	if (ft_strcmp(*str, "?") == 0)
 	{
-		*str = ft_itoa(status_x(0, false));
+		foo = ft_itoa(status_x(0, false));
+		if (foo == NULL)
+			return ;
+		*str = foo;
+		free(tmp);
 		return ;
 	}
 	var = get_env(env, *str);
-	tmp = *str;
+	// Error: Fix Later var NULL str should be NULL
 	if (var == NULL)
-		*str = ft_strdup("");
+		foo = ft_strdup("");
 	else
-		*str = ft_strdup(var->value);
+		foo  = ft_strdup(var->value);
+	if (foo == NULL)
+		return ;
+	*str = foo;
 	free(tmp);
 }
 
