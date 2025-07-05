@@ -47,13 +47,13 @@ static void	*extract_words_list_escapint_norms(t_list **result, t_list **tokens)
 	if (tokenized_word == NULL)
 		return (ft_lstclear(result, free), NULL);
 	dup = tokens_to_str(tokenized_word);
+	ft_lstclear(&tokenized_word, free_token);
 	if (dup == NULL)
-		return (ft_lstclear(&tokenized_word, free_token), ft_lstclear(result,
+		return (ft_lstclear(result,
 				free), NULL);
 	new_node = ft_lstnew(dup);
 	if (new_node == NULL)
-		return (free(dup), ft_lstclear(&tokenized_word, free_token),
-			ft_lstclear(result, free), NULL);
+		return (free(dup),ft_lstclear(result, free), NULL);
 	ft_lstadd_back(result, new_node);
 	return (NOTNULL);
 }

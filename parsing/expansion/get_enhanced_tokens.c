@@ -57,13 +57,15 @@ t_list	*get_enhanced_tokens(t_list *tokens, char *delim)
 		else
 		{
 			split_token_data = ft_split_pro(current_token->data, delim);
-			if (split_token_data == NULL)
-				break ;
+			if (split_token_data == NULL) {
+				ft_lstclear(&enhanced_tokens, free_token);
+				return NULL;
+			}
 			new_tokens = create_tokens(split_token_data, current_token->type);
 			ft_lstclear(&split_token_data, free);
 		}
 		if (new_tokens == NULL)
-			ft_lstclear(&enhanced_tokens, free_token);
+			return (ft_lstclear(&enhanced_tokens, free_token), NULL);
 		ft_lstadd_back(&enhanced_tokens, new_tokens);
 		tokens = tokens->next;
 	}
