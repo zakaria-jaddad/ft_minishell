@@ -100,6 +100,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	if (res)
 		write(fd, res, ft_strlen(res));
 	close(fd);
+	free(res);
 	return (line);
 }
 
@@ -108,6 +109,7 @@ char	*handle_heredoc(t_list *tokens, t_list *env_list)
 	t_token	*token;
 	int		expand;
 	char	*str;
+	char *res;
 
 	if (!tokens)
 		return (NULL);
@@ -121,5 +123,7 @@ char	*handle_heredoc(t_list *tokens, t_list *env_list)
 			expand = 0;
 		tokens = tokens->next;
 	}
-	return (run_heredoc(str, expand, env_list));
+	res = run_heredoc(str, expand, env_list);
+	free(str);
+	return (res);
 }
