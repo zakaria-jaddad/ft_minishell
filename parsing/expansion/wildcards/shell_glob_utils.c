@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 07:55:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 16:19:50 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:05:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,23 +62,23 @@ bool	is_valid_wildcard(t_list *current_token_node)
 	return (false);
 }
 
-t_list	*create_tokenized_matches(t_list *filename)
+t_list	*create_tokenized_matches(t_list *filenames)
 {
 	t_list	*token_node;
 	t_list	*tokenized_filenames;
 
-	if (filename == NULL)
+	if (filenames == NULL)
 		return (NULL);
 	tokenized_filenames = NULL;
-	while (filename)
+	while (filenames)
 	{
-		token_node = create_token_node(TOKEN_WORD, filename->content);
+		token_node = create_token_node(TOKEN_WORD, filenames->content);
 		if (token_node == NULL)
 			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
 		ft_lstadd_back(&tokenized_filenames, token_node);
 		if (append_tokens(&tokenized_filenames, TOKEN_WHITE_SPACE, " ") == NULL)
 			return (ft_lstclear(&tokenized_filenames, free_token), NULL);
-		filename = filename->next;
+		filenames = filenames->next;
 	}
 	return (tokenized_filenames);
 }

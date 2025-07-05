@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/03 00:54:19 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:28:13 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 	int		status;
+        int             ret;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
 	status = 0;
@@ -139,7 +140,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "exit") == 0)
 		_exit_(args + 1);
 	else
-		return (not_builtin(args, envs));
+		return (ret = not_builtin(args, envs), free_double_pointer((void **)args), ret);
 	free_double_pointer((void **)args);
 	return (status);
 }

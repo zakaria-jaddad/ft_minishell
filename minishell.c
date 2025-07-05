@@ -1,8 +1,7 @@
 
 #include "includes/minishell.h"
 #include "libft/libft.h"
-#include <includes/parsing/parsing.h>
-#include <stdio.h>
+#include "includes/parsing/parsing.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -43,7 +42,9 @@ int	main(int _, char **__, char **env)
 		print_cmd(cmd, 0);
 		execution(cmd, env_lst);
 		clear_cmd(cmd);
+                /* ft_lstclear(&env_lst, free_env); */
 		line = (free(line), NULL);
+                /* return 0; */
 	}
 	free(line);
 	return (EXIT_SUCCESS);

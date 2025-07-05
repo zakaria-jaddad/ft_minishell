@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 18:00:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:12:13 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
 	tokens = get_tokens(line);
 	if (tokens == NULL)
 		return (NULL);
-	print_tokens(tokens);
-	printf("\n");
         // syntax_check() NOTE IMPLEMENTED
         if (syntax_check(tokens) == false)
                 return (ft_lstclear(&tokens, free_token), status_x(258, true), NULL);

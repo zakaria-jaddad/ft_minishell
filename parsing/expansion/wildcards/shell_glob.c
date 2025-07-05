@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 16:26:24 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:08:06 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ t_list	*expand_wildcard(t_list *tokens)
 {
 	t_list	*matches;
 	t_list	*wordt;
+        t_list *matchest;
 
 	matches = NULL;
 	while (tokens)
@@ -113,7 +114,9 @@ t_list	*expand_wildcard(t_list *tokens)
 				if (set_matches(&matches, wordt) == NULL)
 					return (ft_lstclear(&wordt, free_token), NULL);
 				ft_lstclear(&wordt, free_token);
-				return (create_tokenized_matches(matches));
+                                matchest = create_tokenized_matches(matches);
+				ft_lstclear(&matches, free);
+				return (matchest);
 			}
 			ft_lstclear(&wordt, free_token);
 		}

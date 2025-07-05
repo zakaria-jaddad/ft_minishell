@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:53:55 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 09:43:01 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:32:42 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,6 @@ void	append_file_name(t_list **matches, char *file_name, char *path)
 	append_str(&new_path, file_name);
 	node = ft_lstnew((void *)new_path);
 	if (node == NULL)
-		return ;
+		return free(new_path);
 	ft_lstadd_back(matches, node);
 }

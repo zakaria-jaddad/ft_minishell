@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:56:36 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/03 23:50:04 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 18:13:26 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ t_list	*expand_word(t_list *wordt, t_list *env)
 	if (expanded_tokenized_word == NULL)
 		return (NULL);
 	expansion_lst = extract_words_list(expanded_tokenized_word);
+        ft_lstclear(&expanded_tokenized_word, free_token);
 	return (expansion_lst);
 }
