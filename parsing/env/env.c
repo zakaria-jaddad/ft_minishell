@@ -61,7 +61,8 @@ static t_list	*simple_env(t_list *env_lst)
 		return (ft_lstclear(&env_lst, free_env), NULL);
 	if (append_env(&env_lst, "_", "/usr/bin/env") == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
-	if (append_env(&env_lst, "PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:. ") == NULL)
+	if (append_env(&env_lst, "PATH",
+			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:. ") == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }
@@ -92,5 +93,9 @@ t_list	*envs_init(char **env, ...)
 			return (ft_lstclear(&env_lst, free_env), NULL);
 		(ft_lstadd_back(&env_lst, node), env++);
 	}
+	if (append_env(&env_lst, "a", "-") == NULL)
+		return (ft_lstclear(&env_lst, free_env), NULL);
+	// if (append_env(&env_lst, "b", "-lah") == NULL)
+	// 	return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }

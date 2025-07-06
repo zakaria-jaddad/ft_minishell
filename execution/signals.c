@@ -22,7 +22,6 @@ void	handle_ctr_c_fork(int sig)
 
 void	handle_ctr_c(int sig)
 {
-	(void)sig;
 	if (!waitpid(-1, &sig, WNOHANG))
 		return ;
 	rl_replace_line("", 0);

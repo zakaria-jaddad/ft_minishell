@@ -6,13 +6,15 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 01:50:55 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 23:34:55 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execution.h"
+#include "../../includes/minishell.h"
 #include <readline/readline.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -83,61 +85,66 @@ char	*open_heredoc(char *dilimiter)
 	return (res);
 }
 
-/* char	*expand_arr(char **arr, t_list *envs) */
-/* { */
-/* 	int		i; */
-/* 	char	*tmp; */
-/* 	char	*res; */
-/**/
-/* 	i = 0; */
-/* 	res = NULL; */
-/* 	while (arr[i]) */
-/* 	{ */
-/* 		if (arr[i][0] == '$') */
-/* 		{ */
-/* 			tmp = get_env(envs, arr[i] + 1)->value; */
-/* 			free(arr[i]); */
-/* 			arr[i] = tmp; */
-/* 		} */
-/* 		tmp = ft_strjoin(res, arr[i]); */
-/* 		free(res); */
-/* 		res = tmp; */
-/* 	} */
-/* 	return (res); */
-/* } */
-/**/
-/* char	*expand_heredoc(char *str, t_list *env_list) */
-/* { */
-/* 	char	**arr; */
-/* 	int		i; */
-/* 	int		j; */
-/* 	int		k; */
-/* 	char	*res; */
-/**/
-/* 	i = -1; */
-/* 	j = 0; */
-/* 	while (str[++i]) */
-/* 		if (str[i] == '$' || str[i] == '"' || str[i] == '\'') */
-/* 			j++; */
-/* 	arr = malloc(sizeof(char *) * (j + 1)); */
-/* 	i = -1; */
-/* 	j = 0; */
-/* 	k = 0; */
-/* 	printf("%s\n", str); */
-/* 	while (str[++i]) */
-/* 	{ */
-/* 		if (str[i] == '$' || str[i] == '"' || str[i] == '\'') */
-/* 		{ */
-/* 			arr[j++] = ft_substr(str, k, i - k); */
-/* 			k = i; */
-/* 		} */
-/* 		i++; */
-/* 	} */
-/* 	printf("%s\n", str); */
-/* 	res = expand_arr(arr, env_list); */
-/* 	printf("%s\n", str); */
-/* 	return (res); */
-/* } */
+char	*expand_arr(char **arr, t_list *envs)
+{
+	int		i;
+	char	*tmp;
+	char	*res;
+	t_env	*env;
+
+	i = 0;
+	res = NULL;
+	while (arr[i])
+	{
+		if (arr[i][0] == '$')
+		{
+			env = get_env(envs, arr[i] + 1);
+			if (env)
+				tmp = ft_strdup(env->value);
+			else
+				tmp = ft_strdup("");
+			printf("%p\n", env);
+			free(arr[i]);
+			arr[i] = tmp;
+		}
+		tmp = ft_strjoin(res, arr[i]);
+		free(res);
+		res = tmp;
+		i++;
+	}
+	return (res);
+}
+
+char	*expand_heredoc(char *str, t_list *env_list)
+{
+	char	**arr;
+	int		i;
+	int		j;
+	int		k;
+	char	*res;
+
+	i = -1;
+	j = 0;
+	while (str[++i])
+		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+			j++;
+	arr = malloc(sizeof(char *) * (j + 2));
+	i = -1;
+	j = 0;
+	k = 0;
+	while (str[++i])
+	{
+		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+		{
+			arr[j++] = ft_substr(str, k, i - k);
+			k = i;
+		}
+	}
+	arr[j++] = ft_substr(str, k, i - k);
+	arr[j] = NULL;
+	res = expand_arr(arr, env_list);
+	return (res);
+}
 
 char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 {
@@ -146,7 +153,6 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	int		fd;
 	pid_t	pid;
 
-        (void) env_list;
 	line = get_address(dilimiter);
         if (line == NULL)
                 return (free(dilimiter), NULL);
@@ -154,7 +160,6 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
         {
                 free(line);
 		line = get_address(line);
-        }
 	pid = fork();
 	if (pid == 0)
 	{
@@ -171,13 +176,11 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 			exit(1);
 		}
 		if (expand)
-                {
-		/* 	res = expand_heredoc(res, env_list); */
-                        char *foo = "foo";
-                        (void) foo;
-                }
+			res = expand_heredoc(res, env_list);
 		if (res)
+		{
 			write(fd, res, ft_strlen(res));
+		}
 		close(fd);
 		free(res);
 		exit(0);

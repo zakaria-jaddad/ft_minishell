@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing/parsing.h"
 #include "../includes/minishell.h"
+#include "../includes/parsing/parsing.h"
 
 #define MHCE "bash: maximum here-document count exceeded\n"
 

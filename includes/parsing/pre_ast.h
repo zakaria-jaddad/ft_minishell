@@ -16,7 +16,7 @@
 # include "tokenize.h"
 # include <stdbool.h>
 
-void	pre_ast(t_list **tokens);
+void	pre_ast(t_list **tokens, t_list *envs);
 void	enhance_redirection(t_list **redir_tokens, t_list **tokens);
 char	*handle_heredoc(t_list *tokens, t_list *env_list);
 
