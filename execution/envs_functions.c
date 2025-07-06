@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/03 22:08:47 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/06 05:56:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ char	**split_by_first_equal(char *arg, t_list *list)
 	rv[1] = ft_substr(arg, i, ft_strlen(arg));
 	rv[2] = NULL;
 	add_export(list, rv, append_);
-	return (rv);
+        ft_split_free(rv);
+	return (NOTNULL);
 }
 
 int	_export_(t_list *list, char **args)

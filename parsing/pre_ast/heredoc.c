@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 02:05:37 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 05:44:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,22 +95,28 @@ char	*expand_arr(char **arr, t_list *envs)
 	res = NULL;
 	while (arr[i])
 	{
-		if (arr[i][0] == '$')
+		if (arr[i][0] == '$' && arr[i][1] != 0)
 		{
-			env = get_env(envs, arr[i] + 1);
+                        char *key = ft_substr(&arr[i][1], 0, ft_strlen(&arr[i][1]) - 1);
+			env = get_env(envs, key);
+                        free(key);
 			if (env)
 				tmp = ft_strdup(env->value);
 			else
 				tmp = ft_strdup("");
-			printf("%p\n", env);
-			free(arr[i]);
-			arr[i] = tmp;
+                        if (tmp != NULL)
+                        {
+                                free(arr[i]);
+                                arr[i] = tmp;
+                        }
+                        append_str(&arr[i], "\n");
 		}
 		tmp = ft_strjoin(res, arr[i]);
 		free(res);
 		res = tmp;
 		i++;
 	}
+        ft_split_free(arr);
 	return (res);
 }
 
@@ -124,6 +130,8 @@ char	*expand_heredoc(char *str, t_list *env_list)
 
 	i = -1;
 	j = 0;
+        if (str == NULL)
+                return (NULL);
 	while (str[++i])
 		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
 			j++;
@@ -142,6 +150,7 @@ char	*expand_heredoc(char *str, t_list *env_list)
 	arr[j++] = ft_substr(str, k, i - k);
 	arr[j] = NULL;
 	res = expand_arr(arr, env_list);
+        free(str);
 	return (res);
 }
 
