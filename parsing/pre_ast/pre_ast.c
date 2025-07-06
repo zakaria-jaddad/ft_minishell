@@ -6,13 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 01:24:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 00:15:09 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/pre_ast.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 static void	enhance_redirections(t_list **tokens)
 {
@@ -39,7 +37,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 	t_list	*node_to_del;
 	t_list	*filenametn;
 
-	if (filename == NULL || start == NULL || tokens == NULL)
+	if (start == NULL || tokens == NULL)
 		return (NULL);
 	tokenized_file_name_start = start->next;
 	skip_front_spaces(&tokenized_file_name_start);
@@ -49,7 +47,10 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 		tokenized_file_name_start = tokenized_file_name_start->next;
 		ft_lst_rm_one(tokens, node_to_del, free_token);
 	}
-	filenametn = create_token_node(TOKEN_WORD, filename);
+        if (filename == NULL)
+	        filenametn = create_token_node(TOKEN_WORD, "NULL");
+        else
+	        filenametn = create_token_node(TOKEN_WORD, filename);
 	if (filenametn == NULL)
 		return (NULL);
 	if (start->next == NULL)
@@ -77,8 +78,6 @@ static void	handle_heredocs(t_list **tokens)
 				filenamet = get_filename(&tok));
 			filename = handle_heredoc(filenamet, NULL);
 			ft_lstclear(&filenamet, free_token);
-			if (filename == NULL)
-				return (ft_lstclear(&filenamet, free_token));
 			if (NULL == insert_filename_token(filename, start, tok, tokens))
 				return (free(filename));
 			free(filename);

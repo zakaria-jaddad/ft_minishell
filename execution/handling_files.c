@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:30:23 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/01 10:30:23 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/06 00:02:48 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	open_file(char *file, int flags)
 	if (fd == -1)
 	{
 		if (access(file, R_OK))
-			return (ft_fprintf(STDERR_FILENO, "access: error"), -1);
+			return (-1);
 		if (errno == EACCES)
 			ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
 				file);
@@ -53,6 +53,8 @@ int	found_file(t_cmd *t, t_node_type flag, t_list *envs)
 		fd = open_file(file, O_RDONLY);
 		unlink(file);
 	}
+        // FIX: FIXED file leak, remove me :)
+        free(file);
 	if (fd == -1)
 		return (-1);
 	return (fd);

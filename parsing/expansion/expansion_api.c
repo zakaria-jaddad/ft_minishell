@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:51:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/05 21:52:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,7 @@ void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 	if (filename == NULL || filenamet == NULL || env == NULL)
 		return ;
 	filename_lst = expand_word(filenamet, env);
-	if (filename_lst == NULL)
-		return ;
-	if (ft_lstsize(filename_lst) > 1)
+	if (filename_lst == NULL || ft_lstsize(filename_lst) > 1)
 	{
 		ft_fprintf(STDERR_FILENO, "bash: *: ambiguous redirect\n");
 		status_x(1, true);
