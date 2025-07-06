@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/05 23:34:55 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/06 15:35:52 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,14 +96,13 @@ char	*expand_arr(char **arr, t_list *envs)
 	res = NULL;
 	while (arr[i])
 	{
-		if (arr[i][0] == '$')
+		if (arr[i][0] == '$' && arr[i][1])
 		{
 			env = get_env(envs, arr[i] + 1);
 			if (env)
 				tmp = ft_strdup(env->value);
 			else
 				tmp = ft_strdup("");
-			printf("%p\n", env);
 			free(arr[i]);
 			arr[i] = tmp;
 		}
@@ -126,7 +125,7 @@ char	*expand_heredoc(char *str, t_list *env_list)
 	i = -1;
 	j = 0;
 	while (str[++i])
-		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+		if (str[i] == '\n' || str[i] == '$' || str[i] == '"' || str[i] == '\'')
 			j++;
 	arr = malloc(sizeof(char *) * (j + 2));
 	i = -1;
@@ -134,7 +133,7 @@ char	*expand_heredoc(char *str, t_list *env_list)
 	k = 0;
 	while (str[++i])
 	{
-		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+		if (str[i] == '\n' || str[i] == '$' || str[i] == '"' || str[i] == '\'')
 		{
 			arr[j++] = ft_substr(str, k, i - k);
 			k = i;
@@ -171,7 +170,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 			free(line);
 			exit(1);
 		}
-		if (expand)
+		if (expand && res)
 			res = expand_heredoc(res, env_list);
 		if (res)
 		{

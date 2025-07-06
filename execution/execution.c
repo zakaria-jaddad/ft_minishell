@@ -75,10 +75,6 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	envs = envs_list_to_double_pointer(env_list);
 	if (!envs)
 		exit(1);
-	if (!args)
-		ft_fprintf(2, "minishell: : Command not found\n");
-	if (!args)
-		exit(127);
 	path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	if (execve(path, args, envs) < 0)
 	{
@@ -123,7 +119,9 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	args = expand_all(cmd->command, cmd->arguments, envs);
 	status = 0;
 	if (!args)
-		return (status);
+		ft_fprintf(2, "minishell: : Command not found\n");
+	if (!args)
+		return (status_x(127, 1));
 	else if (ft_strcmp(args[0], "cd") == 0)
 		status = _cd_(envs, args + 1);
 	else if (ft_strcmp(args[0], "export") == 0)
