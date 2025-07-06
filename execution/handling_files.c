@@ -21,7 +21,7 @@ int	open_file(char *file, int flags)
 	if (fd == -1)
 	{
 		if (access(file, R_OK))
-			return (ft_fprintf(STDERR_FILENO, "access: error"), -1);
+			return (-1);
 		if (errno == EACCES)
 			ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
 				file);

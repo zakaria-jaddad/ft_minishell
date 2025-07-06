@@ -1,6 +1,7 @@
 
 #include "includes/minishell.h"
 #include "libft/libft.h"
+#include <includes/execution.h>
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -32,7 +33,7 @@ int	main(int _, char **__, char **env)
 		cmd = parse_cmd(line, env_lst);
 		if (cmd == NULL)
 			continue ;
-		print_cmd(cmd, 0);
+		// print_cmd(cmd, 0);
 		// printf("%s\n",
 		// char *command;
 		// char **arguments;

@@ -55,14 +55,14 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 	return (NOTNULL);
 }
 
-static void	handle_heredocs(t_list **tokens)
+static void	handle_heredocs(t_list **tokens, t_list *envs)
 {
 	t_list	*current_token;
 	char	*filename;
 	t_list	*tokenized_file_name;
 	t_list	*start;
 
-        (void) start;
+	(void)start;
 	if (tokens == NULL || *tokens == NULL)
 		return ;
 	current_token = *tokens;
@@ -72,7 +72,7 @@ static void	handle_heredocs(t_list **tokens)
 		{
 			(void)!(current_token = current_token->next, start = current_token);
 			tokenized_file_name = get_filename(&current_token);
-			filename = handle_heredoc(tokenized_file_name, NULL);
+			filename = handle_heredoc(tokenized_file_name, envs);
 			ft_lstclear(&tokenized_file_name, free_token);
 			if (filename == NULL)
 				return (ft_lstclear(&tokenized_file_name, free_token));
@@ -85,10 +85,10 @@ static void	handle_heredocs(t_list **tokens)
 	}
 }
 
-void	pre_ast(t_list **tokens)
+void	pre_ast(t_list **tokens, t_list *envs)
 {
 	if (tokens == NULL)
 		return ;
 	enhance_redirections(tokens);
-	handle_heredocs(tokens);
+	handle_heredocs(tokens, envs);
 }

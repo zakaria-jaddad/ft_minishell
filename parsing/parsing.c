@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing/parsing.h"
 #include "../includes/minishell.h"
+#include "../includes/parsing/parsing.h"
 
 t_cmd	*parse_cmd(char *line, t_list *env_lst)
 {
@@ -23,12 +23,12 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
 	tokens = get_tokens(line);
 	if (tokens == NULL)
 		return (NULL);
-        // syntax_check() NOTE IMPLEMENTED
-        if (syntax_check(tokens) == false)
-                return (ft_lstclear(&tokens, free_token), status_x(258, true), NULL);
-        pre_ast(&tokens);
-        cmd = ast(&tokens);
-        if (cmd == NULL)
-                return (ft_lstclear(&tokens, free_token), NULL);
+	// syntax_check() NOTE IMPLEMENTED
+	if (syntax_check(tokens) == false)
+		return (ft_lstclear(&tokens, free_token), status_x(258, true), NULL);
+	pre_ast(&tokens, env_lst);
+	cmd = ast(&tokens);
+	if (cmd == NULL)
+		return (ft_lstclear(&tokens, free_token), NULL);
 	return (cmd);
 }
