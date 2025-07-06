@@ -6,25 +6,29 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:28:41 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/05/23 11:51:20 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/06 22:10:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
-#include <unistd.h>
 
 void	add_pwd_manual(char *path)
 {
-	int	lenth;
+	int	length;
+	char *joined;
 
 	ft_fprintf(STDERR_FILENO,
 		"cd: error retrieving current directory: getcwd: cannot access %s",
 		"parent directories: No such file or directory\n");
-	lenth = ft_strlen(path);
-	if (path[lenth - 1] == '/')
-		path[lenth - 1] = '\0';
-	manage_pwd(ft_strjoin(manage_pwd(NULL), "/"));
-	manage_pwd(ft_strjoin(manage_pwd(NULL), path));
+	length = ft_strlen(path);
+	if (path[length - 1] == '/')
+		path[length - 1] = '\0';
+	joined = ft_strjoin(manage_pwd(NULL), "/");
+	manage_pwd(joined);
+	free(joined);
+	joined = ft_strjoin(manage_pwd(NULL), path);
+	manage_pwd(joined);
+	free(joined);
 }
 
 int	cd_helper(char *path, t_list *list)

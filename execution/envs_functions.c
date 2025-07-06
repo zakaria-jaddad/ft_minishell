@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 05:56:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 23:06:32 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	add_export(t_list *list, char **args, int append)
 	if (env && (!args[1] || !ft_strcmp(args[1], "")))
 		return ;
 	if (env)
-		edit_env(env, args[1] + 1);
+		edit_env(env, args[1]);
 	else
 	{
 		if (args[1] && args[1] + 1)
@@ -92,8 +92,7 @@ int	check_args(char **args)
 	i = 0;
 	while (args[i])
 	{
-		if (((args[i][0] >= '0' && args[i][0] <= '9') || args[i][0] == '=')
-			&& !ft_strchr(args[i], '-'))
+		if (((args[i][0] >= '0' && args[i][0] <= '9') || args[i][0] == '='))
 			return (ft_fprintf(2,
 					"minishell: export: `%s`: not a valid identifier\n",
 					args[i]), 0);
@@ -101,7 +100,7 @@ int	check_args(char **args)
 		while (args[i][++j] && args[i][j] != '=')
 			if (!(args[i][j] >= 'a' && args[i][j] <= 'z') && !(args[i][j] >= 'A'
 					&& args[i][j] <= 'Z') && !(args[i][j] >= '0'
-					&& args[i][j] <= '9' && j > 0))
+					&& args[i][j] <= '9' && j > 0) && !(args[i][j] == '+' && args[i][j + 1] == '='))
 				return (ft_fprintf(2,
 						"minishell: export: `%s`: not a valid identifier\n",
 						args[i]), 0);

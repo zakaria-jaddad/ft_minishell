@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 05:44:23 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 22:02:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		wait(&fd);
         free(dilimiter);
 	if (fd > 0)
-		return (NULL);
+		return (free(line), NULL);
 	return (line);
 }
 
