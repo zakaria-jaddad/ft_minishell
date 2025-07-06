@@ -73,7 +73,7 @@ t_list	*append_env(t_list **env_lst, char *key, char *value)
 	}
 	env_node = ft_lstnew(env_content);
 	if (env_node == NULL)
-		return (free(env_content), free_env(env_content), NULL);
+		return (free_env(env_content), NULL);
 	ft_lstadd_back(env_lst, env_node);
 	return (*env_lst);
 }

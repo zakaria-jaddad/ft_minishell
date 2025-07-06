@@ -166,8 +166,8 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
                 return (free(dilimiter), NULL);
 	if (access(line, F_OK) == 0)
         {
-                free(line);
-		line = get_address(line);
+            line = (free(line), NULL);
+			line = get_address(line);
         }
 	pid = fork();
 	if (pid == 0)

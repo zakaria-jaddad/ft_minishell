@@ -29,6 +29,8 @@ void	add_pwd_manual(char *path)
 
 int	cd_helper(char *path, t_list *list)
 {
+	char *cwd;
+
 	if (!path || ft_strcmp(path, "") == 0)
 		return (1);
 	if (chdir(path) < 0)
@@ -38,9 +40,11 @@ int	cd_helper(char *path, t_list *list)
 	}
 	if (get_env(list, "OLDPWD"))
 		edit_env(get_env(list, "OLDPWD"), manage_pwd(NULL));
-	if (getcwd(NULL, 0))
+	cwd = getcwd(NULL, 0);
+	if (cwd)
 	{
-		manage_pwd(getcwd(NULL, 0));
+		manage_pwd(cwd);
+		free(cwd);
 	}
 	else
 		add_pwd_manual(path);
