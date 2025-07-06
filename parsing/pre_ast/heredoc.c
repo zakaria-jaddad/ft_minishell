@@ -6,12 +6,11 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/05 23:34:55 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/06 02:05:37 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/execution.h"
-#include "../../includes/minishell.h"
 #include <readline/readline.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -160,6 +159,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
         {
                 free(line);
 		line = get_address(line);
+        }
 	pid = fork();
 	if (pid == 0)
 	{

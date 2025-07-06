@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/06 00:15:09 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 02:04:04 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static void	handle_heredocs(t_list **tokens, t_list *envs)
 		{
 			(void)!(start = tok, tok = tok->next,
 				filenamet = get_filename(&tok));
-			filename = handle_heredoc(filenamet, NULL);
+			filename = handle_heredoc(filenamet, envs);
 			ft_lstclear(&filenamet, free_token);
 			if (NULL == insert_filename_token(filename, start, tok, tokens))
 				return (free(filename));
