@@ -109,7 +109,7 @@ int	not_builtin(char **args, t_list *env_list)
 		{
 			wait(&status);
 			if (status)
-				status_x(1, 1);
+				status_x(130, 1);
 			else
 				status_x(0, 1);
 		}
