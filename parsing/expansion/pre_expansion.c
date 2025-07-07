@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:48:11 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:29:59 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/07 05:34:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 static void	wildcard_pre_expansion(t_list **tokens)
 {
