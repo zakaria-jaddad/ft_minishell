@@ -54,7 +54,7 @@ t_list	*append_env(t_list **env_lst, char *key, char *value)
 {
 	t_env	*env_content;
 	t_list	*env_node;
-	char *tmp;
+	char	*tmp;
 
 	env_content = (t_env *)malloc(sizeof(t_env));
 	if (env_content == NULL)
@@ -67,7 +67,7 @@ t_list	*append_env(t_list **env_lst, char *key, char *value)
 		env_content->value = NULL;
 	else
 	{
-		tmp = env_content->value ;
+		tmp = env_content->value;
 		env_content->value = ft_strdup(value);
 		free(tmp);
 	}

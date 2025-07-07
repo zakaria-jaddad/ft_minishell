@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 23:06:32 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/06 23:36:18 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	print_envs(char *declare, t_list *list)
 			if (env->value && ft_strcmp(env->value, ""))
 				printf("%s=%s\n", env->key, env->value);
 		}
-		else if (env->value && ft_strcmp(env->value, ""))
+		else if (env->value)
 			printf("%s%s=\"%s\"\n", declare, env->key, env->value);
 		else
 			printf("%s%s\n", declare, env->key);
@@ -73,14 +73,19 @@ void	add_export(t_list *list, char **args, int append)
 		args[1] = ft_strjoin(env->value, args[1] + 1);
 	if (env && (!args[1] || !ft_strcmp(args[1], "")))
 		return ;
-	if (env)
+	if (env && append)
 		edit_env(env, args[1]);
+	else if (env)
+		edit_env(env, args[1] + 1);
 	else
 	{
-		if (args[1] && args[1] + 1)
+		printf("%s\n", args[1]);
+		if (args[1] && args[1][0] && args[1][1])
 			append_env(&list, args[0], args[1] + 1);
-		else
+		else if (args[1] && args[1][0] == '=')
 			append_env(&list, args[0], "\0");
+		else
+			append_env(&list, args[0], NULL);
 	}
 }
 
@@ -100,7 +105,8 @@ int	check_args(char **args)
 		while (args[i][++j] && args[i][j] != '=')
 			if (!(args[i][j] >= 'a' && args[i][j] <= 'z') && !(args[i][j] >= 'A'
 					&& args[i][j] <= 'Z') && !(args[i][j] >= '0'
-					&& args[i][j] <= '9' && j > 0) && !(args[i][j] == '+' && args[i][j + 1] == '='))
+					&& args[i][j] <= '9' && j > 0) && !(args[i][j] == '+'
+					&& args[i][j + 1] == '='))
 				return (ft_fprintf(2,
 						"minishell: export: `%s`: not a valid identifier\n",
 						args[i]), 0);
@@ -134,7 +140,7 @@ char	**split_by_first_equal(char *arg, t_list *list)
 	rv[1] = ft_substr(arg, i, ft_strlen(arg));
 	rv[2] = NULL;
 	add_export(list, rv, append_);
-        ft_split_free(rv);
+	ft_split_free(rv);
 	return (NOTNULL);
 }
 
