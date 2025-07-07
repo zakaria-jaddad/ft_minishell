@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:06 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 06:21:03 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/07 05:36:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq)
 		tok = tokens->content;
 		if (tok == NULL)
 			return (ft_lstclear(&new_enhanced_tokens, free_token), NULL);
-		if (is_dq == true)
+		if (is_dq == true && tok->type != TOKEN_SINGLE_QUOTE_WORD)
 			new_token_node = create_token_node(TOKEN_DOUBLE_QUOTE_WORD,
 					tok->data);
 		else
