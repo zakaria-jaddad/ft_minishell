@@ -41,6 +41,13 @@ EXPANSION = ./parsing/expansion/dollar_expansion.c \
 	    ./parsing/expansion/wildcards/wildcards_utils_2.c \
 	    ./parsing/expansion/wildcards/wildcards_utils_3.c \
 
+SYNTAX_CHECK = 	  ./parsing/syntx_check/syntax_check.c \
+		  ./parsing/syntx_check/syntax_check_utils_1.c \
+		  ./parsing/syntx_check/par_check.c \
+		  ./parsing/syntx_check/check_pipe.c \
+		  ./parsing/syntx_check/check_redir.c \
+		  ./parsing/syntx_check/check_logical.c \
+
 
 PARCING = ./parsing/parsing.c \
 	  ./parsing/env/env.c ./parsing/env/env_utils.c \
@@ -58,10 +65,9 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/pre_ast/enhance_redirection.c \
 	  ./parsing/ast/ast.c \
 	  ./parsing/ast/get_root.c \
-	  ./parsing/syntx_check/syntax_check.c \
 	  ./parsing/pre_ast/heredoc.c \
 	  ./parsing/ast/free_ast.c \
-	  $(EXPANSION)
+	  $(EXPANSION) $(SYNTAX_CHECK)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 
