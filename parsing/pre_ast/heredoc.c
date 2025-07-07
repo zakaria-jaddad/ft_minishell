@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 22:02:17 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/07 09:53:12 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ char	*expand_arr(char **arr, t_list *envs)
 	char	*tmp;
 	char	*res;
 	t_env	*env;
+	char	*key;
 
 	i = 0;
 	res = NULL;
@@ -97,26 +98,25 @@ char	*expand_arr(char **arr, t_list *envs)
 	{
 		if (arr[i][0] == '$' && arr[i][1] != 0)
 		{
-                        char *key = ft_substr(&arr[i][1], 0, ft_strlen(&arr[i][1]) - 1);
+			key = ft_substr(&arr[i][1], 0, ft_strlen(&arr[i][1]));
 			env = get_env(envs, key);
-                        free(key);
+			free(key);
 			if (env)
 				tmp = ft_strdup(env->value);
 			else
 				tmp = ft_strdup("");
-                        if (tmp != NULL)
-                        {
-                                free(arr[i]);
-                                arr[i] = tmp;
-                        }
-                        append_str(&arr[i], "\n");
+			if (tmp != NULL)
+			{
+				free(arr[i]);
+				arr[i] = tmp;
+			}
 		}
 		tmp = ft_strjoin(res, arr[i]);
 		free(res);
 		res = tmp;
 		i++;
 	}
-        ft_split_free(arr);
+	ft_split_free(arr);
 	return (res);
 }
 
@@ -130,10 +130,11 @@ char	*expand_heredoc(char *str, t_list *env_list)
 
 	i = -1;
 	j = 0;
-        if (str == NULL)
-                return (NULL);
+	if (str == NULL)
+		return (NULL);
 	while (str[++i])
-		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+		if (!(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A'
+				&& str[i] <= 'Z') && str[i] != '_')
 			j++;
 	arr = malloc(sizeof(char *) * (j + 2));
 	i = -1;
@@ -141,7 +142,8 @@ char	*expand_heredoc(char *str, t_list *env_list)
 	k = 0;
 	while (str[++i])
 	{
-		if (str[i] == '$' || str[i] == '"' || str[i] == '\'')
+		if (!(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A'
+				&& str[i] <= 'Z') && str[i] != '_')
 		{
 			arr[j++] = ft_substr(str, k, i - k);
 			k = i;
@@ -150,7 +152,7 @@ char	*expand_heredoc(char *str, t_list *env_list)
 	arr[j++] = ft_substr(str, k, i - k);
 	arr[j] = NULL;
 	res = expand_arr(arr, env_list);
-        free(str);
+	free(str);
 	return (res);
 }
 
@@ -162,13 +164,13 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	pid_t	pid;
 
 	line = get_address(dilimiter);
-        if (line == NULL)
-                return (free(dilimiter), NULL);
+	if (line == NULL)
+		return (free(dilimiter), NULL);
 	if (access(line, F_OK) == 0)
-        {
-            line = (free(line), NULL);
-			line = get_address(line);
-        }
+	{
+		line = (free(line), NULL);
+		line = get_address(line);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
@@ -196,7 +198,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	}
 	else
 		wait(&fd);
-        free(dilimiter);
+	free(dilimiter);
 	if (fd > 0)
 		return (free(line), NULL);
 	return (line);

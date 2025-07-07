@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <sys/wait.h>
 
 char	*valid_command(char *cmd, char *path)
 {
@@ -107,7 +108,10 @@ int	not_builtin(char **args, t_list *env_list)
 		else
 		{
 			wait(&status);
-			status_x(WEXITSTATUS(status), 1);
+			if (status)
+				status_x(1, 1);
+			else
+				status_x(0, 1);
 		}
 	}
 	else
@@ -119,7 +123,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 	int		status;
-        int             ret;
+	int		ret;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
 	status = 0;
@@ -140,7 +144,8 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "exit") == 0)
 		_exit_(args + 1);
 	else
-		return (ret = not_builtin(args, envs), free_double_pointer((void **)args), ret);
+		return (ret = not_builtin(args, envs),
+			free_double_pointer((void **)args), ret);
 	free_double_pointer((void **)args);
 	return (status);
 }
