@@ -1,19 +1,17 @@
 
 #include "includes/minishell.h"
-#include "libft/libft.h"
 #include "includes/parsing/parsing.h"
+#include "libft/libft.h"
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
 
-
 int	main(int _, char **__, char **env)
 {
-
-	char	*line;
-	t_cmd	*cmd;
-	t_list	*env_lst;
-	struct	termios	tr;
+	char			*line;
+	t_cmd			*cmd;
+	t_list			*env_lst;
+	struct termios	tr;
 
 	env_lst = envs_init(env, _, __);
 	if (env_lst == NULL)
@@ -24,6 +22,7 @@ int	main(int _, char **__, char **env)
 		ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		return (1);
 	}
+	signal(SIGQUIT, SIG_IGN);
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (EXIT_FAILURE);
 	while (true)
@@ -44,9 +43,9 @@ int	main(int _, char **__, char **env)
 		/* print_cmd(cmd, 0); */
 		execution(cmd, env_lst);
 		clear_cmd(cmd);
-                /* ft_lstclear(&env_lst, free_env); */
+		/* ft_lstclear(&env_lst, free_env); */
 		line = (free(line), NULL);
-                /* return 0; */
+		/* return (0); */
 		tcsetattr(STDERR_FILENO, TCSANOW, &tr);
 	}
 	free(line);

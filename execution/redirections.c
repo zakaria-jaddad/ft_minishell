@@ -32,6 +32,24 @@ void	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 		get_last_redir_fd(t->right, out, in, envs);
 }
 
+void	redir_fork(t_cmd *t, int out_fd, int in_fd, t_list *envs)
+{
+	int	status;
+
+	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
+		ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
+	if (in_fd)
+		dup2(in_fd, STDIN_FILENO);
+	if (out_fd)
+		dup2(out_fd, STDOUT_FILENO);
+	status = execution(t->left, envs);
+	if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
+		close(out_fd);
+	if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
+		close(in_fd);
+	exit(status);
+}
+
 int	run_redir(t_cmd *t, t_list *envs)
 {
 	int		status;
@@ -47,20 +65,7 @@ int	run_redir(t_cmd *t, t_list *envs)
 		return (status_x(1, 1));
 	pid = fork();
 	if (0 == pid)
-	{
-		if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
-			ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
-		if (in_fd)
-			dup2(in_fd, STDIN_FILENO);
-		if (out_fd)
-			dup2(out_fd, STDOUT_FILENO);
-		status = execution(t->left, envs);
-		if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
-			close(out_fd);
-		if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
-			close(in_fd);
-		exit(status);
-	}
+		redir_fork(t, out_fd, in_fd, envs);
 	else if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
@@ -74,6 +79,26 @@ int	run_redir(t_cmd *t, t_list *envs)
 	return (status_x(status, 0));
 }
 
+void	pipe_fork(int *fd, int fd_to_dup, t_cmd *t, t_list *envs)
+{
+	int	status;
+
+	if (fd_to_dup == STDOUT_FILENO)
+	{
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+	}
+	else if (fd_to_dup == STDIN_FILENO)
+	{
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+	}
+	status = execution(t, envs);
+	exit(status);
+}
+
 int	run_in_pipe(t_cmd *t, t_list *envs)
 {
 	pid_t	pid_left;
@@ -83,36 +108,22 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 
 	if (pipe(fd) < 0)
 		return (ft_fprintf(2, "pipe: error!\n"), 1);
-	status = 0;
 	pid_left = fork();
 	if (pid_left < 0)
 		return (close(fd[0]), close(fd[1]), ft_fprintf(2, "fork: error!!\n"),
 			1);
 	if (pid_left == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		status = execution(t->left, envs);
-		exit(status);
-	}
+		pipe_fork(fd, STDOUT_FILENO, t->left, envs);
 	pid_right = fork();
 	if (pid_right < 0)
 		return (close(fd[0]), close(fd[1]), waitpid(pid_left, 0, 0),
 			ft_fprintf(2, "fork: error!!\n"), 1);
 	if (pid_right == 0)
-	{
-		if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
-			ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		status = execution(t->right, envs);
-		exit(status);
-	}
+		pipe_fork(fd, STDIN_FILENO, t->right, envs);
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(pid_left, NULL, 0);
-	waitpid(pid_right, NULL, 0);
-	return (status_x(status, 0));
+	waitpid(pid_left, &status, 0);
+	waitpid(pid_right, &status, 0);
+	status_x(WEXITSTATUS(status), 1);
+	return (status_x(0, 0));
 }

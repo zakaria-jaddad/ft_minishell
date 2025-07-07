@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:27:26 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/06/29 21:36:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:14:50 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,9 @@ void	_exit_(char **args)
 	if (args && args[0])
 	{
 		while (args[0][++i])
-		{
 			if (!ft_isdigit(args[0][i]) && ((args[0][i] == '-'
 						|| args[0][i] == '+') && !ft_isdigit(args[0][i + 1])))
 				break ;
-		}
 		if (args[0][i])
 		{
 			print_error("bash: exit: ", args[0], ": numiric argument required");

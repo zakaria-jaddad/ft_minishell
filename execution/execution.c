@@ -13,73 +13,20 @@
 #include "../includes/minishell.h"
 #include <sys/wait.h>
 
-char	*valid_command(char *cmd, char *path)
-{
-	char	*rv;
-	char	*tmp;
-	char	**paths;
-	int		i;
-
-	i = 0;
-	paths = ft_split(path, ':');
-	while (paths[i])
-	{
-		tmp = ft_strjoin(paths[i], "/");
-		rv = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (!access(rv, X_OK))
-		{
-			break ;
-		}
-		free(rv);
-		rv = NULL;
-		i++;
-	}
-	free_double_pointer((void **)paths);
-	if (rv)
-		return (rv);
-	return (ft_strdup(cmd));
-}
-
-int	display_execve_error(char *command)
-{
-	if (errno == ENOENT || errno == EACCES)
-	{
-		if (ft_strnstr(command, "/", ft_strlen(command)))
-			return (ft_fprintf(2, "minishell: %s: No such file or directory\n",
-					command), 127);
-		else
-			return (ft_fprintf(2, "minishell: %s: Command not found\n",
-					command), 127);
-	}
-	if (errno == EISDIR)
-		return (ft_fprintf(2, "minishell: %s: Is a directory\n", command), 126);
-	if (errno == ENOEXEC)
-		return (ft_fprintf(2, "minishell: %s: Exec format error\n", command),
-			126);
-	if (errno == ENOMEM)
-		return (ft_fprintf(2, "minishell: %s: Cannot allocate memory\n",
-				command), 1);
-	if (errno == EFAULT)
-		return (ft_fprintf(2, "minishell: %s: Bad address\n", command), 1);
-	if (errno == ENOTDIR)
-		return (ft_fprintf(2, "minishell: %s: Not a directory\n", command), 1);
-	return (ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno)), 1);
-}
-
 void	execve_fork(char **args, t_list *env_list, char *path)
 {
 	char	**envs;
 
+	signal(SIGQUIT, SIG_DFL);
 	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
 		ft_fprintf(STDERR_FILENO, "signal: error: ctr+c!!\n");
-	envs = envs_list_to_double_pointer(env_list);
-	if (!envs)
-		exit(1);
 	if (!args)
 		ft_fprintf(2, "minishell: : Command not found\n");
 	if (!args)
-		exit(127);
+		exit(-1);
+	envs = envs_list_to_double_pointer(env_list);
+	if (!envs)
+		exit(1);
 	path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	if (execve(path, args, envs) < 0)
 	{
@@ -108,22 +55,23 @@ int	not_builtin(char **args, t_list *env_list)
 		else
 		{
 			wait(&status);
-			if (status)
-				status_x(130, 1);
+			if (WEXITSTATUS(status))
+				status_x((unsigned char)(127 + status), 1);
+			else if (WIFSIGNALED(status))
+				status_x((unsigned char)(128 + status), 1);
 			else
 				status_x(0, 1);
 		}
 	}
 	else
 		return (1);
-	return (status);
+	return (status_x(0, 0));
 }
 
 int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 	int		status;
-	int		ret;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
 	status = 0;
@@ -144,10 +92,9 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "exit") == 0)
 		_exit_(args + 1);
 	else
-		return (ret = not_builtin(args, envs),
-			free_double_pointer((void **)args), ret);
+		status = (not_builtin(args, envs), status_x(0, 0));
 	free_double_pointer((void **)args);
-	return (status);
+	return (status_x(status, 1));
 }
 
 int	execution(t_cmd *tree, t_list *env_list)

@@ -18,6 +18,9 @@ EXECUTION = execution/execution.c \
 	    execution/signals.c \
 	    execution/helpers.c \
 	    execution/list_management.c \
+	    execution/unset.c \
+	    execution/export.c \
+	    execution/errors.c \
 
 EXPANSION = ./parsing/expansion/dollar_expansion.c \
 	    ./parsing/expansion/dollar_expansion_utils.c \

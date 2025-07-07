@@ -14,8 +14,8 @@
 
 void	add_pwd_manual(char *path)
 {
-	int	length;
-	char *joined;
+	int		length;
+	char	*joined;
 
 	ft_fprintf(STDERR_FILENO,
 		"cd: error retrieving current directory: getcwd: cannot access %s",
@@ -33,7 +33,7 @@ void	add_pwd_manual(char *path)
 
 int	cd_helper(char *path, t_list *list)
 {
-	char *cwd;
+	char	*cwd;
 
 	if (!path || ft_strcmp(path, "") == 0)
 		return (1);

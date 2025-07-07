@@ -53,8 +53,7 @@ int	found_file(t_cmd *t, t_node_type flag, t_list *envs)
 		fd = open_file(file, O_RDONLY);
 		unlink(file);
 	}
-        // FIX: FIXED file leak, remove me :)
-        free(file);
+	free(file);
 	if (fd == -1)
 		return (-1);
 	return (fd);
