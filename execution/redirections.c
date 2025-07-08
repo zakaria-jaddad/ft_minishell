@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:41:29 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/01 10:41:29 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:46:24 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	run_redir(t_cmd *t, t_list *envs)
 	}
 	else
 		return (ft_fprintf(2, "fork error!\n"), 1);
-	return (status_x(status, 0));
+	return (status_x(WEXITSTATUS(status), 1));
 }
 
 void	pipe_fork(int *fd, int fd_to_dup, t_cmd *t, t_list *envs)

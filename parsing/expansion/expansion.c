@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:37:22 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:39:26 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 t_list	*get_word_tokens(t_token *token)
 {

@@ -6,17 +6,18 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:51:14 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:40:41 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:36:03 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 
-static bool	check_spaces(char *str)
-{
-	return (count_spaces(str) == (int)ft_strlen(str));
-}
+/* static bool	check_spaces(char *str) */
+/* { */
+/* 	return (count_spaces(str) == (int)ft_strlen(str)); */
+/* } */
 
 t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 {
@@ -26,11 +27,10 @@ t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 	new_tokens = NULL;
 	if (data_lst == NULL)
 		return (NULL);
-	while (data_lst)
+	while (data_lst && data_lst->content)
 	{
-		if (check_spaces(data_lst->content) == true)
-			token_node = create_token_node(TOKEN_WHITE_SPACE,
-					data_lst->content);
+		if (ft_strcmp(data_lst->content, " ") == 0)
+			token_node = create_token_node(TOKEN_WHITE_SPACE, data_lst->content);
 		else
 			token_node = create_token_node(tokens_type, data_lst->content);
 		if (token_node == NULL)

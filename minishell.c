@@ -41,7 +41,7 @@ int	main(int _, char **__, char **env)
 			continue ;
 		}
 		/* print_cmd(cmd, 0); */
-		execution(cmd, env_lst);
+		status_x(execution(cmd, env_lst), 1);
 		clear_cmd(cmd);
 		/* ft_lstclear(&env_lst, free_env); */
 		line = (free(line), NULL);

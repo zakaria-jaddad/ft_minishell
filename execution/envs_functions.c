@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 23:36:18 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:58:32 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,14 @@ int	print_envs(char *declare, t_list *list)
 	return (0);
 }
 
-int	_env_(t_list *list)
+int	_env_(t_list *list, char **args)
 {
 	if (!list)
 		return (-1);
+	if (!args || !args[0])
+	{
+		ft_fprintf(STDERR_FILENO, "minishell: env: nor arguments required!\n");
+		return (1);
+	}
 	return (print_envs(NULL, sort_envs(list)));
 }

@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:48:35 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:36:56 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:13:32 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 int	count_spaces(char *s)
 {
@@ -39,15 +40,18 @@ static bool	check_spaces(char *str)
 
 static void	*extract_words_list_escapint_norms(t_list **result, t_list **tokens)
 {
-	t_list	*tokenized_word;
+	t_list	*wordt;
 	char	*dup;
 	t_list	*new_node;
 
-	tokenized_word = get_filename(tokens);
-	if (tokenized_word == NULL)
+	wordt = get_filename(tokens);
+	/* printf("\n=====================\n"); */
+	/* print_tokens(wordt); */
+	/* printf("\n=====================\n"); */
+	if (wordt == NULL)
 		return (ft_lstclear(result, free), NULL);
-	dup = tokens_to_str(tokenized_word);
-	ft_lstclear(&tokenized_word, free_token);
+	dup = tokens_to_str(wordt);
+	ft_lstclear(&wordt, free_token);
 	if (dup == NULL)
 		return (ft_lstclear(result,
 				free), NULL);

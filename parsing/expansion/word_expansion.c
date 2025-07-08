@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:04:48 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:31:45 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 19:36:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,7 @@ static void	simple_word_expansion(char **str, t_list *env)
 		return ;
 	}
 	var = get_env(env, *str);
-	// Error: Fix Later var NULL str should be NULL
-	if (var == NULL)
+	if (var == NULL || var->value == NULL)
 		foo = ft_strdup("");
 	else
 		foo  = ft_strdup(var->value);

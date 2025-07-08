@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/05 18:28:13 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:43:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,13 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 {
 	char	**args;
 	int		status;
+	int i;
 
 	args = expand_all(cmd->command, cmd->arguments, envs);
+	i = 0;
+	/* while (args[i]) */
+	/* 	printf("\"%s\"\n", args[i++]); */
+	/* exit(1); */
 	status = 0;
 	if (!args)
 		return (status);
@@ -82,7 +87,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "export") == 0)
 		status = _export_(envs, args + 1);
 	else if (ft_strcmp(args[0], "env") == 0)
-		status = _env_(envs);
+		status = _env_(envs, args + 1);
 	else if (ft_strcmp(args[0], "echo") == 0)
 		status = _echo_(args + 1);
 	else if (ft_strcmp(args[0], "pwd") == 0)

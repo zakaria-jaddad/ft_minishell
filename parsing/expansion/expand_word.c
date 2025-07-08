@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:56:36 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 18:13:26 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:27:06 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 t_list	*expand_word(t_list *wordt, t_list *env)
 {

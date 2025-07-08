@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/08 08:08:04 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:50:27 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/pre_ast.h"
+#include <stdbool.h>
 
 static void	enhance_redirections(t_list **tokens)
 {
@@ -47,10 +48,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 		tokenized_file_name_start = tokenized_file_name_start->next;
 		ft_lst_rm_one(tokens, node_to_del, free_token);
 	}
-        if (filename == NULL)
-	        filenametn = create_token_node(TOKEN_WORD, "");
-        else
-	        filenametn = create_token_node(TOKEN_WORD, filename);
+	filenametn = create_token_node(TOKEN_WORD, filename);
 	if (filenametn == NULL)
 		return (NULL);
 	if (start->next == NULL)
@@ -60,7 +58,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 	return (NOTNULL);
 }
 
-static void	handle_heredocs(t_list **tokens, t_list *envs)
+static bool	handle_heredocs(t_list **tokens, t_list *envs)
 {
 	t_list	*tok;
 	char	*filename;
@@ -69,7 +67,7 @@ static void	handle_heredocs(t_list **tokens, t_list *envs)
 
 	(void)start;
 	if (tokens == NULL || *tokens == NULL)
-		return ;
+		return false;
 	tok = *tokens;
 	while (tok)
 	{
@@ -79,19 +77,24 @@ static void	handle_heredocs(t_list **tokens, t_list *envs)
 				filenamet = get_filename(&tok));
 			filename = handle_heredoc(filenamet, envs);
 			ft_lstclear(&filenamet, free_token);
+			if (filename == NULL)
+				return (false);
 			if (NULL == insert_filename_token(filename, start, tok, tokens))
-				return (free(filename));
+				return (free(filename), false);
 			free(filename);
 			continue ;
 		}
 		tok = tok->next;
 	}
+	return (true);
 }
 
-void	pre_ast(t_list **tokens, t_list *envs)
+void	*pre_ast(t_list **tokens, t_list *envs)
 {
 	if (tokens == NULL)
-		return ;
+		return (NULL);
 	enhance_redirections(tokens);
-	handle_heredocs(tokens, envs);
+	if (handle_heredocs(tokens, envs) == false)
+		return (NULL);
+	return (NOTNULL);
 }

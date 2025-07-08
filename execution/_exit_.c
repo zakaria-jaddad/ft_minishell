@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:27:26 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/07 17:14:50 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:36:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	_exit_(char **args)
 		if (args[1])
 		{
 			print_error("bash: exit: ", NULL, "too many arguments");
+			status_x(1,1);
 			return ;
 		}
 		exit((unsigned char)ft_atoi(args[0]));

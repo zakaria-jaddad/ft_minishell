@@ -6,12 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/08 08:17:05 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 23:39:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 static char	**create_cmd_and_args(t_list *command, t_list *arguments)
 {
@@ -73,7 +74,7 @@ t_list	*expand_arguments(t_list *argt, t_list *env)
 	{
 		wordt = get_tokenizd_word(&argt);
 		if (wordt == NULL)
-			return (ft_lstclear(&arguments_lst, free), NULL);
+			continue ;
 		expanded_argument = expand_word(wordt, env);
 		ft_lstclear(&wordt, free_token);
 		if (expanded_argument == NULL)
@@ -92,10 +93,22 @@ char	**expand_all(t_list *cmdt, t_list *argt, t_list *env)
 	t_list	*arguments;
 	t_list	*argtdup;
 
+	/* print_tokens(cmdt); */
+	/* printf("\n"); */
+
 	command = expand_command(cmdt, env);
 	argtdup = dup_tokens(argt, ft_lstlast(argt), true);
+
+	/* print_tokens(argtdup); */
+	/* printf("\n"); */
+
 	pre_expansion(command, cmdt, &argtdup);
+
+	/* print_tokens(argtdup); */
+	/* printf("\n"); */
+	/* exit(0); */
+
 	arguments = expand_arguments(argtdup, env);
-	ft_lstclear(&argtdup, free_token);
+
 	return (create_cmd_and_args(command, arguments));
 }

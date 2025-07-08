@@ -6,12 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:48:11 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/07 05:34:31 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 20:46:18 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 static void	wildcard_pre_expansion(t_list **tokens)
 {
@@ -24,6 +25,10 @@ static void	wildcard_pre_expansion(t_list **tokens)
 		return ;
 	et = get_enhanced_tokens(*tokens, "=*");
 	head = et;
+	/* printf("this is argt before wildcard_pre_expansion: \n"); */
+	/* print_tokens(et); */
+	/* printf("\n"); */
+	/* exit(0); */
 	while (et)
 	{
 		tok = et->content;
@@ -38,6 +43,9 @@ static void	wildcard_pre_expansion(t_list **tokens)
 	}
 	ft_lstclear(tokens, free_token);
 	*tokens = head;
+	/* printf("this is argt after wildcard_pre_expansion: \n"); */
+	/* print_tokens(*tokens); */
+	/* printf("\n"); */
 }
 
 static void	*split_pre_expansion_escapint_norms_v2(t_list **new_tokens,

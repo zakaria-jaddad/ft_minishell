@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/07 03:00:07 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 12:50:09 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ t_cmd	*parse_cmd(char *line, t_list *env_lst)
                 return (ft_lstclear(&tokens, free_token), status_x(258, true), NULL);
 	if (heredoc_limit(tokens) == true)
                 return (ft_lstclear(&tokens, free_token), exit(2), NULL);
-        pre_ast(&tokens, env_lst);
+        if (pre_ast(&tokens, env_lst) == NULL)
+                return (ft_lstclear(&tokens, free_token), NULL);
         if (syntax_check(tokens) == false)
                 return (ft_lstclear(&tokens, free_token), status_x(258, true), NULL);
         cmd = ast(&tokens);

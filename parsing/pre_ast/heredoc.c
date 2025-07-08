@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/07 20:57:28 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/08 18:29:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	heredoc_fork(char *dilimiter, char *line, int expand, t_list *env_list)
 	int		fd;
 	char	*res;
 
-	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
+	if (signal(SIGINT, SIG_DFL) == SIG_ERR)
 	{
 		ft_fprintf(STDERR_FILENO, "signal: error handling ctr+c!!\n");
 		exit(1);
