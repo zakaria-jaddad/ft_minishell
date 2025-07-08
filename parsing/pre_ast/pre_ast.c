@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/06 02:04:04 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 08:08:04 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 		ft_lst_rm_one(tokens, node_to_del, free_token);
 	}
         if (filename == NULL)
-	        filenametn = create_token_node(TOKEN_WORD, "NULL");
+	        filenametn = create_token_node(TOKEN_WORD, "");
         else
 	        filenametn = create_token_node(TOKEN_WORD, filename);
 	if (filenametn == NULL)

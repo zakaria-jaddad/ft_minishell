@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 21:52:10 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/08 08:17:05 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,18 @@ t_list	*expand_command(t_list *tokenized_command, t_list *env)
 void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 {
 	t_list	*filename_lst;
+	t_token	*tok;
 
 	if (filename == NULL || filenamet == NULL || env == NULL)
 		return ;
+	tok = filenamet->content;
+	if (tok == NULL)
+		return ;
+	if (tok->data != NULL && *tok->data == 0)
+	{
+		*filename = ft_strdup(tok->data);
+		return ;
+	}
 	filename_lst = expand_word(filenamet, env);
 	if (filename_lst == NULL || ft_lstsize(filename_lst) > 1)
 	{
