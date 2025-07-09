@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:20:51 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/07 20:56:15 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:01:30 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,19 @@ char	**split_by_first_equal(char *arg, t_list *list)
 		i--;
 	}
 	rv = malloc(sizeof(char *) * (2 + 1));
+	if (rv == NULL)
+		return (NULL);
 	rv[0] = ft_substr(arg, 0, i);
+	if (rv[0] == NULL)
+		return (NULL);
 	if (append_)
 		i++;
 	rv[1] = ft_substr(arg, i, ft_strlen(arg));
+	if (rv[1] == NULL)
+		return (NULL);
 	rv[2] = NULL;
 	add_export(list, rv, append_);
-	ft_split_free(rv);
+	free_double_pointer((void **) rv);
 	return (NOTNULL);
 }
 

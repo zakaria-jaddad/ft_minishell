@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 02:48:40 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/09 12:40:38 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,6 @@ char **expand_all(t_list *cmdt, t_list *argt, t_list *env) {
 
   pre_expansion(command, cmdt, &argtdup);
 
-  /* print_tokens(argtdup); */
-  /* printf("\n"); */
-  /* exit(0); */
 
   arguments = expand_arguments(argtdup, env);
   ft_lstclear(&argtdup, free_token);

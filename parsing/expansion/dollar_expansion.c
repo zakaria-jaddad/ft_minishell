@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/08 19:36:50 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:19:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 static void	del_node_and_go_next(t_list **tokens, t_list **token_head)
 {
@@ -49,18 +50,41 @@ static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
 			update_current_token(*tokens, env));
 }
 
+void	clean_up_null_tokens(t_list **tokens)
+{
+	t_list	*th;
+	t_token	*tok;
+	t_list	*node_to_del;
+
+	if (tokens == NULL || *tokens == NULL)
+		return ;
+	th = *tokens;
+	while (th && th->content)
+	{
+		tok = th->content;
+		if (tok->data == NULL)
+		{
+			node_to_del = th;
+			th = th->next;
+			ft_lst_rm_one(tokens, node_to_del, free_token);
+			continue ;
+		}
+		th = th->next;
+	}
+}
+
 void	expand_dollar(t_list **tokens, t_list *env)
 {
 	t_list	*th;
-	t_token	*current_token;
+	t_token	*tok;
 
 	if (tokens == NULL)
 		return ;
 	th = *tokens;
-	while (*tokens)
+	while (*tokens && (*tokens)->content)
 	{
-		current_token = (*tokens)->content;
-		if (ft_strchr(current_token->data, '$') != NULL)
+		tok = (*tokens)->content;
+		if (tok && tok->data && ft_strchr(tok->data, '$') != NULL)
 		{
 			if (is_valid_dollar_with_qs_next(*tokens) == true
 				|| is_valid_dollar_with_valid_var(*tokens) == true)
@@ -76,4 +100,5 @@ void	expand_dollar(t_list **tokens, t_list *env)
 		*tokens = (*tokens)->next;
 	}
 	*tokens = th;
+	clean_up_null_tokens(tokens);
 }

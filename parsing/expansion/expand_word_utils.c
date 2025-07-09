@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:48:35 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/08 23:13:32 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/09 15:19:49 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,14 @@ static int	is_valid_word_token(int type)
 		|| type == TOKEN_SINGLE_QUOTE_WORD);
 }
 
-static bool	check_spaces(char *str)
-{
-	return (count_spaces(str) == (int)ft_strlen(str));
-}
 
-static void	*extract_words_list_escapint_norms(t_list **result, t_list **tokens)
+static void	*extract_words_list_escaping_norms(t_list **result, t_list **tokens)
 {
 	t_list	*wordt;
 	char	*dup;
 	t_list	*new_node;
 
 	wordt = get_filename(tokens);
-	/* printf("\n=====================\n"); */
-	/* print_tokens(wordt); */
-	/* printf("\n=====================\n"); */
 	if (wordt == NULL)
 		return (ft_lstclear(result, free), NULL);
 	dup = tokens_to_str(wordt);
@@ -68,13 +61,13 @@ t_list	*extract_words_list(t_list *tokens)
 	t_token	*tok;
 
 	result = NULL;
-	while (tokens)
+
+	while (tokens && tokens->content)
 	{
 		tok = (t_token *)tokens->content;
-		if (tok && is_valid_word_token(tok->type) && tok->data
-			&& check_spaces(tok->data) == false)
+		if (is_valid_word_token(tok->type) && tok->data)
 		{
-			if (extract_words_list_escapint_norms(&result, &tokens) == NULL)
+			if (extract_words_list_escaping_norms(&result, &tokens) == NULL)
 				return (NULL);
 			continue ;
 		}
