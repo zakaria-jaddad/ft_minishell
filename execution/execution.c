@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/09 15:30:58 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 03:48:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
 		ft_fprintf(STDERR_FILENO, "signal: error: ctr+c!!\n");
 	if (!args)
-		ft_fprintf(2, "minishell: : command not found\n");
+		write(2, "minishell:  command not found\n", 30);
 	if (!args)
 		exit(-1);
 	envs = envs_list_to_double_pointer(env_list);
 	if (!envs)
 		exit(1);
-	path = valid_command(args[0], get_env(env_list, "PATH")->value);
+	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
+		path = valid_command(args[0], get_env(env_list, "PATH")->value);
+	else
+		path = ft_strjoin("/", args[0]);
 	if (execve(path, args, envs) < 0)
 	{
 		free(path);
@@ -47,26 +50,23 @@ int	not_builtin(char **args, t_list *env_list)
 	int		status;
 
 	status = 0;
-	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
-	{
-		pid = fork();
-		if (pid < 0)
-			return (ft_fprintf(2, "fork failed\n"), 1);
-		if (pid == 0)
-			execve_fork(args, env_list, "");
-		else
-		{
-			wait(&status);
-			if (WEXITSTATUS(status))
-				status_x((unsigned char)(127 + status), 1);
-			else if (WIFSIGNALED(status))
-				status_x((unsigned char)(128 + status), 1);
-			else
-				status_x(0, 1);
-		}
-	}
+	pid = fork();
+	if (pid < 0)
+		return (ft_fprintf(2, "fork failed\n"), 1);
+	if (pid == 0)
+		execve_fork(args, env_list, "");
 	else
-		return (1);
+	{
+		wait(&status);
+		printf("%d\n", status);
+		printf("%d\n", errno);
+		if (WEXITSTATUS(status))
+			status_x((unsigned char)(127 + status), 1);
+		else if (WIFSIGNALED(status))
+			status_x((unsigned char)(128 + status), 1);
+		else
+			status_x(0, 1);
+	}
 	return (status_x(0, 0));
 }
 
@@ -92,9 +92,9 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "pwd") == 0)
 		status = _pwd_(manage_pwd(NULL));
 	else if (ft_strcmp(args[0], "unset") == 0)
-		_unset_(envs, args + 1);
+		status = _unset_(envs, args + 1);
 	else if (ft_strcmp(args[0], "exit") == 0)
-		_exit_(args + 1);
+		return (_exit_(args + 1), status_x(0, 0));
 	else
 		status = (not_builtin(args, envs), status_x(0, 0));
 	free_double_pointer((void **)args);

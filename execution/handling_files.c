@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:30:23 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 00:02:48 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 02:07:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,13 @@ int	open_file(char *file, int flags)
 	if (fd == -1)
 	{
 		if (access(file, R_OK))
-			return (-1);
-		if (errno == EACCES)
-			ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
-				file);
-		else
-			ft_fprintf(2, "minishell: %s: no such file or directory\n", file);
+		{
+			if (errno == EACCES)
+				ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
+					file);
+			else
+				ft_fprintf(2, "minishell: %s: no such file or directory\n", file);
+		}
 		return (-1);
 	}
 	return (fd);

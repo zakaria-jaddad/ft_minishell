@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 07:55:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 19:05:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/09 19:56:14 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ bool	is_valid_word(t_list *wordt)
 bool	is_valid_wildcard(t_list *current_token_node)
 {
 	t_token	*current_token;
+	/* t_list *prev; */
+	/* t_list *next; */
 
 	if (current_token_node == NULL)
 		return (false);

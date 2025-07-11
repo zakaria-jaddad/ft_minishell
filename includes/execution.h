@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 17:01:43 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/08 18:56:50 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 00:35:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ t_list	*find_node(t_list *envs, char *key);
 char	**list_to_double_pointer(t_list *env_list);
 int		count_envs(t_list *envs);
 void	free_double_pointer(void **p);
-void	_unset_(t_list *envs, char **args);
+int	_unset_(t_list *envs, char **args);
 t_list	*sort_envs(t_list *list);
 char	**envs_list_to_double_pointer(t_list *env_list);
 char	*manage_pwd(char *value);
@@ -46,6 +46,8 @@ int		run_in_pipe(t_cmd *t, t_list *envs);
 char	*valid_command(char *cmd, char *path);
 int		display_execve_error(char *command);
 int		print_envs(char *declare, t_list *list);
+int	check_arg(char *args);
+int in_pipe(int val, int modify);
 
 // helpers
 int		count_args(t_list *tokens);

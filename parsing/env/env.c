@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:55:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 03:07:46 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ static t_list	*simple_env(t_list *env_lst)
 		return (NULL);
 	if (append_env(&env_lst, "SHLVL", "1") == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
-	if (append_env(&env_lst, "_", "/usr/bin/env") == NULL)
+	if (append_env(&env_lst, "OLDPWD", NULL) == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
 	if (append_env(&env_lst, "PATH",
-			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:. ") == NULL)
+			"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.") == NULL)
 		return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }
@@ -93,9 +93,5 @@ t_list	*envs_init(char **env, ...)
 			return (ft_lstclear(&env_lst, free_env), NULL);
 		(ft_lstadd_back(&env_lst, node), env++);
 	}
-	if (append_env(&env_lst, "a", "-") == NULL)
-		return (ft_lstclear(&env_lst, free_env), NULL);
-	// if (append_env(&env_lst, "b", "-lah") == NULL)
-	// 	return (ft_lstclear(&env_lst, free_env), NULL);
 	return (env_lst);
 }

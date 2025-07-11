@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 00:22:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/09 19:14:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**expand_all(t_list *cmdt, t_list *argt, t_list *env);
 static inline bool is_word_and_space_found(t_token *token)
 {
 	return (check_token_type(token, TOKEN_WORD) == true
-			&& ft_strchr(token->data, ' ') != NULL);
+			&& ft_strpbrk(token->data, " \t") != NULL);
 }
 
 #endif // !EXPANSION_H

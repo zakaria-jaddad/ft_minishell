@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:40:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/07 17:40:56 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/11 03:43:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ int	display_execve_error(char *command)
 		ft_fprintf(2, "minishell: %s: Not a directory\n", command);
 	else
 		ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno));
-	return (100);
+	return (errno);
 }

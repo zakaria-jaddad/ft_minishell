@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:12:26 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 17:16:12 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/10 22:39:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+#include <stdio.h>
 #include "../includes/parsing/parsing.h"
 
 #define MHCE "bash: maximum here-document count exceeded\n"
