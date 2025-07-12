@@ -146,6 +146,8 @@ char	*expand_heredoc(char *str, t_list *env_list)
 		return (NULL);
 	j = count_allocat(str);
 	arr = malloc(sizeof(char *) * (j + 2));
+		if (arr == NULL)
+			return (NULL);
 	i = -1;
 	j = 0;
 	k = 0;
