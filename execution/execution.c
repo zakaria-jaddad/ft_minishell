@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 03:48:17 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 06:58:16 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,8 @@ int	not_builtin(char **args, t_list *env_list)
 	else
 	{
 		wait(&status);
-		printf("%d\n", status);
-		printf("%d\n", errno);
 		if (WEXITSTATUS(status))
-			status_x((unsigned char)(127 + status), 1);
+			status_x((unsigned char)(WEXITSTATUS(status)), 1);
 		else if (WIFSIGNALED(status))
 			status_x((unsigned char)(128 + status), 1);
 		else
@@ -108,8 +106,9 @@ int	execution(t_cmd *tree, t_list *env_list)
 	setup_pwd(get_env(env_list, "PWD"));
 	if (tree->type == NODE_IF_AND)
 	{
-		status_x(execution(tree->left, env_list), 1);
-		return (execution(tree->right, env_list));
+		if (status_x(execution(tree->left, env_list), 1) == 0)
+			return (execution(tree->right, env_list));
+		return (status_x(0,0));
 	}
 	else if (tree->type == NODE_IF_OR)
 	{

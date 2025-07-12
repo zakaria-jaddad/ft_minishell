@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 16:27:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/08 18:29:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 06:39:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,8 @@ void	heredoc_fork(char *dilimiter, char *line, int expand, t_list *env_list)
 	exit(0);
 }
 
+int status_x(int var, int modify);
+
 char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 {
 	char	*line;
@@ -201,7 +203,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 	if (access(line, F_OK) == 0)
 	{
 		line = (free(line), NULL);
-		line = get_address(line);
+		line = get_address(dilimiter);
 	}
 	pid = fork();
 	if (pid == 0)
@@ -210,7 +212,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list)
 		wait(&fd);
 	free(dilimiter);
 	if (fd > 0)
-		return (free(line), NULL);
+		return (free(line), status_x(1,1), NULL);
 	return (line);
 }
 

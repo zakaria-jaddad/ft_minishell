@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:40:40 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 03:43:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/11 06:16:58 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,12 @@ int	display_execve_error(char *command)
 				command);
 		else
 			ft_fprintf(2, "minishell: %s: Command not found\n", command);
+		return (127);
 	}
 	else if (errno == EISDIR)
-		ft_fprintf(2, "minishell: %s: Is a directory\n", command);
-	else if (errno == ENOEXEC)
-		ft_fprintf(2, "minishell: %s: Exec format error\n", command);
-	else if (errno == ENOMEM)
-		ft_fprintf(2, "minishell: %s: Cannot allocate memory\n", command);
-	else if (errno == EFAULT)
-		ft_fprintf(2, "minishell: %s: Bad address\n", command);
+		return (ft_fprintf(2, "minishell: %s: Is a directory\n", command), 127);
 	else if (errno == ENOTDIR)
-		ft_fprintf(2, "minishell: %s: Not a directory\n", command);
+		return (ft_fprintf(2, "minishell: %s: Not a directory\n", command), 1);
 	else
 		ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno));
 	return (errno);
