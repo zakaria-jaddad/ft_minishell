@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 12:40:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 00:02:19 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,14 +84,8 @@ char **expand_all(t_list *cmdt, t_list *argt, t_list *env) {
   t_list *arguments;
   t_list *argtdup;
 
-  /* print_tokens(cmdt); */
-  /* printf("\n"); */
-
   command = expand_command(cmdt, env);
   argtdup = dup_tokens(argt, ft_lstlast(argt), true);
-
-  /* print_tokens(argtdup); */
-  /* printf("\n"); */
 
   pre_expansion(command, cmdt, &argtdup);
 
