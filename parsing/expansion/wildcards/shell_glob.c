@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/10 22:39:08 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:08:28 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/parsing/expansion.h"
-#include <stdio.h>
 
 int	get_backslash_pos_before_wildcard(char *str)
 {
@@ -102,7 +101,7 @@ t_list	*expand_wildcard(t_list *tokens)
 {
 	t_list	*matches;
 	t_list	*wordt;
-        t_list *matchest;
+	t_list	*matchest;
 
 	matches = NULL;
 	while (tokens)
@@ -115,7 +114,7 @@ t_list	*expand_wildcard(t_list *tokens)
 				if (set_matches(&matches, wordt) == NULL)
 					return (ft_lstclear(&wordt, free_token), NULL);
 				ft_lstclear(&wordt, free_token);
-                                matchest = create_tokenized_matches(matches);
+				matchest = create_tokenized_matches(matches);
 				ft_lstclear(&matches, free);
 				return (matchest);
 			}

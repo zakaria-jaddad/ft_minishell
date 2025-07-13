@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:06 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/07 05:36:07 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:06:33 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,27 @@
 t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq)
 {
 	t_token	*tok;
-	t_list	*new_token_node;
-	t_list	*new_enhanced_tokens;
+	t_list	*ntn;
+	t_list	*net;
 
 	if (tokens == NULL)
 		return (NULL);
-	new_enhanced_tokens = NULL;
+	net = NULL;
 	while (tokens)
 	{
 		tok = tokens->content;
 		if (tok == NULL)
-			return (ft_lstclear(&new_enhanced_tokens, free_token), NULL);
+			return (ft_lstclear(&net, free_token), NULL);
 		if (is_dq == true && tok->type != TOKEN_SINGLE_QUOTE_WORD)
-			new_token_node = create_token_node(TOKEN_DOUBLE_QUOTE_WORD,
-					tok->data);
+			ntn = create_token_node(TOKEN_DOUBLE_QUOTE_WORD, tok->data);
 		else
-			new_token_node = create_token_node(tok->type, tok->data);
-		if (new_token_node == NULL)
-			return (ft_lstclear(&new_enhanced_tokens, free_token), NULL);
-		ft_lstadd_back(&new_enhanced_tokens, new_token_node);
+			ntn = create_token_node(tok->type, tok->data);
+		if (ntn == NULL)
+			return (ft_lstclear(&net, free_token), NULL);
+		ft_lstadd_back(&net, ntn);
 		tokens = tokens->next;
 	}
-	return (new_enhanced_tokens);
+	return (net);
 }
 
 bool	check_cmdt(t_list *cmdt)

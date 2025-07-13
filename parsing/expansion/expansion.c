@@ -6,12 +6,23 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/12 23:48:51 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:01:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 #include <stdio.h>
+
+static bool	is_ws_found(char *s)
+{
+	return (ft_strcmp(s, " ") == 0 || ft_strcmp(s, "\t") == 0);
+}
+
+static bool	if_escape(t_token *tok)
+{
+	return (is_word_and_space_found(tok)
+		&& count_spaces(tok->data) != (int)ft_strlen(tok->data));
+}
 
 t_list	*get_word_tokens(t_token *token)
 {
@@ -28,8 +39,7 @@ t_list	*get_word_tokens(t_token *token)
 		return (NULL);
 	while (sptw && sptw->content)
 	{
-		if (ft_strcmp(sptw->content, " ") == 0 || ft_strcmp(sptw->content,
-				"\t") == 0)
+		if (is_ws_found(sptw->content))
 			wordt_node = create_token_node(TOKEN_WHITE_SPACE, " ");
 		else
 			wordt_node = create_token_node(TOKEN_WORD, sptw->content);
@@ -42,57 +52,26 @@ t_list	*get_word_tokens(t_token *token)
 	return (ft_lstclear(&sptw_head, free), wordt);
 }
 
-void	insert_split_tokens(t_list **tokens, t_list **tokens_tmp, t_list *wordt)
-{
-	t_list	*node_to_del;
-	t_list	*prev;
-	t_list	*next;
-	t_list	*word_tail;
-
-	if (tokens == NULL || tokens_tmp == NULL || *tokens_tmp == NULL
-		|| wordt == NULL)
-		return ;
-	node_to_del = *tokens_tmp;
-	prev = (*tokens_tmp)->prev;
-	next = (*tokens_tmp)->next;
-	*tokens_tmp = (*tokens_tmp)->next;
-	ft_lst_rm_one(tokens, node_to_del, free_token);
-	word_tail = ft_lstlast(wordt);
-	if (prev == NULL)
-		*tokens = wordt;
-	else
-		(void)!(prev->next = wordt, wordt->prev = prev);
-	if (next)
-		(void)!(word_tail->next = next, next->prev = word_tail);
-}
-
 void	split_enhanced_tokens(t_list **tokens)
 {
 	t_list	*tokens_tmp;
 	t_token	*tok;
 	t_list	*wordt;
-	t_list	*node_to_del;
 
 	tokens_tmp = *tokens;
 	while (tokens_tmp)
 	{
 		tok = tokens_tmp->content;
-		if (is_word_and_space_found(tok))
+		if (if_escape(tok))
 		{
-			if (count_spaces(tok->data) != (int)ft_strlen(tok->data))
-			{
-				wordt = get_word_tokens(tok);
-				if (wordt == NULL)
-					return ;
-				insert_split_tokens(tokens, &tokens_tmp, wordt);
-				continue ;
-			}
+			wordt = get_word_tokens(tok);
+			if (wordt == NULL && ist(tokens, &tokens_tmp, wordt))
+				return ;
+			continue ;
 		}
 		else if (tok->data == NULL)
 		{
-			node_to_del = tokens_tmp;
-			tokens_tmp = tokens_tmp->next;
-			ft_lst_rm_one(tokens, node_to_del, free_token);
+			del_token(&tokens_tmp, tokens);
 			continue ;
 		}
 		tokens_tmp = tokens_tmp->next;
