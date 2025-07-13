@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
 NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
+
 EXECUTION = execution/execution.c \
 	    execution/_cd_.c \
 	    execution/_exit_.c \
@@ -57,9 +58,12 @@ AST = ./parsing/ast/ast.c \
       ./parsing/ast/ast_utils.c \
       ./parsing/ast/free_ast.c \
 
-PARCING = ./parsing/parsing.c \
-	  ./parsing/env/env.c ./parsing/env/env_utils.c \
-	  ./parsing/tokenize/tokenize.c \
+PRE_AST = ./parsing/pre_ast/pre_ast.c \
+	  ./parsing/pre_ast/enhance_redirection.c \
+	  ./parsing/pre_ast/heredoc.c \
+	  ./parsing/pre_ast/heredoc_utils.c \
+
+TOKENIZE = ./parsing/tokenize/tokenize.c \
 	  ./parsing/tokenize/tokenize_utils_1.c \
 	  ./parsing/tokenize/tokenize_utils_2.c \
 	  ./parsing/tokenize/tokenize_utils_3.c \
@@ -67,12 +71,14 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/tokenize_utils_5.c	\
 	  ./parsing/tokenize/tokenize_utils_6.c	\
 	  ./parsing/tokenize/tokenize_utils_7.c	\
+	  ./parsing/tokenize/tokenize_utils_8.c	\
 	  ./parsing/tokenize/split_line.c \
 	  ./parsing/tokenize/tokens_to_str.c \
-	  ./parsing/pre_ast/pre_ast.c \
-	  ./parsing/pre_ast/enhance_redirection.c \
-	  ./parsing/pre_ast/heredoc.c \
-	  $(EXPANSION) $(SYNTAX_CHECK) $(AST)
+
+ENV = ./parsing/env/env.c \
+      ./parsing/env/env_utils.c \
+
+PARCING = ./parsing/parsing.c $(ENV) $(TOKENIZE) $(EXPANSION) $(SYNTAX_CHECK) $(AST) $(PRE_AST)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 02:19:04 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/07/13 02:19:06 by zajaddad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
@@ -18,7 +29,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 
-#define SYNTAX_E "bash: syntax error near unexpected token `%s'\n"
+# define SYNTAX_E "bash: syntax error near unexpected token `%s'\n"
 
 bool	syntax_check(t_list *tokens);
 t_cmd	*parse_cmd(char *line, t_list *env);

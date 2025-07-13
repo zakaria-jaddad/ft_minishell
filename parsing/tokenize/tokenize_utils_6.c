@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 08:01:57 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/23 12:38:54 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:04:53 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,11 @@ void	skip_prev_spaces(t_list **tokens)
 	}
 }
 
-t_list *get_filename(t_list **tokens)
+t_list	*get_filename(t_list **tokens)
 {
-	t_list *filename;
-	t_list *token_node;
-	t_token *token;
+	t_list	*filename;
+	t_list	*token_node;
+	t_token	*token;
 
 	filename = NULL;
 	token_node = NULL;
@@ -106,10 +106,9 @@ t_list *get_filename(t_list **tokens)
 	while (*tokens)
 	{
 		token = (*tokens)->content;
-		if (token->type != TOKEN_WORD
-			&& token->type != TOKEN_DOUBLE_QUOTE_WORD
+		if (token->type != TOKEN_WORD && token->type != TOKEN_DOUBLE_QUOTE_WORD
 			&& token->type != TOKEN_SINGLE_QUOTE_WORD)
-			break;
+			break ;
 		token_node = create_token_node(token->type, token->data);
 		ft_lstadd_back(&filename, token_node);
 		*tokens = (*tokens)->next;

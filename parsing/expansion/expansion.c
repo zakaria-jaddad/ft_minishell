@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:01:17 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:47:43 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,9 @@ void	split_enhanced_tokens(t_list **tokens)
 		if (if_escape(tok))
 		{
 			wordt = get_word_tokens(tok);
-			if (wordt == NULL && ist(tokens, &tokens_tmp, wordt))
+			if (wordt == NULL)
 				return ;
+			ist(tokens, &tokens_tmp, wordt);
 			continue ;
 		}
 		else if (tok->data == NULL)

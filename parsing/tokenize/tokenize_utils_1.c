@@ -6,13 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 15:32:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 17:05:56 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:18:26 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/tokenize.h"
-#include "../../includes/parsing/parsing.h"
-#include "../../includes/minishell.h"
+#include <stdlib.h>
 
 /*
  * @brief frees t_token object
@@ -85,29 +84,25 @@ t_list	*create_token_node(t_token_type token_type, char *token_data)
  *      if success returns a list node with the tokenized content
  *      if error returns NULL and frees the allocated token
  */
-t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
-		t_list **line_lst)
+t_list	*tokenize_quotes(char *quote_type, t_token_type token_type, t_list **ls)
 {
 	t_token	*token;
 	t_list	*node;
-	char	*token_data;
+	char	*tod;
 
-	token_data = NULL;
-	if (line_lst == NULL || *line_lst == NULL)
+	if (ls == NULL || *ls == NULL)
 		return (NULL);
-	*line_lst = (*line_lst)->next;
-	while (*line_lst != NULL && ft_strcmp((char *)(*line_lst)->content,
-		quote_type) != 0)
+	(void)!(tod = NULL, *ls = (*ls)->next);
+	while (*ls != NULL && ft_strcmp((char *)(*ls)->content, quote_type) != 0)
 	{
-		append_str(&token_data, (*line_lst)->content);
-		if (token_data == NULL)
-			return (free(token_data), token_data = NULL, NULL);
-		*line_lst = (*line_lst)->next;
+		append_str(&tod, (*ls)->content);
+		if (tod == NULL)
+			return (free(tod), tod = NULL, NULL);
+		*ls = (*ls)->next;
 	}
-	if (*line_lst != NULL && ft_strcmp((*line_lst)->content, quote_type) == 0)
+	if (*ls != NULL && ft_strcmp((*ls)->content, quote_type) == 0)
 	{
-		token = create_token(token_type, token_data);
-		token_data = (free(token_data), NULL);
+		(void)!(token = create_token(token_type, tod), free(tod), 0);
 		if (token == NULL)
 			return (NULL);
 		node = ft_lstnew(token);
@@ -115,27 +110,5 @@ t_list	*tokenize_quotes(char *quote_type, t_token_type token_type,
 			return (free_token(token), token = NULL, NULL);
 		return (node);
 	}
-	ft_fprintf(STDERR_FILENO, SYNTAX_E, quote_type);
-	status_x(258, true);
-	token_data = (free(token_data), NULL);
-	return (NULL);
+	return (invalid_quote(quote_type, tod), NULL);
 }
-
-void	print_tokens(t_list *tokens)
-{
-	t_token	*token;
-
-	if (tokens == NULL)
-        {
-		ft_fprintf(STDOUT_FILENO, "(null) ");
-                return ;
-        }
-	while (tokens)
-	{
-		token = (t_token *)tokens->content;
-		ft_fprintf(STDOUT_FILENO, "data: \"%s\" %s, ", token->data, get_token_type(token->type));
-		fflush(stdout);
-		tokens = tokens->next;
-	}
-}
-

@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 00:50:30 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 00:55:15 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:34:20 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 bool	is_word_and_space_found(t_token *token)
 {
