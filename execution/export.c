@@ -15,10 +15,15 @@
 void	add_export(t_list *list, char **args, int append)
 {
 	t_env	*env;
+	char *tmp;
 
 	env = get_env(list, args[0]);
 	if (append && env)
-		args[1] = ft_strjoin(env->value, args[1] + 1);
+	{
+		tmp = ft_strjoin(env->value, args[1] + 1);
+		free(args[1]);
+		args[1] = tmp;
+	}
 	if (env && (!args[1] || !ft_strcmp(args[1], "")))
 		return ;
 	if (env && append)

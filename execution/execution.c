@@ -32,7 +32,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
-		path = ft_strjoin("/", args[0]);
+		path = ft_strdup(args[0]);
 	if (execve(path, args, envs) < 0)
 	{
 		free(path);
