@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax_check.h                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/13 01:35:24 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/07/13 01:35:25 by zajaddad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SYNTAX_CHECK_H
 # define SYNTAX_CHECK_H
 
@@ -19,14 +31,5 @@ bool	is_type_redirection(t_token_type type);
 bool	check_redir(t_list *tokens);
 bool	check_pipe(t_list *tokens);
 bool	check_logical_operator(t_list *tokens);
-
-static inline bool	check_per(t_list *tokens)
-{
-	if (tokens == NULL)
-		return (false);
-	if (peak_prev(tokens) == TOKEN_PAR_CLOSE)
-		return (ft_fprintf(STDERR_FILENO, OPEN_PER_SE), false);
-	return (true);
-}
 
 #endif // !SYNTAX_CHECK_H
