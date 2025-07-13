@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:23:10 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/04 01:37:43 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 00:22:42 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 static void	skip_par(t_list **tokens)
 {
-	int depth = 0;
+	int		depth;
 	t_token	*token;
 
+	depth = 0;
 	if (tokens == NULL)
 		return ;
 	while (*tokens != NULL)
@@ -26,8 +27,6 @@ static void	skip_par(t_list **tokens)
 			depth++;
 		else if (token->type == TOKEN_PAR_CLOSE)
 		{
-			// depth 100% wouldn't be negative
-			// par validation already happened
 			depth--;
 			if (depth == 0)
 			{
@@ -97,5 +96,4 @@ t_list	*get_root(t_list *tokens)
 	if (check_redirection(tokens) != NULL)
 		return (check_redirection(tokens));
 	return (NULL);
-
 }

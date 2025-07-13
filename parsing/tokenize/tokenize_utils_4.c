@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 21:24:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/25 21:50:39 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:55:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_list	*dup_and_remove_simple_tokens(t_list *to_start)
 
 	if (to_start == NULL)
 		return (NULL);
-	(void)(simple_tokens = NULL, token = NULL, node_to_del = NULL);
+	(void)!(simple_tokens = NULL, token = NULL, node_to_del = NULL);
 	while (to_start)
 	{
 		token = to_start->content;
@@ -112,7 +112,7 @@ t_list	*dup_and_remove_simple_tokens(t_list *to_start)
 		ft_lstadd_back(&simple_tokens, dsn);
 		if (append_tokens(&simple_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
 			return (ft_lstclear(&simple_tokens, free_token), NULL);
-		(void)(node_to_del = to_start, to_start = to_start->next);
+		(void)!(node_to_del = to_start, to_start = to_start->next);
 		ft_lst_rm_one(NULL, node_to_del, free_token);
 	}
 	if (insert_tokens(&simple_tokens, TOKEN_WHITE_SPACE, " ") == NULL)

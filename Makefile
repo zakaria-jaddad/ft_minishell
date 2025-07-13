@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
 NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
+
 EXECUTION = execution/execution.c \
 	    execution/_cd_.c \
 	    execution/_exit_.c \
@@ -27,6 +28,7 @@ EXPANSION = ./parsing/expansion/dollar_expansion.c \
 	    ./parsing/expansion/expand_word.c \
 	    ./parsing/expansion/expand_word_utils.c \
 	    ./parsing/expansion/expansion.c \
+	    ./parsing/expansion/expansion_utils.c \
 	    ./parsing/expansion/expansion_api.c \
 	    ./parsing/expansion/get_enhanced_tokens.c \
 	    ./parsing/expansion/is_assignment_statement.c \
@@ -51,10 +53,17 @@ SYNTAX_CHECK = 	  ./parsing/syntx_check/syntax_check.c \
 		  ./parsing/syntx_check/check_redir.c \
 		  ./parsing/syntx_check/check_logical.c \
 
+AST = ./parsing/ast/ast.c \
+      ./parsing/ast/get_root.c \
+      ./parsing/ast/ast_utils.c \
+      ./parsing/ast/free_ast.c \
 
-PARCING = ./parsing/parsing.c \
-	  ./parsing/env/env.c ./parsing/env/env_utils.c \
-	  ./parsing/tokenize/tokenize.c \
+PRE_AST = ./parsing/pre_ast/pre_ast.c \
+	  ./parsing/pre_ast/enhance_redirection.c \
+	  ./parsing/pre_ast/heredoc.c \
+	  ./parsing/pre_ast/heredoc_utils.c \
+
+TOKENIZE = ./parsing/tokenize/tokenize.c \
 	  ./parsing/tokenize/tokenize_utils_1.c \
 	  ./parsing/tokenize/tokenize_utils_2.c \
 	  ./parsing/tokenize/tokenize_utils_3.c \
@@ -62,15 +71,14 @@ PARCING = ./parsing/parsing.c \
 	  ./parsing/tokenize/tokenize_utils_5.c	\
 	  ./parsing/tokenize/tokenize_utils_6.c	\
 	  ./parsing/tokenize/tokenize_utils_7.c	\
+	  ./parsing/tokenize/tokenize_utils_8.c	\
 	  ./parsing/tokenize/split_line.c \
 	  ./parsing/tokenize/tokens_to_str.c \
-	  ./parsing/pre_ast/pre_ast.c \
-	  ./parsing/pre_ast/enhance_redirection.c \
-	  ./parsing/ast/ast.c \
-	  ./parsing/ast/get_root.c \
-	  ./parsing/pre_ast/heredoc.c \
-	  ./parsing/ast/free_ast.c \
-	  $(EXPANSION) $(SYNTAX_CHECK)
+
+ENV = ./parsing/env/env.c \
+      ./parsing/env/env_utils.c \
+
+PARCING = ./parsing/parsing.c $(ENV) $(TOKENIZE) $(EXPANSION) $(SYNTAX_CHECK) $(AST) $(PRE_AST)
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
 

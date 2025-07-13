@@ -6,13 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:48:11 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/12 23:27:00 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:05:39 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 static void	wildcard_pre_expansion(t_list **tokens)
 {
@@ -32,7 +30,7 @@ static void	wildcard_pre_expansion(t_list **tokens)
 		{
 			prev = et->prev;
 			if (prev != NULL && ft_strcmp(((t_token *)(prev->content))->data,
-					"=") == 0)
+				"=") == 0)
 				tok->type = TOKEN_DOUBLE_QUOTE_WORD;
 		}
 		et = et->next;
@@ -41,7 +39,7 @@ static void	wildcard_pre_expansion(t_list **tokens)
 	*tokens = head;
 }
 
-static void	*split_pre_expansion_escapint_norms_v2(t_list **new_tokens,
+static void	*split_pre_expansion_escaping_norms_v2(t_list **new_tokens,
 		t_list **wordt)
 {
 	t_list	*argt;
@@ -58,11 +56,13 @@ static void	*split_pre_expansion_escapint_norms_v2(t_list **new_tokens,
 	return (NOTNULL);
 }
 
-static void	*split_pre_expansion_escapint_norms_v1(t_list **new_tokens,
+static void	*split_pre_expansion_escaping_norms_v1(t_list **new_tokens,
 		t_list **wordt)
 {
 	t_list	*argt;
 
+	if (wordt == NULL)
+		return (ft_lstclear(new_tokens, free_token), NULL);
 	argt = create_enhanced_tokens(*wordt, true);
 	if (argt == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
@@ -89,15 +89,13 @@ static void	split_pre_expansion(t_list **tokens)
 		if (((t_token *)tmp->content)->type != TOKEN_WHITE_SPACE)
 		{
 			wordt = get_tokenizd_word(&tmp);
-			if (wordt == NULL)
-				return (ft_lstclear(&new_tokens, free_token));
 			if (is_assignment_statement(wordt) == true)
 			{
-				if (!split_pre_expansion_escapint_norms_v1(&new_tokens, &wordt))
+				if (!split_pre_expansion_escaping_norms_v1(&new_tokens, &wordt))
 					return ;
 				continue ;
 			}
-			if (!split_pre_expansion_escapint_norms_v2(&new_tokens, &wordt))
+			if (!split_pre_expansion_escaping_norms_v2(&new_tokens, &wordt))
 				return ;
 		}
 		if (tmp != NULL)
@@ -108,7 +106,6 @@ static void	split_pre_expansion(t_list **tokens)
 
 void	pre_expansion(t_list *command, t_list *cmdt, t_list **tokens)
 {
-
 	if (command != NULL && check_cmdt(cmdt) == false)
 		split_pre_expansion(tokens);
 	wildcard_pre_expansion(tokens);

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:04:48 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 15:05:45 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:07:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void	special_word_expansion(char **str, char *special, t_list *env)
 	char	*key;
 	char	*tmp;
 	t_env	*var;
-	char *foo;
+	char	*foo;
 
 	if (str == NULL || *str == NULL || env == NULL || special == NULL)
 		return ;
@@ -41,9 +41,9 @@ static void	special_word_expansion(char **str, char *special, t_list *env)
 	if (var == NULL)
 		foo = ft_strjoin("", special);
 	else
-		foo  = ft_strjoin(var->value, special);
+		foo = ft_strjoin(var->value, special);
 	if (foo == NULL)
-		return;
+		return ;
 	*str = foo;
 	free(tmp);
 	free(key);
@@ -54,7 +54,7 @@ static void	simple_word_expansion(char **str, t_list *env)
 {
 	char	*tmp;
 	t_env	*var;
-	char *foo;
+	char	*foo;
 
 	if (str == NULL || *str == NULL || env == NULL)
 		return ;
@@ -70,9 +70,9 @@ static void	simple_word_expansion(char **str, t_list *env)
 	}
 	var = get_env(env, *str);
 	if (var == NULL || var->value == NULL)
-		foo = NULL; // might segfault
+		foo = NULL;
 	else
-		foo  = ft_strdup(var->value);
+		foo = ft_strdup(var->value);
 	*str = foo;
 	free(tmp);
 }

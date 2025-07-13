@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 19:39:40 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 00:28:37 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-#include <stdio.h>
 
 static void	del_node_and_go_next(t_list **tokens, t_list **token_head)
 {
@@ -50,7 +49,7 @@ static void	expand_dollar_escaping_norms(t_list **tokens, t_list **tokens_head,
 			update_current_token(*tokens, env));
 }
 
-void	clean_up_null_tokens(t_list **tokens)
+void	c_null_tokens(t_list **tokens)
 {
 	t_list	*th;
 	t_token	*tok;
@@ -99,6 +98,5 @@ void	expand_dollar(t_list **tokens, t_list *env)
 			break ;
 		*tokens = (*tokens)->next;
 	}
-	*tokens = th;
-	clean_up_null_tokens(tokens);
+	(void)!(*tokens = th, c_null_tokens(tokens), 0);
 }

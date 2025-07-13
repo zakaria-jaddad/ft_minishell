@@ -6,12 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/08 12:50:27 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:32:06 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/pre_ast.h"
-#include <stdbool.h>
 
 static void	enhance_redirections(t_list **tokens)
 {
@@ -61,27 +60,25 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 static bool	handle_heredocs(t_list **tokens, t_list *envs)
 {
 	t_list	*tok;
-	char	*filename;
-	t_list	*filenamet;
+	char	*f;
+	t_list	*ft;
 	t_list	*start;
 
 	(void)start;
 	if (tokens == NULL || *tokens == NULL)
-		return false;
+		return (false);
 	tok = *tokens;
 	while (tok)
 	{
 		if (check_token_type(tok->content, TOKEN_HEREDOC) == true)
 		{
-			(void)!(start = tok, tok = tok->next,
-				filenamet = get_filename(&tok));
-			filename = handle_heredoc(filenamet, envs);
-			ft_lstclear(&filenamet, free_token);
-			if (filename == NULL)
+			(void)!(start = tok, tok = tok->next, ft = get_filename(&tok),
+				f = handle_heredoc(ft, envs), ft_lstclear(&ft, free_token), 0);
+			if (f == NULL)
 				return (false);
-			if (NULL == insert_filename_token(filename, start, tok, tokens))
-				return (free(filename), false);
-			free(filename);
+			if (NULL == insert_filename_token(f, start, tok, tokens))
+				return (free(f), false);
+			free(f);
 			continue ;
 		}
 		tok = tok->next;

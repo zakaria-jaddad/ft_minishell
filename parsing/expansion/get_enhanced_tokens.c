@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:51:14 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/10 22:38:21 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:00:52 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,7 @@ t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 		return (NULL);
 	while (data_lst && data_lst->content)
 	{
-		/* if (ft_strcmp(data_lst->content, " ") == 0 || ft_strcmp(data_lst->content, "\t") == 0) */
-		/* 	token_node = create_token_node(TOKEN_WHITE_SPACE, */
-		/* 			data_lst->content); */
-		/* else */
-			token_node = create_token_node(tokens_type, data_lst->content);
+		token_node = create_token_node(tokens_type, data_lst->content);
 		if (token_node == NULL)
 			return (ft_lstclear(&new_tokens, free_token), NULL);
 		ft_lstadd_back(&new_tokens, token_node);
@@ -36,12 +32,32 @@ t_list	*create_tokens(t_list *data_lst, t_token_type tokens_type)
 	return (new_tokens);
 }
 
+t_list	*get_created_tokens(t_token *tok, char *delim)
+{
+	t_list	*split_token_data;
+	t_list	*new_tokens;
+
+	new_tokens = NULL;
+	if (tok->type != TOKEN_WHITE_SPACE)
+	{
+		split_token_data = ft_split_pro(tok->data, delim);
+		if (split_token_data == NULL)
+		{
+			return (NULL);
+		}
+		new_tokens = create_tokens(split_token_data, tok->type);
+		ft_lstclear(&split_token_data, free);
+	}
+	else
+		new_tokens = create_token_node(TOKEN_WHITE_SPACE, " ");
+	return (new_tokens);
+}
+
 t_list	*get_enhanced_tokens(t_list *tokens, char *delim)
 {
 	t_list	*enhanced_tokens;
 	t_list	*new_tokens;
 	t_token	*tok;
-	t_list	*split_token_data;
 
 	enhanced_tokens = NULL;
 	while (tokens)
@@ -51,19 +67,9 @@ t_list	*get_enhanced_tokens(t_list *tokens, char *delim)
 			new_tokens = create_token_node(tok->type, "");
 		else
 		{
-			if (tok->type != TOKEN_WHITE_SPACE)
-			{
-				split_token_data = ft_split_pro(tok->data, delim);
-				if (split_token_data == NULL)
-				{
-					ft_lstclear(&enhanced_tokens, free_token);
-					return (NULL);
-				}
-				new_tokens = create_tokens(split_token_data, tok->type);
-				ft_lstclear(&split_token_data, free);
-			}
-			else
-				new_tokens = create_token_node(TOKEN_WHITE_SPACE, " ");
+			new_tokens = get_created_tokens(tok, delim);
+			if (new_tokens == NULL)
+				ft_lstclear(&enhanced_tokens, free_token);
 		}
 		if (new_tokens == NULL)
 			return (ft_lstclear(&enhanced_tokens, free_token), NULL);

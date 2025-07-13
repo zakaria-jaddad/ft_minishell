@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 03:39:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/07 03:39:58 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:35:33 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,15 @@ bool	syntax_check_escaping_norms(t_token *tok, t_list *t)
 	}
 	else if (tok->type == TOKEN_PAR_CLOSE)
 		return (ft_fprintf(STDERR_FILENO, CLOSE_PER_SE), false);
+	return (true);
+}
+
+bool	check_per(t_list *tokens)
+{
+	if (tokens == NULL)
+		return (false);
+	if (peak_prev(tokens) == TOKEN_PAR_CLOSE)
+		return (ft_fprintf(STDERR_FILENO, OPEN_PER_SE), false);
 	return (true);
 }
 

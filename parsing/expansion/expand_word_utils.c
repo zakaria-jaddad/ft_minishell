@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 23:48:35 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/12 23:58:53 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 00:30:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static int	is_valid_word_token(int type)
 		|| type == TOKEN_SINGLE_QUOTE_WORD);
 }
 
-
 static void	*extract_words_list_escaping_norms(t_list **result, t_list **tokens)
 {
 	t_list	*wordt;
@@ -46,11 +45,10 @@ static void	*extract_words_list_escaping_norms(t_list **result, t_list **tokens)
 	dup = tokens_to_str(wordt);
 	ft_lstclear(&wordt, free_token);
 	if (dup == NULL)
-		return (ft_lstclear(result,
-				free), NULL);
+		return (ft_lstclear(result, free), NULL);
 	new_node = ft_lstnew(dup);
 	if (new_node == NULL)
-		return (free(dup),ft_lstclear(result, free), NULL);
+		return (free(dup), ft_lstclear(result, free), NULL);
 	ft_lstadd_back(result, new_node);
 	return (NOTNULL);
 }
@@ -61,7 +59,6 @@ t_list	*extract_words_list(t_list *tokens)
 	t_token	*tok;
 
 	result = NULL;
-
 	while (tokens && tokens->content)
 	{
 		tok = (t_token *)tokens->content;

@@ -1,12 +1,12 @@
-
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   expansion.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/23 08:45:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/09 19:14:51 by zajaddad         ###   ########.fr       */
+/*   Created: 2025/07/13 01:10:01 by zajaddad          #+#    #+#             */
+/*   Updated: 2025/07/13 01:10:04 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq);
 bool	check_cmdt(t_list *cmdt);
 void	pre_expansion(t_list *command, t_list *cmdt, t_list **tokens);
 t_list	*extract_words_list(t_list *tokens);
-int	count_spaces(char *s);
+int		count_spaces(char *s);
 
 // Dollarsign Expansion
 void	expand_dollar(t_list **tokens, t_list *env);
@@ -78,10 +78,8 @@ void	expand_filename(char **filename, t_list *tokenized_filename,
 			t_list *env);
 char	**expand_all(t_list *cmdt, t_list *argt, t_list *env);
 
-static inline bool is_word_and_space_found(t_token *token)
-{
-	return (check_token_type(token, TOKEN_WORD) == true
-			&& ft_strpbrk(token->data, " \t") != NULL);
-}
+int		ist(t_list **tokens, t_list **tokens_tmp, t_list *wordt);
+bool	is_word_and_space_found(t_token *token);
+void	del_token(t_list **tokens_tmp, t_list **tokens);
 
 #endif // !EXPANSION_H

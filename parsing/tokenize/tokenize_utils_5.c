@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 22:06:04 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/30 20:00:37 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 02:04:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	remove_es(t_list **tokens)
 				|| token->type == TOKEN_SINGLE_QUOTE_WORD)
 			&& token->data != NULL && *token->data == 0)
 		{
-			(tt = th, th = th->next, ft_lst_rm_one(tokens, tt, free_token));
+			(void)!(tt = th, th = th->next, ft_lst_rm_one(tokens, tt,
+					free_token), 0);
 			continue ;
 		}
 		if (th == NULL)
@@ -42,8 +43,8 @@ bool	is_wrapped_by_single_paren_pair(t_list *tokens)
 	t_list	*token_node;
 	int		depth;
 
-        if (tokens == NULL)
-                return false;
+	if (tokens == NULL)
+		return (false);
 	if (check_token_type(tokens->content, TOKEN_PAR_OPEN) == false)
 		return (false);
 	token_node = tokens->next;
@@ -89,35 +90,32 @@ void	remove_per(t_list **tokens)
 	ft_lstdelone(last, free_token);
 }
 
-t_list	*dup_tokens(t_list *tokens_start, t_list *token_end, bool add_last)
+t_list	*dup_tokens(t_list *ts, t_list *te, bool al)
 {
-	t_list	*new_tokens;
-	t_list	*token_node;
-	t_token	*token;
+	t_list	*nt;
+	t_list	*tn;
+	t_token	*t;
 
-	if (tokens_start == NULL || token_end == NULL)
+	if (ts == NULL || te == NULL)
 		return (NULL);
-	(new_tokens = NULL, token = NULL);
-	while (tokens_start && tokens_start != token_end)
+	(void)!(nt = NULL, t = NULL);
+	while (ts && ts != te && ts->content)
 	{
-		token = tokens_start->content;
-		if (token == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		token_node = create_token_node(token->type, token->data);
-		if (token_node == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		ft_lstadd_back(&new_tokens, token_node);
-		tokens_start = tokens_start->next;
+		t = ts->content;
+		tn = create_token_node(t->type, t->data);
+		if (tn == NULL)
+			return (ft_lstclear(&nt, free_token), NULL);
+		ft_lstadd_back(&nt, tn);
+		ts = ts->next;
 	}
-	if (tokens_start != NULL && add_last == true)
+	if (ts != NULL && al == true)
 	{
-		token = tokens_start->content;
-		token_node = create_token_node(token->type, token->data);
-		if (token_node == NULL)
-			return (ft_lstclear(&new_tokens, free_token), NULL);
-		ft_lstadd_back(&new_tokens, token_node);
+		(void)!(t = ts->content, tn = create_token_node(t->type, t->data));
+		if (tn == NULL)
+			return (ft_lstclear(&nt, free_token), NULL);
+		ft_lstadd_back(&nt, tn);
 	}
-	return (new_tokens);
+	return (nt);
 }
 
 char	*get_token_data(t_token *token)

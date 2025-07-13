@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 00:57:24 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/22 00:43:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:11:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@ static void	skip_redirections(t_list **tokens)
 	{
 		token = (*tokens)->content;
 		if (token == NULL || is_redirection(token) == false)
-                        return ;
+			return ;
 		*tokens = (*tokens)->next;
 		skip_front_spaces(tokens);
 		filename = get_filename(tokens);
 		if (filename == NULL)
-                        return ;
+			return ;
 		ft_lstclear(&filename, free_token);
 		if (*tokens == NULL)
 			return ;
-		/* *tokens = (*tokens)->next; */
 		skip_front_spaces(tokens);
 	}
 }
@@ -47,7 +46,7 @@ static void	move_redirection_after(t_list *cmd_node, t_list **redir_node)
 	cmd_node = dup_and_remove_simple_tokens(cmd_node);
 	if (cmd_node == NULL)
 		return ;
-        redir_prev = (*redir_node)->prev;
+	redir_prev = (*redir_node)->prev;
 	if (redir_prev != NULL)
 	{
 		cmd_tail = ft_lstlast(cmd_node);

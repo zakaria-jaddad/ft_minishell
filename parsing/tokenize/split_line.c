@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 20:04:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/06/09 19:38:56 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/13 01:39:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,31 @@ static void	append_prev_word(t_list **lst, char *line, int i, int prev)
 		return (ft_lstclear(lst, free));
 	node = ft_lstnew(word);
 	if (node == NULL)
-		return (void)(ft_lstclear(lst, free), free(word), word = NULL);
+	{
+		ft_lstclear(lst, free);
+		free(word);
+		word = NULL;
+		return ;
+	}
 	ft_lstadd_back(lst, node);
 }
 
 static void	append_special(t_list **lst, char *special, int *i, int *prev)
 {
 	t_list	*node;
-        char *special_dup;
+	char	*special_dup;
 
 	special_dup = ft_strdup(special);
 	if (special_dup == NULL)
 		return (ft_lstclear(lst, free));
 	node = ft_lstnew(special_dup);
 	if (node == NULL)
-		return (void)(ft_lstclear(lst, free), free(special_dup), special_dup = NULL);
+	{
+		ft_lstclear(lst, free);
+		free(special_dup);
+		special_dup = NULL;
+		return ;
+	}
 	ft_lstadd_back(lst, node);
 	*i += ft_strlen(special_dup);
 	*prev = *i;
