@@ -6,14 +6,15 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:26:10 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/03 15:48:34 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/14 08:42:13 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/execution.h"
+#include <stdlib.h>
 #include <unistd.h>
 
-void	handel_args(int *i, int *nl, char **args)
+void	handle_args(int *i, int *nl, char **args)
 {
 	int	j;
 
@@ -33,25 +34,29 @@ void	handel_args(int *i, int *nl, char **args)
 
 int	_echo_(char **args)
 {
-	int	i;
-	int	nl;
+	int		i;
+	int		nl;
+	char	*str;
 
 	nl = 0;
+	str = NULL;
 	if (!args)
 	{
 		write(STDOUT_FILENO, "\n", 1);
 		return (1);
 	}
 	i = 0;
-	handel_args(&i, &nl, args);
+	handle_args(&i, &nl, args);
 	while (args[i])
 	{
 		if (args[i])
-			ft_fprintf(STDOUT_FILENO, "%s", args[i]);
+			append_str(&str, args[i]);
 		if (args[++i])
-			ft_fprintf(STDOUT_FILENO, "%s", " ");
+			append_str(&str, " ");
 	}
 	if (!nl || !args[0])
-		ft_fprintf(STDOUT_FILENO, "\n");
+		append_str(&str, "\n");
+	ft_fprintf_putstr_fd(STDOUT_FILENO, str);
+	str = (free(str), NULL);
 	return (0);
 }
