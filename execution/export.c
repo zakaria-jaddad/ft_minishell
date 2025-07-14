@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:20:51 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 00:56:55 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 10:59:41 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	add_export(t_list *list, char **args, int append)
 {
 	t_env	*env;
-	char *tmp;
+	char	*tmp;
 
 	env = get_env(list, args[0]);
 	if (append && env)
@@ -57,7 +57,8 @@ void	add_export(t_list *list, char **args, int append)
 /* 					args[i]), 0); */
 /* 		j = -1; */
 /* 		while (args[i][++j] && args[i][j] != '=') */
-/* 			if (!(args[i][j] >= 'a' && args[i][j] <= 'z') && !(args[i][j] >= 'A' */
+/* 			if (!(args[i][j] >= 'a' && args[i][j] <= 'z')
+				&& !(args[i][j] >= 'A' */
 /* 					&& args[i][j] <= 'Z') && !(args[i][j] >= '0' */
 /* 					&& args[i][j] <= '9' && j > 0) && !(args[i][j] == '+' */
 /* 					&& args[i][j + 1] == '=' && j != 0) && args[i][j] != '_') */
@@ -86,6 +87,11 @@ char	**split_by_first_equal(char *arg, t_list *list)
 	{
 		append_++;
 		i--;
+		int j = i;
+		while (j > 0 && arg[j] == '+')
+			j--;
+		if (arg[j] == '+')
+			return (NULL);
 	}
 	rv = malloc(sizeof(char *) * (2 + 1));
 	if (rv == NULL)
@@ -100,14 +106,14 @@ char	**split_by_first_equal(char *arg, t_list *list)
 		return (free(rv[0]), NULL);
 	rv[2] = NULL;
 	add_export(list, rv, append_);
-	free_double_pointer((void **) rv);
+	free_double_pointer((void **)rv);
 	return (NOTNULL);
 }
 
 int	_export_(t_list *list, char **args)
 {
 	int	i;
-	int status;
+	int	status;
 
 	if (!list)
 		return (-1);
@@ -120,11 +126,16 @@ int	_export_(t_list *list, char **args)
 		if (!check_arg(args[i]))
 		{
 			status = (ft_fprintf(2,
-					"minishell: export: `%s`: not a valid identifier\n",
-					args[i++]), 1);
-			continue;
+						"minishell: export: `%s`: not a valid identifier\n",
+						args[i++]), 1);
+			continue ;
 		}
-		split_by_first_equal(args[i], list);
+		if (split_by_first_equal(args[i], list) == NULL)
+		{
+			status = (ft_fprintf(2,
+						"minishell: export: `%s`: not a valid identifier\n",
+						args[i]), 1);
+		}
 		i++;
 	}
 	return (status_x(status, 1));
