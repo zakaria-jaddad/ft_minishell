@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:11:14 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 01:20:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 11:49:53 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	**list_to_double_pointer(t_list *list)
 	i = 0;
 	if (!list)
 		return (NULL);
-	res = malloc(sizeof(char *) * (count_envs(list) + 1));
+	res = malloc(sizeof(char *) * (ft_lstsize(list) + 1));
 	if (!res)
 		return (NULL);
 	while (list)
@@ -43,7 +43,7 @@ int	count_envs(t_list *envs)
 	count = 0;
 	while (envs)
 	{
-		env =envs->content; 
+		env = envs->content; 
 		if (env && env->key && env->value)
 			count++;
 		envs = envs->next;
