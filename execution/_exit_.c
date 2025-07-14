@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:27:26 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/14 15:48:45 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 20:50:33 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	_exit_(char **args)
 		if (args[1])
 			return ((void)(print_error("minishell: exit: ", NULL,
 					"too many arguments"), status_x(1, 1)));
+		_exit_escaping_norms(args[0]);
 	}
 	exit(status_x(0, 0));
 }

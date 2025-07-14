@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:05:52 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/11 03:07:46 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 20:32:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/env.h"
+#include <stdlib.h>
 
 static int	locate_first_equale(char *line)
 {
@@ -43,6 +44,8 @@ static char	**get_split_env(char *env)
 	_env[0] = ft_substr(env, 0, equal_pos);
 	if (_env[0] == NULL)
 		return (free(_env), _env = NULL, NULL);
+	if (ft_strcmp(_env[0], "_") == 0)
+		return (free(_env[0]), _env[0] = NULL, free(_env), _env = NULL, NULL);
 	_env[1] = ft_substr(env, equal_pos + 1, ft_strlen(env) - equal_pos + 1);
 	if (_env[1] == NULL)
 		return (free(_env[0]), _env[0] = NULL, free(_env), _env = NULL, NULL);
@@ -71,27 +74,27 @@ t_list	*envs_init(char **env, ...)
 {
 	t_list	*env_lst;
 	t_list	*node;
-	char	**split_env;
-	t_env	*env_content;
+	char	**se;
+	t_env	*ec;
 
 	env_lst = NULL;
 	if (*env == NULL)
 		return (simple_env(env_lst));
 	while (*env)
 	{
-		split_env = get_split_env(*env);
-		if (split_env == NULL)
-			return (ft_lstclear(&env_lst, free_env), NULL);
-		env_content = (t_env *)malloc(sizeof(t_env));
-		if (env_content == NULL)
-			return (ft_lstclear(&env_lst, free_env), NULL);
-		env_content->key = split_env[0];
-		env_content->value = split_env[1];
-		free(split_env);
-		node = ft_lstnew(env_content);
-		if (node == NULL)
-			return (ft_lstclear(&env_lst, free_env), NULL);
-		(ft_lstadd_back(&env_lst, node), env++);
+		se = get_split_env(*env);
+		if (se != NULL)
+		{
+			ec = (t_env *)malloc(sizeof(t_env));
+			if (ec == NULL)
+				return (ft_lstclear(&env_lst, free_env), NULL);
+			(void)!(ec->key = se[0], ec->value = se[1], free(se), 0);
+			node = ft_lstnew(ec);
+			if (node == NULL)
+				return (ft_lstclear(&env_lst, free_env), NULL);
+			(ft_lstadd_back(&env_lst, node));
+		}
+		env++;
 	}
 	return (env_lst);
 }
