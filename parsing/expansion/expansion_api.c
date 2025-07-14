@@ -6,12 +6,16 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 00:55:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 18:37:14 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+
 
 static char	**create_cmd_and_args(t_list *command, t_list *arguments)
 {
@@ -25,31 +29,32 @@ static char	**create_cmd_and_args(t_list *command, t_list *arguments)
 	return (arr_add_front(cmds, args));
 }
 
-t_list	*expand_command(t_list *tokenized_command, t_list *env)
+t_list	*expand_command(t_list *commandt, t_list *env)
 {
 	t_list	*expanded_word;
 
-	if (tokenized_command == NULL || env == NULL)
+	if (commandt == NULL || env == NULL)
 		return (NULL);
-	expanded_word = expand_word(tokenized_command, env);
+	expanded_word = expand_word(commandt, env);
 	return (expanded_word);
 }
 
 void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 {
 	t_list	*filename_lst;
-	t_token	*tok;
+	t_list *wordt;
+	char *str;
 
 	if (filename == NULL || filenamet == NULL || env == NULL)
 		return ;
-	tok = filenamet->content;
-	if (tok == NULL)
-		return ;
-	if (tok->data != NULL && *tok->data == 0)
-	{
-		*filename = ft_strdup(tok->data);
-		return ;
-	}
+	wordt = get_word(filenamet);
+	str = tokens_to_str(wordt);
+	if (str == NULL)
+		return (ft_lstclear(&wordt, free_token));
+	ft_lstclear(&wordt, free_token);
+	if (*str == 0)
+		return (*filename = ft_strdup(""), free(str));
+	free(str);
 	filename_lst = expand_word(filenamet, env);
 	if (filename_lst == NULL || ft_lstsize(filename_lst) > 1)
 	{

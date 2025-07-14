@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 09:32:40 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 00:28:37 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 18:54:33 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,15 @@ void	c_null_tokens(t_list **tokens)
 		tok = th->content;
 		if (tok->data == NULL)
 		{
-			node_to_del = th;
-			th = th->next;
-			ft_lst_rm_one(tokens, node_to_del, free_token);
-			continue ;
+			if (tok->type == TOKEN_DOUBLE_QUOTE_WORD || tok->type == TOKEN_SINGLE_QUOTE_WORD)
+				tok->data = ft_strdup("");
+			else
+			{
+				node_to_del = th;
+				th = th->next;
+				ft_lst_rm_one(tokens, node_to_del, free_token);
+				continue ;
+			}
 		}
 		th = th->next;
 	}
