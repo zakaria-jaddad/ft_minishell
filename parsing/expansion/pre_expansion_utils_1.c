@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:53:06 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:06:33 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 09:03:50 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdbool.h>
 
 t_list	*create_enhanced_tokens(t_list *tokens, bool is_dq)
 {
@@ -43,6 +44,7 @@ bool	check_cmdt(t_list *cmdt)
 	t_list	*wordt;
 	t_list	*wordt_head;
 	t_token	*tok;
+	char	*str;
 
 	if (cmdt == NULL)
 		return (false);
@@ -50,6 +52,10 @@ bool	check_cmdt(t_list *cmdt)
 	if (wordt == NULL)
 		return (false);
 	wordt_head = wordt;
+	str = tokens_to_str(wordt);
+	if (str != NULL && ft_strcmp(str, "export") != 0)
+		return (free(str), ft_lstclear(&wordt_head, free_token), true);
+	free(str);
 	while (wordt)
 	{
 		tok = wordt->content;
