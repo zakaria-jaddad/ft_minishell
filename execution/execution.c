@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 06:58:16 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 22:33:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,23 @@ int	not_builtin(char **args, t_list *env_list)
 	return (status_x(0, 0));
 }
 
-int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
+int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 {
 	char	**args;
 	int		status;
 
-	args = expand_all(cmd->command, cmd->arguments, envs);
+	args = expand_all(cmd->command, cmd->arguments, *envs);
 	status = 0;
 	/* for (int i = 0; args[i]; i++) */
 	/* 	printf("args[i] = %s\n", args[i]); */
 	if (!args)
 		return (0);
 	else if (ft_strcmp(args[0], "cd") == 0)
-		status = _cd_(envs, args + 1);
+		status = _cd_(*envs, args + 1);
 	else if (ft_strcmp(args[0], "export") == 0)
-		status = _export_(envs, args + 1);
+		status = _export_(*envs, args + 1);
 	else if (ft_strcmp(args[0], "env") == 0)
-		status = _env_(envs, args + 1);
+		status = _env_(*envs, args + 1);
 	else if (ft_strcmp(args[0], "echo") == 0)
 		status = _echo_(args + 1);
 	else if (ft_strcmp(args[0], "pwd") == 0)
@@ -94,16 +94,16 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list *envs)
 	else if (ft_strcmp(args[0], "exit") == 0)
 		return (_exit_(args + 1), status_x(0, 0));
 	else
-		status = (not_builtin(args, envs), status_x(0, 0));
+		status = (not_builtin(args, *envs), status_x(0, 0));
 	free_double_pointer((void **)args);
 	return (status_x(status, 1));
 }
 
-int	execution(t_cmd *tree, t_list *env_list)
+int	execution(t_cmd *tree, t_list **env_list)
 {
 	if (!tree || !env_list)
 		return (1);
-	setup_pwd(get_env(env_list, "PWD"));
+	setup_pwd(get_env(*env_list, "PWD"));
 	if (tree->type == NODE_IF_AND)
 	{
 		if (status_x(execution(tree->left, env_list), 1) == 0)
@@ -118,12 +118,12 @@ int	execution(t_cmd *tree, t_list *env_list)
 	}
 	else if (tree->type == NODE_PIPE)
 	{
-		return (run_in_pipe(tree, env_list));
+		return (run_in_pipe(tree, *env_list));
 	}
 	else if (tree->type == NODE_IN_REDIR || tree->type == NODE_HEREDOC
 		|| tree->type == NODE_OUT_REDIR || tree->type == NODE_APPEND_REDIR)
 	{
-		return (run_redir(tree, env_list));
+		return (run_redir(tree, *env_list));
 	}
 	return (execution_simple_command(tree->content, env_list));
 }

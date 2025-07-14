@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:41:29 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 06:43:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 22:34:51 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	redir_fork(t_cmd *t, int out_fd, int in_fd, t_list *envs)
 	if (out_fd)
 		dup2(out_fd, STDOUT_FILENO);
 	if (t->left)
-		status = execution(t->left, envs);
+		status = execution(t->left, &envs);
 	if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
 		close(out_fd);
 	if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
@@ -115,7 +115,7 @@ void	pipe_fork(int *fd, int fd_to_dup, t_cmd *t, t_list *envs)
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}
-	status = execution(t, envs);
+	status = execution(t, &envs);
 	exit(status);
 }
 

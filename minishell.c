@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:02:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/14 17:03:35 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 22:34:09 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_minishell(t_list *env)
 			line = (free(line), NULL);
 			continue ;
 		}
-		status_x(execution(cmd, env), 1);
+		status_x(execution(cmd, &env), 1);
 		clear_cmd(cmd);
 		line = (free(line), NULL);
 		tcsetattr(STDERR_FILENO, TCSANOW, &tr);

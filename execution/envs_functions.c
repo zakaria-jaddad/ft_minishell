@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 16:32:47 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/11 01:15:18 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 22:18:35 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	print_envs(char *declare, t_list *list)
 {
 	t_env	*env;
 
-	while (list)
+	while (list && list->content)
 	{
 		env = list->content;
 		if (!declare)
