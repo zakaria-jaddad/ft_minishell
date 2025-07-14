@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:26:10 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/14 08:42:13 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/14 19:46:03 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,9 @@ int	_echo_(char **args)
 	int		nl;
 	char	*str;
 
-	nl = 0;
-	str = NULL;
+	(void)!(nl = 0, str = NULL);
 	if (!args)
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		return (1);
-	}
+		return (write(STDOUT_FILENO, "\n", 1), 1);
 	i = 0;
 	handle_args(&i, &nl, args);
 	while (args[i])
@@ -56,7 +52,8 @@ int	_echo_(char **args)
 	}
 	if (!nl || !args[0])
 		append_str(&str, "\n");
-	ft_fprintf_putstr_fd(STDOUT_FILENO, str);
+	if (str)
+		ft_fprintf_putstr_fd(STDOUT_FILENO, str);
 	str = (free(str), NULL);
 	return (0);
 }
