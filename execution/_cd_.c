@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:28:41 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 10:56:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:54:58 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,33 +31,56 @@ void	add_pwd_manual(char *path)
 	free(joined);
 }
 
-void	chdir_fail(char **path)
+void	join_paths(char **path, char *toadd)
 {
-	int	i;
-	char *tmp;
-	char *tmpp;
+	char	*tmp;
 
-	tmp = *path;
-	if (!ft_strcmp(*path, ".") || !ft_strcmp(*path, "./"))
-	{
-		free(tmp);
-		*path = manage_pwd(NULL);
-		return ;
-	}
-	else if (!ft_strcmp(*path, "..") || !ft_strncmp(*path, "../", 3))
-		*path = ft_strdup(manage_pwd(NULL));
-	else
-		return ;
-	i = ft_strlen(*path);
-	while (i > 0 && (*path)[i] != '/')
-		i--;
-	// FIX: LEAK
-	*path = ft_substr(*path, 0, i);
-	tmpp = ft_strjoin(*path, tmp + 2);
-	*path = tmpp;
-	/* printf("%s\n", *path); */
+	tmp = ft_strjoin(*path, "/");
+	*path = ft_strjoin(tmp, toadd);
 	free(tmp);
-	free(tmpp);
+}
+
+void	escape_double_point(char **new_path)
+{
+	char	*tmp;
+	int		j;
+
+	j = ft_strlen(*new_path);
+	while (j > 0 && (*new_path)[j] != '/')
+		j--;
+	tmp = *new_path;
+	*new_path = ft_substr(tmp, 0, j);
+}
+
+int	check_path(char *new_path)
+{
+	if (access(new_path, F_OK) < 0)
+		return (1);
+	return (0);
+}
+
+void	reform_path(char **path)
+{
+	char	**dirs;
+	int		i;
+	char	*new_path;
+
+	dirs = ft_split(*path, '/');
+	new_path = manage_pwd(NULL);
+	i = -1;
+	while (dirs[++i])
+	{
+		if (!ft_strcmp(dirs[i], "."))
+			continue ;
+		else if (!ft_strcmp(dirs[i], ".."))
+			escape_double_point(&new_path);
+		else
+			join_paths(&new_path, dirs[i]);
+		if (check_path(new_path))
+			return ;
+	}
+	free(*path);
+	*path = new_path;
 }
 
 int	cd_helper(char *path, t_list *list)
@@ -66,7 +89,7 @@ int	cd_helper(char *path, t_list *list)
 
 	if (!path || ft_strcmp(path, "") == 0)
 		return (1);
-	chdir_fail(&path);
+	reform_path(&path);
 	if (chdir(path) < 0)
 	{
 		ft_fprintf(2, "shell: cd: %s: No such file or directory\n", path);
