@@ -6,26 +6,21 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:41:29 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 01:00:25 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/15 12:19:30 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs);
+int		get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs);
 
-int	keep_going(t_cmd *t, int *in, int *out, t_list *envs)
+void	fd_cleaner(void)
 {
-	int	in_fd;
-	int	out_fd;
-	int	fd;
+	int	i;
 
-	in_fd = *in;
-	out_fd = *out;
-	fd = get_last_redir_fd(t, out, in, envs);
-	close(in_fd);
-	close(out_fd);
-	return (fd);
+	i = 3;
+	while (i <= FD_SETSIZE)
+		close(i++);
 }
 
 int	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
@@ -52,6 +47,6 @@ int	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
 			return (-1);
 	}
 	if (t->right)
-		fd = keep_going(t->right, in, out, envs);
+		fd = get_last_redir_fd(t->right, out, in, envs);
 	return (fd);
 }
