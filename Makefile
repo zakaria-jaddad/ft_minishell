@@ -22,6 +22,7 @@ EXECUTION = execution/execution.c \
 	    execution/unset.c \
 	    execution/export.c \
 	    execution/errors.c \
+	    execution/redir_helpers.c \
 
 EXPANSION = ./parsing/expansion/dollar_expansion.c \
 	    ./parsing/expansion/dollar_expansion_utils.c \

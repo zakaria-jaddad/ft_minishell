@@ -35,15 +35,15 @@ char	**list_to_double_pointer(t_list *list)
 
 int	count_envs(t_list *envs)
 {
-	int	count;
-	t_env *env;
+	int		count;
+	t_env	*env;
 
 	if (!envs)
 		return (0);
 	count = 0;
 	while (envs)
 	{
-		env = envs->content; 
+		env = envs->content;
 		if (env && env->key && env->value)
 			count++;
 		envs = envs->next;

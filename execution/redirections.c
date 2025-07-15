@@ -12,38 +12,6 @@
 
 #include "../includes/minishell.h"
 
-int	get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs)
-{
-	int fd;
-	int in_fd;
-	int out_fd;
-
-	if (!t)
-		return (0);
-	fd = 0;
-	if (NODE_OUT_REDIR == t->type || t->type == NODE_APPEND_REDIR)
-	{
-		if (*out > 2)
-			close (*out);
-		*out = found_file(t, t->type, envs);
-		if (*out == -1)
-			return (-1);
-	}
-	else if (NODE_IN_REDIR == t->type || NODE_HEREDOC == t->type)
-	{
-		if (*in > 2)
-			close (*in);
-		*in = found_file(t, t->type, envs);
-		if (*in == -1)
-			return (-1);
-	}
-	in_fd = *in;
-	out_fd = *out;
-	if (t->right)
-		fd = get_last_redir_fd(t->right, out, in, envs);
-	return (fd);
-}
-
 void	redir_fork(t_cmd *t, int out_fd, int in_fd, t_list *envs)
 {
 	int	status;
@@ -64,14 +32,26 @@ void	redir_fork(t_cmd *t, int out_fd, int in_fd, t_list *envs)
 	exit(status);
 }
 
+void	wait_for_redir(pid_t pid)
+{
+	int	status;
+
+	status = 0;
+	waitpid(pid, &status, 0);
+	if (WEXITSTATUS(status))
+		status_x((unsigned char)(127 + status), 1);
+	else if (WIFSIGNALED(status))
+		status_x((unsigned char)(128 + status), 1);
+	else
+		status_x(0, 1);
+}
+
 int	run_redir(t_cmd *t, t_list *envs)
 {
-	int		status;
 	int		out_fd;
 	int		in_fd;
 	pid_t	pid;
 
-	status = 0;
 	in_fd = STDIN_FILENO;
 	out_fd = STDOUT_FILENO;
 	get_last_redir_fd(t, &out_fd, &in_fd, envs);
@@ -82,13 +62,7 @@ int	run_redir(t_cmd *t, t_list *envs)
 		redir_fork(t, out_fd, in_fd, envs);
 	else if (pid > 0)
 	{
-		waitpid(pid, &status, 0);
-		if (WEXITSTATUS(status))
-			status_x((unsigned char)(127 + status), 1);
-		else if (WIFSIGNALED(status))
-			status_x((unsigned char)(128 + status), 1);
-		else
-			status_x(0, 1);
+		wait_for_redir(pid);
 		if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
 			close(out_fd);
 		if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
@@ -96,7 +70,7 @@ int	run_redir(t_cmd *t, t_list *envs)
 	}
 	else
 		return (ft_fprintf(2, "fork error!\n"), 1);
-	return (status_x(0,0));
+	return (status_x(0, 0));
 }
 
 void	pipe_fork(int *fd, int fd_to_dup, t_cmd *t, t_list *envs)
@@ -128,11 +102,10 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 
 	if (pipe(fd) < 0)
 		return (ft_fprintf(2, "pipe: error!\n"), 1);
-	in_pipe(1,1);
+	in_pipe(1, 1);
 	pid_left = fork();
 	if (pid_left < 0)
-		return (close(fd[0]), close(fd[1]), ft_fprintf(2, "fork: error!!\n"),
-			1);
+		return (close(fd[0]), close(fd[1]), ft_fprintf(2, "fork:err!\n"), 1);
 	if (pid_left == 0)
 		pipe_fork(fd, STDOUT_FILENO, t->left, envs);
 	pid_right = fork();
@@ -141,11 +114,10 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 			ft_fprintf(2, "fork: error!!\n"), 1);
 	if (pid_right == 0)
 		pipe_fork(fd, STDIN_FILENO, t->right, envs);
-	in_pipe(0,1);
+	in_pipe(0, 1);
 	close(fd[0]);
 	close(fd[1]);
 	waitpid(pid_left, &status, 0);
 	waitpid(pid_right, &status, 0);
-	status_x(WEXITSTATUS(status), 1);
-	return (status_x(0, 0));
+	return (status_x(WEXITSTATUS(status), 1));
 }

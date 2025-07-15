@@ -33,11 +33,11 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
 		path = ft_strdup(args[0]);
+	if (!ft_strnstr(path, "/", ft_strlen(path)))
+		return (ft_fprintf(2, "minishell: %s: Command not found\n", path),
+			exit(127));
 	if (execve(path, args, envs) < 0)
-	{
-		free(path);
-		exit(display_execve_error(args[0]));
-	}
+		return (free(path), exit(display_execve_error(args[0])));
 	free(path);
 	free_double_pointer((void **)args);
 	free_double_pointer((void **)envs);
@@ -75,8 +75,6 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 
 	args = expand_all(cmd->command, cmd->arguments, *envs);
 	status = 0;
-	/* for (int i = 0; args[i]; i++) */
-	/* 	printf("args[i] = %s\n", args[i]); */
 	if (!args)
 		return (0);
 	else if (ft_strcmp(args[0], "cd") == 0)
@@ -108,7 +106,7 @@ int	execution(t_cmd *tree, t_list **env_list)
 	{
 		if (status_x(execution(tree->left, env_list), 1) == 0)
 			return (execution(tree->right, env_list));
-		return (status_x(0,0));
+		return (status_x(0, 0));
 	}
 	else if (tree->type == NODE_IF_OR)
 	{
