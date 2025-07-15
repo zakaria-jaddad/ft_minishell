@@ -6,16 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/14 18:37:14 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:23:45 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parsing/expansion.h"
-#include <stdio.h>
-#include <stdlib.h>
-
-
 
 static char	**create_cmd_and_args(t_list *command, t_list *arguments)
 {
@@ -42,8 +38,8 @@ t_list	*expand_command(t_list *commandt, t_list *env)
 void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 {
 	t_list	*filename_lst;
-	t_list *wordt;
-	char *str;
+	t_list	*wordt;
+	char	*str;
 
 	if (filename == NULL || filenamet == NULL || env == NULL)
 		return ;

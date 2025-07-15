@@ -6,13 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/15 09:49:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:24:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 #include <stdio.h>
-
 
 static bool	is_ws_found(char *s)
 {

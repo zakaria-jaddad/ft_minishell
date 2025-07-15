@@ -6,13 +6,11 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 02:13:15 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 02:13:54 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:23:18 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/tokenize.h"
-
-
 
 bool	is_redirection(t_token *token)
 {
