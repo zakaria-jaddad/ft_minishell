@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:28:41 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/06 22:10:17 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 10:56:38 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,30 @@ void	add_pwd_manual(char *path)
 void	chdir_fail(char **path)
 {
 	int	i;
+	char *tmp;
+	char *tmpp;
 
+	tmp = *path;
 	if (!ft_strcmp(*path, ".") || !ft_strcmp(*path, "./"))
 	{
+		free(tmp);
 		*path = manage_pwd(NULL);
 		return ;
 	}
-	if (!ft_strcmp(*path, "..") || !ft_strcmp(*path, "../"))
+	else if (!ft_strcmp(*path, "..") || !ft_strncmp(*path, "../", 3))
 		*path = ft_strdup(manage_pwd(NULL));
+	else
+		return ;
 	i = ft_strlen(*path);
 	while (i > 0 && (*path)[i] != '/')
 		i--;
+	// FIX: LEAK
 	*path = ft_substr(*path, 0, i);
+	tmpp = ft_strjoin(*path, tmp + 2);
+	*path = tmpp;
+	/* printf("%s\n", *path); */
+	free(tmp);
+	free(tmpp);
 }
 
 int	cd_helper(char *path, t_list *list)
@@ -90,7 +102,7 @@ int	_cd_(t_list *envs, char **args)
 		if (cd_helper((char *)env->value, envs))
 			return (1);
 	}
-	else if (cd_helper(args[0], envs))
+	else if (cd_helper(ft_strdup(args[0]), envs))
 		return (1);
 	return (0);
 }
