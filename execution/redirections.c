@@ -56,20 +56,17 @@ int	run_redir(t_cmd *t, t_list *envs)
 	out_fd = STDOUT_FILENO;
 	get_last_redir_fd(t, &out_fd, &in_fd, envs);
 	if (in_fd == -1 || out_fd == -1)
-		return (status_x(1, 1));
+		return (fd_cleaner(), status_x(1, 1));
 	pid = fork();
 	if (0 == pid)
 		redir_fork(t, out_fd, in_fd, envs);
 	else if (pid > 0)
 	{
 		wait_for_redir(pid);
-		if (t->type == NODE_OUT_REDIR || t->type == NODE_APPEND_REDIR)
-			close(out_fd);
-		if (t->type == NODE_IN_REDIR || t->type == NODE_HEREDOC)
-			close(in_fd);
+		fd_cleaner();
 	}
 	else
-		return (ft_fprintf(2, "fork error!\n"), 1);
+		return (fd_cleaner(), ft_fprintf(2, "fork error!\n"), 1);
 	return (status_x(0, 0));
 }
 
