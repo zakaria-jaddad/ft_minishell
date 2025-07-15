@@ -6,63 +6,13 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/14 18:54:27 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 09:49:38 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
 #include <stdio.h>
 
-
-/*
- * @return: returns a string of the given token
- */
-char	*get_token_type(t_token_type token)
-{
-	if (token == TOKEN_PAR_OPEN)
-		return ("TOKEN_PAR_OPEN");
-	if (token == TOKEN_PAR_CLOSE)
-		return ("TOKEN_PAR_CLOSE");
-	if (token == TOKEN_PIPE)
-		return ("TOKEN_PIPE");
-	if (token == TOKEN_IN_REDIR)
-		return ("TOKEN_IN_REDIR");
-	if (token == TOKEN_OUT_REDIR)
-		return ("TOKEN_OUT_REDIR");
-	if (token == TOKEN_IF_AND)
-		return ("TOKEN_IF_AND");
-	if (token == TOKEN_IF_OR)
-		return ("TOKEN_IF_OR");
-	if (token == TOKEN_HEREDOC)
-		return ("TOKEN_HEREDOC");
-	if (token == TOKEN_APPEND_REDIR)
-		return ("TOKEN_APPEND_REDIR");
-	if (token == TOKEN_WHITE_SPACE)
-		return ("TOKEN_WHITE_SPACE");
-	if (token == TOKEN_DOUBLE_QUOTE_WORD)
-		return ("TOKEN_DOUBLE_QUOTE_WORD");
-	if (token == TOKEN_SINGLE_QUOTE_WORD)
-		return ("TOKEN_SINGLE_QUOTE_WORD");
-	return ("TOKEN_WORD");
-}
-
-void	print_tokens(t_list *tokens)
-{
-	t_token	*token;
-
-	if (tokens == NULL)
-        {
-		ft_fprintf(STDOUT_FILENO, "(null) ");
-                return ;
-        }
-	while (tokens)
-	{
-		token = (t_token *)tokens->content;
-		ft_fprintf(STDOUT_FILENO, "data: \"%s\" %s, ", token->data, get_token_type(token->type));
-		fflush(stdout);
-		tokens = tokens->next;
-	}
-}
 
 static bool	is_ws_found(char *s)
 {
@@ -121,7 +71,8 @@ void	split_enhanced_tokens(t_list **tokens)
 			ist(tokens, &tokens_tmp, wordt);
 			continue ;
 		}
-		else if (tok->data == NULL)
+		else if (tok->data == NULL || (tok->type == TOKEN_WORD
+				&& count_spaces(tok->data) == (int)ft_strlen(tok->data)))
 		{
 			del_token(&tokens_tmp, tokens);
 			continue ;
