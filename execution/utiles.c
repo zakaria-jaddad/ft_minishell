@@ -65,3 +65,13 @@ char	*manage_pwd(char *value)
 	pwd = ft_strdup(value);
 	return (pwd);
 }
+
+void	join_paths(char **path, char *toadd)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(*path, "/");
+	free(*path);
+	*path = ft_strjoin(tmp, toadd);
+	free(tmp);
+}

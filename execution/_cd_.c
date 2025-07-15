@@ -31,15 +31,6 @@ void	add_pwd_manual(char *path)
 	free(joined);
 }
 
-void	join_paths(char **path, char *toadd)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(*path, "/");
-	*path = ft_strjoin(tmp, toadd);
-	free(tmp);
-}
-
 void	escape_double_point(char **new_path)
 {
 	char	*tmp;
@@ -50,13 +41,7 @@ void	escape_double_point(char **new_path)
 		j--;
 	tmp = *new_path;
 	*new_path = ft_substr(tmp, 0, j);
-}
-
-int	check_path(char *new_path)
-{
-	if (access(new_path, F_OK) < 0)
-		return (1);
-	return (0);
+	free(tmp);
 }
 
 void	reform_path(char **path)
@@ -66,7 +51,7 @@ void	reform_path(char **path)
 	char	*new_path;
 
 	dirs = ft_split(*path, '/');
-	new_path = manage_pwd(NULL);
+	new_path = ft_strdup(manage_pwd(NULL));
 	i = -1;
 	while (dirs[++i])
 	{
@@ -76,9 +61,14 @@ void	reform_path(char **path)
 			escape_double_point(&new_path);
 		else
 			join_paths(&new_path, dirs[i]);
-		if (check_path(new_path))
+		if (access(new_path, F_OK) < 0)
+		{
+			free(new_path);
+			free_double_pointer((void **)dirs);
 			return ;
+		}
 	}
+	free_double_pointer((void **)dirs);
 	free(*path);
 	*path = new_path;
 }
@@ -93,7 +83,7 @@ int	cd_helper(char *path, t_list *list)
 	if (chdir(path) < 0)
 	{
 		ft_fprintf(2, "shell: cd: %s: No such file or directory\n", path);
-		return (1);
+		return (free(path), 1);
 	}
 	if (get_env(list, "OLDPWD"))
 		edit_env(get_env(list, "OLDPWD"), manage_pwd(NULL));
@@ -107,6 +97,7 @@ int	cd_helper(char *path, t_list *list)
 		add_pwd_manual(path);
 	if (get_env(list, "PWD"))
 		edit_env(get_env(list, "PWD"), manage_pwd(NULL));
+	free(path);
 	return (0);
 }
 

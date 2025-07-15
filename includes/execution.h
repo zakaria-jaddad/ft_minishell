@@ -54,6 +54,7 @@ int		count_args(t_list *tokens);
 char	**arr_add_front(char **to_add, char **arr);
 void	setup_pwd(t_env *pwd);
 int		get_last_redir_fd(t_cmd *t, int *out, int *in, t_list *envs);
+void	join_paths(char **path, char *toadd);
 
 // file handling
 int		open_file(char *file, int flags);
