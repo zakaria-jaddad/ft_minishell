@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/14 22:33:10 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:54:00 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 	else if (ft_strcmp(args[0], "unset") == 0)
 		status = _unset_(envs, args + 1);
 	else if (ft_strcmp(args[0], "exit") == 0)
-		return (_exit_(args + 1), status_x(0, 0));
+		return (_exit_(args + 1), free_double_pointer((void **)args),
+			status_x(0, 0));
 	else
 		status = (not_builtin(args, *envs), status_x(0, 0));
-	free_double_pointer((void **)args);
-	return (status_x(status, 1));
+	return (free_double_pointer((void **)args), status_x(status, 1));
 }
 
 int	execution(t_cmd *tree, t_list **env_list)
