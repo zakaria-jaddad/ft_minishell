@@ -6,12 +6,11 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 11:54:00 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 21:28:04 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-#include <stdio.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -33,7 +32,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
 		path = ft_strdup(args[0]);
-	if (!ft_strnstr(path, "/", ft_strlen(path)))
+	if (!ft_strnstr(path, "/", ft_strlen(path)) && get_env(env_list, "PATH"))
 		return (ft_fprintf(2, "minishell: %s: Command not found\n", path),
 			exit(127));
 	if (execve(path, args, envs) < 0)

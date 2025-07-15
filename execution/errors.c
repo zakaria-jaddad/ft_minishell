@@ -20,6 +20,8 @@ char	*valid_command(char *cmd, char *path)
 	int		i;
 
 	i = 0;
+	if (!*cmd)
+		return (cmd);
 	paths = ft_split(path, ':');
 	while (paths[i])
 	{
@@ -27,9 +29,7 @@ char	*valid_command(char *cmd, char *path)
 		rv = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if (!access(rv, X_OK))
-		{
 			break ;
-		}
 		free(rv);
 		rv = NULL;
 		i++;
