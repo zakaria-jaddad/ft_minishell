@@ -42,7 +42,7 @@ char	*valid_command(char *cmd, char *path)
 
 int	display_execve_error(char *command)
 {
-	if (errno == ENOENT || errno == EACCES)
+	if (errno == ENOENT)
 	{
 		if (ft_strnstr(command, "/", ft_strlen(command)))
 			ft_fprintf(2, "minishell: %s: No such file or directory\n",
@@ -51,8 +51,11 @@ int	display_execve_error(char *command)
 			ft_fprintf(2, "minishell: %s: Command not found\n", command);
 		return (127);
 	}
+	else if (errno == EACCES)
+		return (ft_fprintf(2, "minishell: %s: Permission denied\n", command),
+			126);
 	else if (errno == EISDIR)
-		return (ft_fprintf(2, "minishell: %s: Is a directory\n", command), 127);
+		return (ft_fprintf(2, "minishell: %s: Is a directory\n", command), 126);
 	else if (errno == ENOTDIR)
 		return (ft_fprintf(2, "minishell: %s: Not a directory\n", command), 1);
 	else

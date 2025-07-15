@@ -31,12 +31,30 @@ void	add_pwd_manual(char *path)
 	free(joined);
 }
 
+void	chdir_fail(char **path)
+{
+	int	i;
+
+	if (!ft_strcmp(*path, ".") || !ft_strcmp(*path, "./"))
+	{
+		*path = manage_pwd(NULL);
+		return ;
+	}
+	if (!ft_strcmp(*path, "..") || !ft_strcmp(*path, "../"))
+		*path = ft_strdup(manage_pwd(NULL));
+	i = ft_strlen(*path);
+	while (i > 0 && (*path)[i] != '/')
+		i--;
+	*path = ft_substr(*path, 0, i);
+}
+
 int	cd_helper(char *path, t_list *list)
 {
 	char	*cwd;
 
 	if (!path || ft_strcmp(path, "") == 0)
 		return (1);
+	chdir_fail(&path);
 	if (chdir(path) < 0)
 	{
 		ft_fprintf(2, "shell: cd: %s: No such file or directory\n", path);

@@ -12,7 +12,7 @@
 
 #include "../includes/execution.h"
 
-int	ft_case_sensitive_strcmp(char *s1, char *s2);
+int		ft_case_sensitive_strcmp(char *s1, char *s2);
 
 t_list	*sort_envs(t_list *list)
 {

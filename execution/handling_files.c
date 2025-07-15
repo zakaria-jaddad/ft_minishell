@@ -26,7 +26,8 @@ int	open_file(char *file, int flags)
 				ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
 					file);
 			else
-				ft_fprintf(2, "minishell: %s: no such file or directory\n", file);
+				ft_fprintf(2, "minishell: %s: no such file or directory\n",
+					file);
 		}
 		return (-1);
 	}
