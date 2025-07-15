@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:28:41 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 15:54:58 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/15 19:50:12 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	_cd_(t_list *envs, char **args)
 			ft_fprintf(STDERR_FILENO, "bash: cd: HOME not set\n");
 			return (1);
 		}
-		if (cd_helper((char *)env->value, envs))
+		if (cd_helper(ft_strdup((char *)env->value), envs))
 			return (1);
 	}
 	else if (cd_helper(ft_strdup(args[0]), envs))
