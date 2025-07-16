@@ -1,51 +1,48 @@
 CC = cc
-MAKE = make -C
-CFLAGS = -Wall -Wextra -Werror -g # -fsanitize=address
-
+CFLAGS = -Wall -Wextra -Werror
 NAME = minishell
-LIBFT_DIR = libft
 MAIN = minishell.c
 
 LIBFT = ./libft/ft_add_node.c \
-				./libft/ft_atoi.c \
-				./libft/ft_bzero.c \
-				./libft/ft_calloc.c \
-				./libft/ft_fprintf/ft_fprintf.c \
-				./libft/ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
-				./libft/ft_fprintf/ft_fprintf_putaddress_fd.c \
-				./libft/ft_fprintf/ft_fprintf_putchar_fd.c \
-				./libft/ft_fprintf/ft_fprintf_puthex_fd.c \
-				./libft/ft_fprintf/ft_fprintf_putnbr_fd.c \
-				./libft/ft_fprintf/ft_fprintf_putstr_fd.c \
-				./libft/ft_fprintf/ft_fprintf_strlen.c \
-				./libft/ft_isdigit.c \
-				./libft/ft_itoa.c \
-				./libft/ft_lst_rm_one.c \
-				./libft/ft_lstadd_back_bonus.c \
-				./libft/ft_lstadd_front_bonus.c \
-				./libft/ft_lstclear_bonus.c \
-				./libft/ft_lstdelone_bonus.c \
-				./libft/ft_lstfirst_bonus.c \
-				./libft/ft_lstlast_bonus.c \
-				./libft/ft_lstnew_bonus.c \
-				./libft/ft_lstsize_bonus.c \
-				./libft/ft_memcpy.c \
-				./libft/ft_memset.c \
-				./libft/ft_split.c \
-				./libft/ft_split_pro.c \
-				./libft/ft_split_pro_max.c \
-				./libft/ft_strchr.c \
-				./libft/ft_strcmp.c \
-				./libft/ft_strdup.c \
-				./libft/ft_strjoin.c \
-				./libft/ft_strlcat.c \
-				./libft/ft_strlcpy.c \
-				./libft/ft_strlen.c \
-				./libft/ft_strncmp.c \
-				./libft/ft_strnstr.c \
-				./libft/ft_strpbrk.c \
-				./libft/ft_substr.c \
-				./libft/ft_tolower.c \
+	./libft/ft_atoi.c \
+	./libft/ft_bzero.c \
+	./libft/ft_calloc.c \
+	./libft/ft_fprintf/ft_fprintf.c \
+	./libft/ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
+	./libft/ft_fprintf/ft_fprintf_putaddress_fd.c \
+	./libft/ft_fprintf/ft_fprintf_putchar_fd.c \
+	./libft/ft_fprintf/ft_fprintf_puthex_fd.c \
+	./libft/ft_fprintf/ft_fprintf_putnbr_fd.c \
+	./libft/ft_fprintf/ft_fprintf_putstr_fd.c \
+	./libft/ft_fprintf/ft_fprintf_strlen.c \
+	./libft/ft_isdigit.c \
+	./libft/ft_itoa.c \
+	./libft/ft_lst_rm_one.c \
+	./libft/ft_lstadd_back_bonus.c \
+	./libft/ft_lstadd_front_bonus.c \
+	./libft/ft_lstclear_bonus.c \
+	./libft/ft_lstdelone_bonus.c \
+	./libft/ft_lstfirst_bonus.c \
+	./libft/ft_lstlast_bonus.c \
+	./libft/ft_lstnew_bonus.c \
+	./libft/ft_lstsize_bonus.c \
+	./libft/ft_memcpy.c \
+	./libft/ft_memset.c \
+	./libft/ft_split.c \
+	./libft/ft_split_pro.c \
+	./libft/ft_split_pro_max.c \
+	./libft/ft_strchr.c \
+	./libft/ft_strcmp.c \
+	./libft/ft_strdup.c \
+	./libft/ft_strjoin.c \
+	./libft/ft_strlcat.c \
+	./libft/ft_strlcpy.c \
+	./libft/ft_strlen.c \
+	./libft/ft_strncmp.c \
+	./libft/ft_strnstr.c \
+	./libft/ft_strpbrk.c \
+	./libft/ft_substr.c \
+	./libft/ft_tolower.c \
 
 EXECUTION = execution/execution.c \
 	    execution/_cd_.c \
@@ -106,16 +103,16 @@ PRE_AST = ./parsing/pre_ast/pre_ast.c \
 	  ./parsing/pre_ast/heredoc_utils.c \
 
 TOKENIZE = ./parsing/tokenize/tokenize.c \
-	  ./parsing/tokenize/tokenize_utils_1.c \
-	  ./parsing/tokenize/tokenize_utils_2.c \
-	  ./parsing/tokenize/tokenize_utils_3.c \
-	  ./parsing/tokenize/tokenize_utils_4.c \
-	  ./parsing/tokenize/tokenize_utils_5.c	\
-	  ./parsing/tokenize/tokenize_utils_6.c	\
-	  ./parsing/tokenize/tokenize_utils_7.c	\
-	  ./parsing/tokenize/tokenize_utils_8.c	\
-	  ./parsing/tokenize/split_line.c \
-	  ./parsing/tokenize/tokens_to_str.c \
+	   ./parsing/tokenize/tokenize_utils_1.c \
+	   ./parsing/tokenize/tokenize_utils_2.c \
+	   ./parsing/tokenize/tokenize_utils_3.c \
+	   ./parsing/tokenize/tokenize_utils_4.c \
+	   ./parsing/tokenize/tokenize_utils_5.c	\
+	   ./parsing/tokenize/tokenize_utils_6.c	\
+	   ./parsing/tokenize/tokenize_utils_7.c	\
+	   ./parsing/tokenize/tokenize_utils_8.c	\
+	   ./parsing/tokenize/split_line.c \
+	   ./parsing/tokenize/tokens_to_str.c \
 
 ENV = ./parsing/env/env.c \
       ./parsing/env/env_utils.c \
@@ -124,22 +121,20 @@ PARCING = ./parsing/parsing.c $(ENV) $(TOKENIZE) $(EXPANSION) $(SYNTAX_CHECK) $(
 
 OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o) $(LIBFT:.c=.o)
 
-INCLUDE = includes/minishell.h libft/libft.h
-
 all : $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 
-%.o: %.c $(INCLUDE)
+%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@ -MMD
 
 clean:  
 	rm -f $(OBJS) $(OBJS:.o=.d)
 
 fclean: clean
-	rm -f $(NAME) $(OBJS) 
+	rm -f $(NAME)
 
 re: fclean all
 
--include $(OBJS=.o:.d)
+-include $(OBJS:.o=.d)
