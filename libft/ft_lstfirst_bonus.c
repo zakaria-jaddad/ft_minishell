@@ -12,12 +12,11 @@
 
 #include "libft.h"
 
-t_list  *ft_lstfirst(t_list *lst)
+t_list	*ft_lstfirst(t_list *lst)
 {
-      	if (lst == NULL)
+	if (lst == NULL)
 		return (NULL);
 	while (lst->prev)
 		lst = lst->prev;
-	return (lst);  
+	return (lst);
 }
-

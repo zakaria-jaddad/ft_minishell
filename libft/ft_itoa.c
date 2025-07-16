@@ -66,7 +66,7 @@ char	*ft_itoa(int n)
 	n_length = count_digit(long_n);
 	sign = 1;
 	i = 0;
-	ptr = (char *) malloc(n_length + 1 + check_sign(&long_n, &sign));
+	ptr = (char *)malloc(n_length + 1 + check_sign(&long_n, &sign));
 	if (ptr == NULL)
 		return (NULL);
 	while (n_length--)

@@ -50,28 +50,28 @@ t_list	*ft_split_pro(char *str, char *charset)
 	t_list	*lst;
 	int		i;
 	int		prev;
-        char *special;
+	char	*special;
 
 	i = 0;
-        prev = 0;
+	prev = 0;
 	lst = NULL;
-        special = NULL;
-        if (str == NULL || charset == NULL)
-                return (NULL);
+	special = NULL;
+	if (str == NULL || charset == NULL)
+		return (NULL);
 	while (str[i])
-        {
-                if (ft_strchr(charset, str[i]) != NULL)
-                {
-                        special = ft_substr(&str[i], 0, 1);
-                        if (special == NULL)
-                                return (ft_lstclear(&lst, free), NULL);
-                        append_prev_word(&lst, &str[prev], i, prev);
-                        append_special(&lst, special, &i, &prev);
-                        special = (free(special), NULL);
-                }
-                else
-                        i++;
-        }
+	{
+		if (ft_strchr(charset, str[i]) != NULL)
+		{
+			special = ft_substr(&str[i], 0, 1);
+			if (special == NULL)
+				return (ft_lstclear(&lst, free), NULL);
+			append_prev_word(&lst, &str[prev], i, prev);
+			append_special(&lst, special, &i, &prev);
+			special = (free(special), NULL);
+		}
+		else
+			i++;
+	}
 	if (str[i] == 0)
 		(append_prev_word(&lst, &str[prev], i, prev));
 	return (lst);

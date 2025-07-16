@@ -6,6 +6,47 @@ NAME = minishell
 LIBFT_DIR = libft
 MAIN = minishell.c
 
+LIBFT = ./libft/ft_add_node.c \
+				./libft/ft_atoi.c \
+				./libft/ft_bzero.c \
+				./libft/ft_calloc.c \
+				./libft/ft_fprintf/ft_fprintf.c \
+				./libft/ft_fprintf/ft_fprintf_put_unsigned_nbr_fd.c \
+				./libft/ft_fprintf/ft_fprintf_putaddress_fd.c \
+				./libft/ft_fprintf/ft_fprintf_putchar_fd.c \
+				./libft/ft_fprintf/ft_fprintf_puthex_fd.c \
+				./libft/ft_fprintf/ft_fprintf_putnbr_fd.c \
+				./libft/ft_fprintf/ft_fprintf_putstr_fd.c \
+				./libft/ft_fprintf/ft_fprintf_strlen.c \
+				./libft/ft_isdigit.c \
+				./libft/ft_itoa.c \
+				./libft/ft_lst_rm_one.c \
+				./libft/ft_lstadd_back_bonus.c \
+				./libft/ft_lstadd_front_bonus.c \
+				./libft/ft_lstclear_bonus.c \
+				./libft/ft_lstdelone_bonus.c \
+				./libft/ft_lstfirst_bonus.c \
+				./libft/ft_lstlast_bonus.c \
+				./libft/ft_lstnew_bonus.c \
+				./libft/ft_lstsize_bonus.c \
+				./libft/ft_memcpy.c \
+				./libft/ft_memset.c \
+				./libft/ft_split.c \
+				./libft/ft_split_pro.c \
+				./libft/ft_split_pro_max.c \
+				./libft/ft_strchr.c \
+				./libft/ft_strcmp.c \
+				./libft/ft_strdup.c \
+				./libft/ft_strjoin.c \
+				./libft/ft_strlcat.c \
+				./libft/ft_strlcpy.c \
+				./libft/ft_strlen.c \
+				./libft/ft_strncmp.c \
+				./libft/ft_strnstr.c \
+				./libft/ft_strpbrk.c \
+				./libft/ft_substr.c \
+				./libft/ft_tolower.c \
+
 EXECUTION = execution/execution.c \
 	    execution/_cd_.c \
 	    execution/_exit_.c \
@@ -81,39 +122,24 @@ ENV = ./parsing/env/env.c \
 
 PARCING = ./parsing/parsing.c $(ENV) $(TOKENIZE) $(EXPANSION) $(SYNTAX_CHECK) $(AST) $(PRE_AST)
 
-OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o)
+OBJS = $(MAIN:.c=.o) $(EXECUTION:.c=.o) $(PARCING:.c=.o) $(LIBFT:.c=.o)
 
-LIBFT = libft/libft.a
 INCLUDE = includes/minishell.h libft/libft.h
 
-all : $(LIBFT) $(NAME)
+all : $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) -lft -L$(LIBFT_DIR) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -lreadline -o $(NAME)
 
 %.o: %.c $(INCLUDE)
 	$(CC) $(CFLAGS) -c $< -o $@ -MMD
 
-clean: libft_clean 
+clean:  
 	rm -f $(OBJS) $(OBJS:.o=.d)
 
-fclean: libft_fclean clean
+fclean: clean
 	rm -f $(NAME) $(OBJS) 
 
 re: fclean all
-
-$(LIBFT): libft_make
-
-libft_make :
-	$(MAKE) libft
-
-libft_clean : 
-	$(MAKE) libft clean
-
-libft_fclean : 
-	$(MAKE) libft fclean
-
-libft_re : 
-	$(MAKE) libft re
 
 -include $(OBJS=.o:.d)

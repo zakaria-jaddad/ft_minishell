@@ -18,8 +18,7 @@ void	ft_lst_rm_one(t_list **head, t_list *node_to_del,
 	t_list	*prev;
 	t_list	*next;
 
-	if (node_to_del == NULL
-		|| clear_content == NULL)
+	if (node_to_del == NULL || clear_content == NULL)
 		return ;
 	if (node_to_del->content)
 		clear_content(node_to_del->content);

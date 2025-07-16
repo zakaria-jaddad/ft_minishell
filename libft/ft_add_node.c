@@ -22,17 +22,13 @@
 /* 	node_before->next = add; */
 /* } */
 
-
-void ft_add_node(t_list *node_before, t_list *add)
+void	ft_add_node(t_list *node_before, t_list *add)
 {
-    if (!node_before || !add)
-        return;
-
-    add->next = node_before->next;
-    add->prev = node_before;
-
-    if (node_before->next)
-        node_before->next->prev = add;
-
-    node_before->next = add;
+	if (!node_before || !add)
+		return ;
+	add->next = node_before->next;
+	add->prev = node_before;
+	if (node_before->next)
+		node_before->next->prev = add;
+	node_before->next = add;
 }

@@ -59,6 +59,6 @@ t_list	*ft_split_pro_max(char *str, char *charset)
 	new_lst = remove_dup(lst, charset);
 	if (new_lst == NULL)
 		return (ft_lstclear(&lst, free), NULL);
-        ft_lstclear(&lst, free);
+	ft_lstclear(&lst, free);
 	return (new_lst);
 }

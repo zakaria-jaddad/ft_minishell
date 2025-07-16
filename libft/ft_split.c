@@ -50,7 +50,7 @@ static char	*get_next_word(char const *s, char c, int index, int *word_length)
 			{
 				while (s[*word_length] && s[*word_length] != c)
 					(*word_length)++;
-				return ((char *) s);
+				return ((char *)s);
 			}
 			word_flag = 0;
 		}
@@ -84,13 +84,13 @@ char	**ft_split(char const *s, char c)
 		return (NULL);
 	words = count_words(s, c);
 	i = 0;
-	ptr = (char **) ft_calloc(sizeof(char *), (words + 1));
+	ptr = (char **)ft_calloc(sizeof(char *), (words + 1));
 	if (ptr == NULL)
 		return (NULL);
 	while (i < words)
 	{
 		word = get_next_word(s, c, (i + 1), &word_length);
-		ptr[i] = (char *) ft_calloc(1, word_length + 1);
+		ptr[i] = (char *)ft_calloc(1, word_length + 1);
 		if (ptr[i] == NULL)
 			return (ft_split_free(ptr));
 		ft_strlcpy(ptr[i++], word, word_length + 1);
