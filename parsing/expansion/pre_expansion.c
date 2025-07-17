@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:48:11 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/17 06:01:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/18 00:46:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ static void	split_pre_expansion(t_list **tokens)
 void	pre_expansion(t_list *command, t_list *cmdt, t_list **tokens)
 {
 	if (command != NULL && check_cmdt(cmdt) == false)
+	{
 		split_pre_expansion(tokens);
-	wildcard_pre_expansion(tokens);
+		wildcard_pre_expansion(tokens);
+	}
 }
