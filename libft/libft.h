@@ -17,7 +17,6 @@
 # include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
-# define NOTNULL ((void *)0x1)
 
 typedef struct s_list
 {

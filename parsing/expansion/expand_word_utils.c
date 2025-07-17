@@ -50,7 +50,7 @@ static void	*extract_words_list_escaping_norms(t_list **result, t_list **tokens)
 	if (new_node == NULL)
 		return (free(dup), ft_lstclear(result, free), NULL);
 	ft_lstadd_back(result, new_node);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 t_list	*extract_words_list(t_list *tokens)

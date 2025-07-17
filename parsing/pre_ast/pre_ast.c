@@ -54,7 +54,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 		start->next = filenametn;
 	else
 		ft_add_node(start, filenametn);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 static bool	handle_heredocs(t_list **tokens, t_list *envs)
@@ -93,5 +93,5 @@ void	*pre_ast(t_list **tokens, t_list *envs)
 	enhance_redirections(tokens);
 	if (handle_heredocs(tokens, envs) == false)
 		return (NULL);
-	return (NOTNULL);
+	return (!NULL);
 }

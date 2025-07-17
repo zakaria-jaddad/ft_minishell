@@ -30,7 +30,7 @@ static void	*get_tokens_escaping_norms_1(t_list **line_lst,
 		return (ft_lstclear(&line_lst_head, free), ft_lstclear(tokens,
 				free_token), NULL);
 	ft_lstadd_back(tokens, node);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 /*
@@ -51,9 +51,9 @@ static void	*get_tokens_escaping_norms_2(t_list **line_lst,
 				free_token), NULL);
 	if (((t_token *)token_node->content)->type == TOKEN_WHITE_SPACE
 		&& is_last_token_type_space(*tokens) == true)
-		return (ft_lstdelone(token_node, free_token), NOTNULL);
+		return (ft_lstdelone(token_node, free_token), !NULL);
 	ft_lstadd_back(tokens, token_node);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 static void	rm_sp(t_list **tokens)

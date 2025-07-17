@@ -94,7 +94,7 @@ void	*set_matches(t_list **matches, t_list *wordt)
 	if (*matches == NULL)
 		return (NULL);
 	sort_matches(matches);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 t_list	*expand_wildcard(t_list *tokens)

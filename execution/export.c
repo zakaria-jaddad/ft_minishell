@@ -95,7 +95,7 @@ char	**split_by_first_equal(char *arg, t_list *list)
 	rv[2] = NULL;
 	add_export(list, rv, append_);
 	free_double_pointer((void **)rv);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 int	_export_(t_list *list, char **args)

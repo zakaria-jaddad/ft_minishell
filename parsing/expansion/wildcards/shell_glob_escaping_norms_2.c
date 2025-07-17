@@ -23,7 +23,7 @@ void	*init_pattern_and_matches(char **pattern, t_list **matches,
 	*matches = get_dir_content(path);
 	if (*matches == NULL)
 		return (NULL);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches)
@@ -46,7 +46,7 @@ void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
 	(void)!(*new_path = ft_strdup(path), *fi = matches_content);
 	if (*new_path == NULL || *fi == NULL)
 		return (NULL);
-	return (NOTNULL);
+	return (!NULL);
 }
 
 bool	is_valid_glob(char *pattern, t_file_info *fi)

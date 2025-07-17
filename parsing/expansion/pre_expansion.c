@@ -53,7 +53,7 @@ static void	*split_pre_expansion_escaping_norms_v2(t_list **new_tokens,
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
 				free_token), ft_lstclear(&argt, free_token), NULL);
 	ft_lstclear(wordt, free_token);
-	return (NOTNULL);
+	return ((void *) !NULL);
 }
 
 static void	*split_pre_expansion_escaping_norms_v1(t_list **new_tokens,
@@ -72,7 +72,7 @@ static void	*split_pre_expansion_escaping_norms_v1(t_list **new_tokens,
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
 				free_token), ft_lstclear(&argt, free_token), NULL);
 	ft_lstclear(wordt, free_token);
-	return (NOTNULL);
+	return ((void *) !NULL);
 }
 
 static void	split_pre_expansion(t_list **tokens)
