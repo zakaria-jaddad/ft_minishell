@@ -26,7 +26,7 @@
 int		_echo_(char **args);
 int		_cd_(t_list *list, char **args);
 int		_pwd_(char *pwd);
-int		_export_(t_list *list, char **args);
+int		_export_(t_list **list, char **args);
 int		_env_(t_list *list, char **arr);
 void	_exit_(char **args);
 void	print_error(char *err, char *value, char *message);

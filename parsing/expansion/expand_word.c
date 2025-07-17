@@ -18,7 +18,7 @@ t_list	*expand_word(t_list *wordt, t_list *env)
 	t_list	*expanded_wordt;
 	t_list	*expansion_lst;
 
-	if (wordt == NULL || env == NULL)
+	if (wordt == NULL)
 		return (NULL);
 	expanded_wordt = expand(wordt, env);
 	if (expanded_wordt == NULL)

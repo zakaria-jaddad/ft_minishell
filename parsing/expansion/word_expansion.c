@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 18:04:48 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:07:34 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 03:42:47 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	special_word_expansion(char **str, char *special, t_list *env)
 	t_env	*var;
 	char	*foo;
 
-	if (str == NULL || *str == NULL || env == NULL || special == NULL)
+	if (str == NULL || *str == NULL || special == NULL)
 		return ;
 	key = get_key(*str, special);
 	if (key == NULL)
@@ -56,7 +56,7 @@ static void	simple_word_expansion(char **str, t_list *env)
 	t_env	*var;
 	char	*foo;
 
-	if (str == NULL || *str == NULL || env == NULL)
+	if (str == NULL || *str == NULL)
 		return ;
 	tmp = *str;
 	if (ft_strcmp(*str, "?") == 0)
