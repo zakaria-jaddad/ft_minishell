@@ -6,11 +6,30 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:50:18 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:06:44 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 07:28:32 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+
+static int	ft_isalnum(int c)
+{
+	if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || (c >= '0'
+			&& c <= '9') || c == '=')
+		return (1);
+	return (0);
+}
+
+static bool	is_alpha_numeric(char *str)
+{
+	while (*str)
+	{
+		if (ft_isalnum(*str) == false)
+			return (false);
+		str++;
+	}
+	return (true);
+}
 
 static bool	key_validation(t_list *tokens)
 {
@@ -24,6 +43,8 @@ static bool	key_validation(t_list *tokens)
 		if (tok->type != TOKEN_WORD)
 			return (false);
 		if (ft_strchr(tok->data, '$') != NULL)
+			return (false);
+		if (is_alpha_numeric(tok->data) == false)
 			return (false);
 		tokens = tokens->prev;
 	}
