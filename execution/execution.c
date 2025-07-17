@@ -26,8 +26,6 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	if (!args)
 		exit(-1);
 	envs = envs_list_to_double_pointer(env_list);
-	if (!envs)
-		exit(1);
 	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
@@ -73,6 +71,12 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 	int		status;
 
 	args = expand_all(cmd->command, cmd->arguments, *envs);
+	if (args == NULL)
+		printf("NULL\n");
+	for (int i = 0; args[i] != NULL; i++)
+	{
+		printf("args: \"%s\"\n", args[i]);
+	}
 	status = 0;
 	if (!args)
 		return (0);

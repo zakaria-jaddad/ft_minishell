@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 00:29:20 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/15 11:23:45 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 03:44:13 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_list	*expand_command(t_list *commandt, t_list *env)
 {
 	t_list	*expanded_word;
 
-	if (commandt == NULL || env == NULL)
+	if (commandt == NULL)
 		return (NULL);
 	expanded_word = expand_word(commandt, env);
 	return (expanded_word);
@@ -41,7 +41,7 @@ void	expand_filename(char **filename, t_list *filenamet, t_list *env)
 	t_list	*wordt;
 	char	*str;
 
-	if (filename == NULL || filenamet == NULL || env == NULL)
+	if (filename == NULL || filenamet == NULL)
 		return ;
 	wordt = get_word(filenamet);
 	str = tokens_to_str(wordt);

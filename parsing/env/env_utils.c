@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 16:11:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/05 06:24:25 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/15 11:28:19 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ t_env	*edit_env(t_env *env, char *new_value)
 	return (env);
 }
 
-// FIX: LEAK
 t_list	*append_env(t_list **env_lst, char *key, char *value)
 {
 	t_env	*env_content;
