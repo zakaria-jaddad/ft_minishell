@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/17 04:00:02 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/17 04:37:25 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,6 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 	int		status;
 
 	args = expand_all(cmd->command, cmd->arguments, *envs);
-	if (args == NULL)
-		printf("NULL\n");
-	for (int i = 0; args[i] != NULL; i++)
-	{
-		printf("args: \"%s\"\n", args[i]);
-	}
 	status = 0;
 	if (!args)
 		return (0);
