@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 17:01:43 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/14 22:32:55 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 04:33:10 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 int		_echo_(char **args);
 int		_cd_(t_list *list, char **args);
 int		_pwd_(char *pwd);
-int		_export_(t_list *list, char **args);
+int		_export_(t_list **list, char **args);
 int		_env_(t_list *list, char **arr);
 void	_exit_(char **args);
 void	print_error(char *err, char *value, char *message);

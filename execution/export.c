@@ -6,18 +6,18 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:20:51 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/14 22:32:38 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 04:32:47 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	add_export(t_list *list, char **args, int append)
+void	add_export(t_list **list, char **args, int append)
 {
 	t_env	*env;
 	char	*tmp;
 
-	env = get_env(list, args[0]);
+	env = get_env(*list, args[0]);
 	if (append && env)
 	{
 		tmp = ft_strjoin(env->value, args[1] + 1);
@@ -33,11 +33,11 @@ void	add_export(t_list *list, char **args, int append)
 	else
 	{
 		if (args[1] && args[1][0] && args[1][1])
-			append_env(&list, args[0], args[1] + 1);
+			append_env(list, args[0], args[1] + 1);
 		else if (args[1] && args[1][0] == '=')
-			append_env(&list, args[0], "\0");
+			append_env(list, args[0], "\0");
 		else
-			append_env(&list, args[0], NULL);
+			append_env(list, args[0], NULL);
 	}
 }
 
@@ -69,7 +69,7 @@ int	check_append_norms(int i, char *arg)
 	return (j);
 }
 
-char	**split_by_first_equal(char *arg, t_list *list)
+char	**split_by_first_equal(char *arg, t_list **list)
 {
 	char	**rv;
 	int		i;
@@ -98,7 +98,7 @@ char	**split_by_first_equal(char *arg, t_list *list)
 	return (NOTNULL);
 }
 
-int	_export_(t_list *list, char **args)
+int	_export_(t_list **list, char **args)
 {
 	int	i;
 	int	status;
@@ -106,21 +106,20 @@ int	_export_(t_list *list, char **args)
 	if (!list)
 		return (-1);
 	if (!args || !args[0])
-		return (print_envs("declare -x ", sort_envs(list)));
+		return (print_envs("declare -x ", sort_envs(*list)));
 	i = 0;
 	status = 0;
 	while (args[i])
 	{
 		if (!check_arg(args[i]))
 		{
-			status = (ft_fprintf(2,
-						"minishell: export: `%s`: not a valid identifier\n",
-						args[i++]), 1);
+			status = (ft_fprintf_putstr_fd(2,
+						"minishell: export: not a valid identifier\n"), 1);
 			continue ;
 		}
 		if (split_by_first_equal(args[i], list) == NULL)
-			status = (ft_fprintf(2, "minishell: export: `%s`:"
-						"not a valid identifier\n", args[i]), 1);
+			status = (ft_fprintf_putstr_fd(2,
+						"minishell: export: not a valid identifier\n"), 1);
 		i++;
 	}
 	return (status_x(status, 1));

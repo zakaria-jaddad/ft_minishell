@@ -39,6 +39,7 @@ void	ft_minishell(t_list *env)
 
 	while (true)
 	{
+		// fd_cleaner();
 		tcgetattr(STDERR_FILENO, &tr);
 		signals_handling();
 		line = readline("ft_minishell -> ");
@@ -67,8 +68,8 @@ int	main(int _, char **__, char **env)
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (EXIT_FAILURE);
 	env_lst = envs_init(env, _, __);
-	if (env_lst == NULL)
-		return (EXIT_FAILURE);
+	// if (env_lst == NULL)
+	// 	return (EXIT_FAILURE);
 	ft_minishell(env_lst);
 	return (EXIT_SUCCESS);
 }

@@ -45,20 +45,18 @@ int	display_execve_error(char *command)
 	if (errno == ENOENT)
 	{
 		if (ft_strnstr(command, "/", ft_strlen(command)))
-			ft_fprintf(2, "minishell: %s: No such file or directory\n",
-				command);
+			ft_fprintf(2, "%s", "minishell: No such file or directory\n");
 		else
-			ft_fprintf(2, "minishell: %s: Command not found\n", command);
+			ft_fprintf_putstr_fd(2, "minishell: Command not found\n");
 		return (127);
 	}
 	else if (errno == EACCES)
-		return (ft_fprintf(2, "minishell: %s: Permission denied\n", command),
-			126);
+		return (ft_fprintf_putstr_fd(2, "minishell: Permission denied\n"), 126);
 	else if (errno == EISDIR)
-		return (ft_fprintf(2, "minishell: %s: Is a directory\n", command), 126);
+		return (ft_fprintf_putstr_fd(2, "minishell: Is a directory\n"), 126);
 	else if (errno == ENOTDIR)
-		return (ft_fprintf(2, "minishell: %s: Not a directory\n", command), 1);
+		return (ft_fprintf_putstr_fd(2, "minishell: Not a directory\n"), 1);
 	else
-		ft_fprintf(2, "minishell: %s: %s\n", command, strerror(errno));
+		ft_fprintf_putstr_fd(2, strerror(errno));
 	return (errno);
 }

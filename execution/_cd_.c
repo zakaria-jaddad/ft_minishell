@@ -17,9 +17,9 @@ void	add_pwd_manual(char *path)
 	int		length;
 	char	*joined;
 
-	ft_fprintf(STDERR_FILENO,
-		"cd: error retrieving current directory: getcwd: cannot access %s",
-		"parent directories: No such file or directory\n");
+	ft_fprintf_putstr_fd(STDERR_FILENO,
+		"cd: error retrieving current directory: getcwd: cannot access parent "
+		"directories: No such file or directory\n");
 	length = ft_strlen(path);
 	if (path[length - 1] == '/')
 		path[length - 1] = '\0';
@@ -82,7 +82,7 @@ int	cd_helper(char *path, t_list *list)
 	reform_path(&path);
 	if (chdir(path) < 0)
 	{
-		ft_fprintf(2, "shell: cd: %s: No such file or directory\n", path);
+		ft_fprintf_putstr_fd(2, "shell: cd: No such file or directory\n");
 		return (free(path), 1);
 	}
 	if (get_env(list, "OLDPWD"))
@@ -110,7 +110,7 @@ int	_cd_(t_list *envs, char **args)
 		env = get_env(envs, "HOME");
 		if (!env)
 		{
-			ft_fprintf(STDERR_FILENO, "bash: cd: HOME not set\n");
+			ft_fprintf_putstr_fd(STDERR_FILENO, "bash: cd: HOME not set\n");
 			return (1);
 		}
 		if (cd_helper(ft_strdup((char *)env->value), envs))

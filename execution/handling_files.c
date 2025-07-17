@@ -23,11 +23,11 @@ int	open_file(char *file, int flags)
 		if (access(file, R_OK))
 		{
 			if (errno == EACCES)
-				ft_fprintf(STDERR_FILENO, "minishell: %s: Permission denied\n",
-					file);
+				ft_fprintf_putstr_fd(STDERR_FILENO,
+					"minishell: Permission denied\n");
 			else
-				ft_fprintf(2, "minishell: %s: no such file or directory\n",
-					file);
+				ft_fprintf_putstr_fd(2,
+					"minishell: no such file or directory\n");
 		}
 		return (-1);
 	}

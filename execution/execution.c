@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 21:28:04 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/17 04:00:02 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 
 	signal(SIGQUIT, SIG_DFL);
 	if (signal(SIGINT, handle_ctr_c_fork) == SIG_ERR)
-		ft_fprintf(STDERR_FILENO, "signal: error: ctr+c!!\n");
+		ft_fprintf_putstr_fd(STDERR_FILENO, "signal: error: ctr+c!!\n");
 	if (!args)
 		write(2, "minishell:  command not found\n", 30);
 	if (!args)
@@ -33,7 +33,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	else
 		path = ft_strdup(args[0]);
 	if (!ft_strnstr(path, "/", ft_strlen(path)) && get_env(env_list, "PATH"))
-		return (ft_fprintf(2, "minishell: %s: Command not found\n", path),
+		return (ft_fprintf_putstr_fd(2, "minishell: Command not found\n"),
 			exit(127));
 	if (execve(path, args, envs) < 0)
 		return (free(path), exit(display_execve_error(args[0])));
@@ -79,7 +79,7 @@ int	execution_simple_command(t_cmd_simple *cmd, t_list **envs)
 	else if (ft_strcmp(args[0], "cd") == 0)
 		status = _cd_(*envs, args + 1);
 	else if (ft_strcmp(args[0], "export") == 0)
-		status = _export_(*envs, args + 1);
+		status = _export_(envs, args + 1);
 	else if (ft_strcmp(args[0], "env") == 0)
 		status = _env_(*envs, args + 1);
 	else if (ft_strcmp(args[0], "echo") == 0)
