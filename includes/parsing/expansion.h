@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 01:10:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:10:04 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 05:45:36 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,17 @@ bool	glob(const char *pattern, const char *text);
 void	check_glob(const char *pattern, const char *text);
 void	remove_path(t_list *matches, char *pattern);
 void	sort_matches(t_list **matches);
-void	*init_pattern_and_matches(char **pattern, t_list **matches,
+bool	init_pattern_and_matches(char **pattern, t_list **matches,
 			t_list *patterns, char *path);
-void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
+bool	init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
 			t_file_info *matches_content);
 void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches);
 void	append_file_name_to_path(char **path, char *file_name);
-void	*nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches);
+bool	nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches);
 t_list	*get_word(t_list *tokens);
 bool	is_valid_word(t_list *tokens_word);
 bool	is_valid_wildcard(t_list *current_token_node);
-void	*set_matches(t_list **matches, t_list *word);
+bool	set_matches(t_list **matches, t_list *wordt);
 t_list	*create_tokenized_matches(t_list *filename);
 
 // Expansion API

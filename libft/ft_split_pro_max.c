@@ -6,42 +6,49 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 17:48:03 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/22 17:48:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 05:59:25 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+bool	remove_dup_escaping_norms(t_list **new_lst, t_list *lst)
+{
+	t_list	*node;
+	char	*str;
+
+	str = ft_strdup(lst->content);
+	node = ft_lstnew(str);
+	if (node == NULL)
+		return (free(str), ft_lstclear(new_lst, free), false);
+	ft_lstadd_back(new_lst, node);
+	return (true);
+}
+
 static t_list	*remove_dup(t_list *lst, char *charset)
 {
-	t_list	*new_lst;
 	char	current_delim;
-	t_list	*node;
+	t_list	*new_lst;
 
 	if (lst == NULL || charset == NULL)
 		return (NULL);
 	new_lst = NULL;
-	while (lst)
+	while (lst && lst->content)
 	{
 		if (ft_strchr(charset, *((char *)lst->content)) != NULL)
 		{
+			if (remove_dup_escaping_norms(&new_lst, lst) == false)
+				return (NULL);
 			current_delim = *((char *)lst->content);
-			node = ft_lstnew(ft_strdup(lst->content));
-			if (node == NULL)
-				return (ft_lstclear(&new_lst, free), NULL);
-			ft_lstadd_back(&new_lst, node);
 			lst = lst->next;
 			while (lst != NULL && *((char *)lst->content) == current_delim)
 				lst = lst->next;
 			continue ;
 		}
-		node = ft_lstnew(ft_strdup(lst->content));
-		if (node == NULL)
-			return (ft_lstclear(&new_lst, free), NULL);
-		ft_lstadd_back(&new_lst, node);
-		if (lst == NULL)
-			break ;
-		lst = lst->next;
+		if (remove_dup_escaping_norms(&new_lst, lst) == false)
+			return (NULL);
+		if (lst != NULL)
+			lst = lst->next;
 	}
 	return (new_lst);
 }

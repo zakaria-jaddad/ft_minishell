@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:20:51 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/17 04:32:47 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/17 04:56:12 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	check_append_norms(int i, char *arg)
 	return (j);
 }
 
-char	**split_by_first_equal(char *arg, t_list **list)
+int	split_by_first_equal(char *arg, t_list **list)
 {
 	char	**rv;
 	int		i;
@@ -78,24 +78,24 @@ char	**split_by_first_equal(char *arg, t_list **list)
 	append_ = 0;
 	i = find_first_arg(arg, &append_);
 	if (i == -1)
-		return (NULL);
+		return (0);
 	if (arg[check_append_norms(i, arg)] == '+')
-		return (NULL);
+		return (0);
 	rv = malloc(sizeof(char *) * (2 + 1));
 	if (rv == NULL)
-		return (NULL);
+		return (0);
 	rv[0] = ft_substr(arg, 0, i);
 	if (rv[0] == NULL)
-		return (NULL);
+		return (0);
 	if (append_)
 		i++;
 	rv[1] = ft_substr(arg, i, ft_strlen(arg));
 	if (rv[1] == NULL)
-		return (free(rv[0]), NULL);
+		return (free(rv[0]), 0);
 	rv[2] = NULL;
 	add_export(list, rv, append_);
 	free_double_pointer((void **)rv);
-	return (!NULL);
+	return (1);
 }
 
 int	_export_(t_list **list, char **args)
@@ -117,7 +117,7 @@ int	_export_(t_list **list, char **args)
 						"minishell: export: not a valid identifier\n"), 1);
 			continue ;
 		}
-		if (split_by_first_equal(args[i], list) == NULL)
+		if (split_by_first_equal(args[i], list) == 0)
 			status = (ft_fprintf_putstr_fd(2,
 						"minishell: export: not a valid identifier\n"), 1);
 		i++;

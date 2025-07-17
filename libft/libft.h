@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 16:19:49 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/16 16:42:31 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/17 05:59:17 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include <limits.h>
 # include <stdarg.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <stdlib.h>
 # include <unistd.h>
 

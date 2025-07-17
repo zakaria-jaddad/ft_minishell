@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/03 22:48:11 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:05:39 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:01:34 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdbool.h>
 
 static void	wildcard_pre_expansion(t_list **tokens)
 {
@@ -39,7 +40,7 @@ static void	wildcard_pre_expansion(t_list **tokens)
 	*tokens = head;
 }
 
-static void	*split_pre_expansion_escaping_norms_v2(t_list **new_tokens,
+static bool	split_pre_expansion_escaping_norms_v2(t_list **new_tokens,
 		t_list **wordt)
 {
 	t_list	*argt;
@@ -47,32 +48,32 @@ static void	*split_pre_expansion_escaping_norms_v2(t_list **new_tokens,
 	argt = create_enhanced_tokens(*wordt, false);
 	if (argt == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
-				free_token), NULL);
+				free_token), false);
 	ft_lstadd_back(new_tokens, argt);
 	if (append_tokens(new_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
-				free_token), ft_lstclear(&argt, free_token), NULL);
+				free_token), ft_lstclear(&argt, free_token), false);
 	ft_lstclear(wordt, free_token);
-	return ((void *) !NULL);
+	return (true);
 }
 
-static void	*split_pre_expansion_escaping_norms_v1(t_list **new_tokens,
+static bool	split_pre_expansion_escaping_norms_v1(t_list **new_tokens,
 		t_list **wordt)
 {
 	t_list	*argt;
 
 	if (wordt == NULL)
-		return (ft_lstclear(new_tokens, free_token), NULL);
+		return (ft_lstclear(new_tokens, free_token), false);
 	argt = create_enhanced_tokens(*wordt, true);
 	if (argt == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
-				free_token), NULL);
+				free_token), false);
 	ft_lstadd_back(new_tokens, argt);
 	if (append_tokens(new_tokens, TOKEN_WHITE_SPACE, " ") == NULL)
 		return (ft_lstclear(new_tokens, free_token), ft_lstclear(wordt,
-				free_token), ft_lstclear(&argt, free_token), NULL);
+				free_token), ft_lstclear(&argt, free_token), false);
 	ft_lstclear(wordt, free_token);
-	return ((void *) !NULL);
+	return (true);
 }
 
 static void	split_pre_expansion(t_list **tokens)

@@ -6,24 +6,25 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 16:02:08 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 21:55:36 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:01:55 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/parsing/expansion.h"
+#include <stdbool.h>
 
-void	*init_pattern_and_matches(char **pattern, t_list **matches,
+bool	init_pattern_and_matches(char **pattern, t_list **matches,
 		t_list *patterns, char *path)
 {
 	if (patterns == NULL || path == NULL)
-		return (NULL);
+		return (false);
 	*pattern = patterns->content;
 	if (*pattern == NULL)
-		return (NULL);
+		return (false);
 	*matches = get_dir_content(path);
 	if (*matches == NULL)
-		return (NULL);
-	return (!NULL);
+		return (false);
+	return (true);
 }
 
 void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches)
@@ -37,16 +38,16 @@ void	*clear_new_matches_and_matches(t_list **new_matches, t_list **matches)
 	return (NULL);
 }
 
-void	*init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
+bool	init_new_path_and_fi(char **new_path, char *path, t_file_info **fi,
 		t_file_info *matches_content)
 {
 	if (new_path == NULL || fi == NULL || path == NULL
 		|| matches_content == NULL)
-		return (NULL);
+		return (false);
 	(void)!(*new_path = ft_strdup(path), *fi = matches_content);
 	if (*new_path == NULL || *fi == NULL)
-		return (NULL);
-	return (!NULL);
+		return (false);
+	return (true);
 }
 
 bool	is_valid_glob(char *pattern, t_file_info *fi)

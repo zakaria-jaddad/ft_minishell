@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 02:00:05 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:32:06 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:02:24 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/pre_ast.h"
+#include <stdbool.h>
 
 static void	enhance_redirections(t_list **tokens)
 {
@@ -30,7 +31,7 @@ static void	enhance_redirections(t_list **tokens)
 	}
 }
 
-void	*insert_filename_token(char *filename, t_list *start, t_list *end,
+bool	insert_filename_token(char *filename, t_list *start, t_list *end,
 		t_list **tokens)
 {
 	t_list	*tokenized_file_name_start;
@@ -38,7 +39,7 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 	t_list	*filenametn;
 
 	if (start == NULL || tokens == NULL)
-		return (NULL);
+		return (false);
 	tokenized_file_name_start = start->next;
 	skip_front_spaces(&tokenized_file_name_start);
 	while (tokenized_file_name_start && tokenized_file_name_start != end)
@@ -49,12 +50,12 @@ void	*insert_filename_token(char *filename, t_list *start, t_list *end,
 	}
 	filenametn = create_token_node(TOKEN_WORD, filename);
 	if (filenametn == NULL)
-		return (NULL);
+		return (false);
 	if (start->next == NULL)
 		start->next = filenametn;
 	else
 		ft_add_node(start, filenametn);
-	return (!NULL);
+	return (true);
 }
 
 static bool	handle_heredocs(t_list **tokens, t_list *envs)
@@ -76,7 +77,7 @@ static bool	handle_heredocs(t_list **tokens, t_list *envs)
 				f = handle_heredoc(ft, envs), ft_lstclear(&ft, free_token), 0);
 			if (f == NULL)
 				return (false);
-			if (NULL == insert_filename_token(f, start, tok, tokens))
+			if (false == insert_filename_token(f, start, tok, tokens))
 				return (free(f), false);
 			free(f);
 			continue ;
@@ -86,12 +87,12 @@ static bool	handle_heredocs(t_list **tokens, t_list *envs)
 	return (true);
 }
 
-void	*pre_ast(t_list **tokens, t_list *envs)
+bool	pre_ast(t_list **tokens, t_list *envs)
 {
 	if (tokens == NULL)
-		return (NULL);
+		return (false);
 	enhance_redirections(tokens);
 	if (handle_heredocs(tokens, envs) == false)
-		return (NULL);
-	return (!NULL);
+		return (false);
+	return (true);
 }

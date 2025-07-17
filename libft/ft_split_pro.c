@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 03:27:58 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/22 16:08:12 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:00:27 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,7 @@ t_list	*ft_split_pro(char *str, char *charset)
 	int		prev;
 	char	*special;
 
-	i = 0;
-	prev = 0;
-	lst = NULL;
-	special = NULL;
+	(void)!(i = 0, prev = 0, lst = NULL, special = NULL);
 	if (str == NULL || charset == NULL)
 		return (NULL);
 	while (str[i])

@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 08:13:13 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:23:53 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 05:15:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdbool.h>
 # include <unistd.h>
 
-void		*pre_ast(t_list **tokens, t_list *envs);
+bool		pre_ast(t_list **tokens, t_list *envs);
 void		enhance_redirection(t_list **redir_tokens, t_list **tokens);
 char		*handle_heredoc(t_list *tokens, t_list *env_list);
 uintptr_t	open_and_read_urandom(void);

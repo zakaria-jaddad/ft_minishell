@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:02:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/14 22:34:09 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 05:58:45 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	ft_minishell(t_list *env)
 
 	while (true)
 	{
-		// fd_cleaner();
 		tcgetattr(STDERR_FILENO, &tr);
 		signals_handling();
 		line = readline("ft_minishell -> ");
@@ -64,12 +63,11 @@ int	main(int _, char **__, char **env)
 {
 	t_list	*env_lst;
 
-	sig();
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (EXIT_FAILURE);
 	env_lst = envs_init(env, _, __);
-	// if (env_lst == NULL)
-	// 	return (EXIT_FAILURE);
+	if (env_lst == NULL)
+		return (EXIT_FAILURE);
 	ft_minishell(env_lst);
 	return (EXIT_SUCCESS);
 }

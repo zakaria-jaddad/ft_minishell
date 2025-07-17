@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 03:33:17 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/16 20:46:59 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:02:39 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ bool	check_logical_operator(t_list *tokens)
 	tok = tokens->content;
 	if (prev != TOKEN_PAR_CLOSE && is_type_word(prev) != true)
 		return (ft_fprintf(STDERR_FILENO, SYNTAX_E, tok->data), false);
-	if (next != TOKEN_PAR_OPEN && is_type_word(next) != true && is_type_redirection(next) == false)
+	if (next != TOKEN_PAR_OPEN && is_type_word(next) != true
+		&& is_type_redirection(next) == false)
 		return (ft_fprintf(STDERR_FILENO, SYNTAX_E, tok->data), false);
 	return (true);
 }

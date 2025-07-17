@@ -6,19 +6,19 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 22:00:16 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/05/23 22:27:48 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:02:05 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/parsing/expansion.h"
 
-void	*nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches)
+bool	nmmt(t_list **matches_tmp, t_list **new_matches, t_list **matches)
 {
 	if (matches_tmp == NULL || new_matches == NULL)
-		return (NULL);
+		return (false);
 	*matches_tmp = *matches;
 	*new_matches = NULL;
-	return (!NULL);
+	return (true);
 }
 
 bool	is_dir_with_trailing_slash(t_file_info *file_info, t_list *patterns)

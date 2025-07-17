@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:57:21 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/13 01:08:28 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:01:44 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,21 +80,21 @@ static t_list	*get_valid_matches(char *str)
 	return (matches);
 }
 
-void	*set_matches(t_list **matches, t_list *wordt)
+bool	set_matches(t_list **matches, t_list *wordt)
 {
 	char	*unexpanded_name;
 
 	if (matches == NULL || wordt == NULL)
-		return (NULL);
+		return (false);
 	unexpanded_name = tokens_to_str(wordt);
 	if (unexpanded_name == NULL)
-		return (NULL);
+		return (false);
 	*matches = get_valid_matches(unexpanded_name);
 	free(unexpanded_name);
 	if (*matches == NULL)
-		return (NULL);
+		return (false);
 	sort_matches(matches);
-	return (!NULL);
+	return (true);
 }
 
 t_list	*expand_wildcard(t_list *tokens)
@@ -111,7 +111,7 @@ t_list	*expand_wildcard(t_list *tokens)
 			wordt = get_word(tokens);
 			if (is_valid_word(wordt) == true)
 			{
-				if (set_matches(&matches, wordt) == NULL)
+				if (set_matches(&matches, wordt) == false)
 					return (ft_lstclear(&wordt, free_token), NULL);
 				ft_lstclear(&wordt, free_token);
 				matchest = create_tokenized_matches(matches);
