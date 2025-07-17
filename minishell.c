@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/14 17:02:50 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/17 05:58:45 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 08:42:03 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ int	main(int _, char **__, char **env)
 {
 	t_list	*env_lst;
 
+	sig();
 	if (!isatty(0) || !isatty(1) || !isatty(2))
 		return (EXIT_FAILURE);
 	env_lst = envs_init(env, _, __);
