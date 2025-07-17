@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 17:20:51 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/17 04:56:12 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 08:02:10 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	_export_(t_list **list, char **args)
 		{
 			status = (ft_fprintf_putstr_fd(2,
 						"minishell: export: not a valid identifier\n"), 1);
+			i++;
 			continue ;
 		}
 		if (split_by_first_equal(args[i], list) == 0)
