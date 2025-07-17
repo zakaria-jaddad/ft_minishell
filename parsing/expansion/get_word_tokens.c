@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 06:45:42 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/17 07:11:15 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 23:20:49 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,17 @@ t_list	*get_word_tokens(t_token *token)
 	t_list	*wordt;
 	t_list	*wordt_node;
 	t_list	*sptw_head;
-	int		i;
 
-	(void)!(i_(token->data, &sptw, &sptw_head, &wordt), i = 0);
+	(void)!(i_(token->data, &sptw, &sptw_head, &wordt), 0);
 	while (sptw && sptw->content)
 	{
 		if (is_ws_found(sptw->content))
-		{
-			if (i == 0)
-			{
-				(void)!(sptw = sptw->next, i++);
-				continue ;
-			}
 			wordt_node = create_token_node(TOKEN_WHITE_SPACE, " ");
-		}
 		else
 			wordt_node = create_token_node(TOKEN_WORD, sptw->content);
 		if (gwten(wordt_node, &sptw_head, &wordt) == false)
 			return (NULL);
-		(void)!(sptw = sptw->next, ft_lstadd_back(&wordt, wordt_node), i++);
+		(void)!(sptw = sptw->next, ft_lstadd_back(&wordt, wordt_node), 0);
 	}
 	return (ft_lstclear(&sptw_head, free), wordt);
 }
