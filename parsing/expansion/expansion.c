@@ -6,50 +6,16 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/15 11:24:31 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 07:11:07 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
-#include <stdio.h>
-
-static bool	is_ws_found(char *s)
-{
-	return (ft_strcmp(s, " ") == 0 || ft_strcmp(s, "\t") == 0);
-}
 
 static bool	if_escape(t_token *tok)
 {
 	return (is_word_and_space_found(tok)
 		&& count_spaces(tok->data) != (int)ft_strlen(tok->data));
-}
-
-t_list	*get_word_tokens(t_token *token)
-{
-	t_list	*sptw;
-	t_list	*wordt;
-	t_list	*wordt_node;
-	t_list	*sptw_head;
-
-	if (token == NULL)
-		return (NULL);
-	sptw = ft_split_pro_max(token->data, " \t\n");
-	(void)!(sptw_head = sptw, wordt = NULL);
-	if (sptw == NULL)
-		return (NULL);
-	while (sptw && sptw->content)
-	{
-		if (is_ws_found(sptw->content))
-			wordt_node = create_token_node(TOKEN_WHITE_SPACE, " ");
-		else
-			wordt_node = create_token_node(TOKEN_WORD, sptw->content);
-		if (wordt_node == NULL)
-			return (ft_lstclear(&sptw_head, free), ft_lstclear(&wordt,
-					free_token), NULL);
-		ft_lstadd_back(&wordt, wordt_node);
-		sptw = sptw->next;
-	}
-	return (ft_lstclear(&sptw_head, free), wordt);
 }
 
 void	split_enhanced_tokens(t_list **tokens)

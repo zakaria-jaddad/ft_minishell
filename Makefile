@@ -70,6 +70,7 @@ EXPANSION = ./parsing/expansion/dollar_expansion.c \
 	    ./parsing/expansion/expansion_utils.c \
 	    ./parsing/expansion/expansion_api.c \
 	    ./parsing/expansion/get_enhanced_tokens.c \
+	    ./parsing/expansion/get_word_tokens.c \
 	    ./parsing/expansion/is_assignment_statement.c \
 	    ./parsing/expansion/pre_expansion.c \
 	    ./parsing/expansion/pre_expansion_utils_1.c \

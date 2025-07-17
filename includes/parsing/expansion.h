@@ -6,7 +6,7 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/13 01:10:01 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/17 05:45:36 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/17 06:46:31 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ bool	check_cmdt(t_list *cmdt);
 void	pre_expansion(t_list *command, t_list *cmdt, t_list **tokens);
 t_list	*extract_words_list(t_list *tokens);
 int		count_spaces(char *s);
+t_list	*get_word_tokens(t_token *token);
 
 // Dollarsign Expansion
 void	expand_dollar(t_list **tokens, t_list *env);
