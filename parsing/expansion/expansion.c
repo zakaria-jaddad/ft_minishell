@@ -6,11 +6,12 @@
 /*   By: zajaddad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/23 08:44:31 by zajaddad          #+#    #+#             */
-/*   Updated: 2025/07/17 07:11:07 by zajaddad         ###   ########.fr       */
+/*   Updated: 2025/07/18 01:17:23 by zajaddad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parsing/expansion.h"
+#include <stdio.h>
 
 static bool	if_escape(t_token *tok)
 {
@@ -55,6 +56,11 @@ t_list	*expand(t_list *tokens, t_list *env)
 	if (enhanced_tokens == NULL)
 		return (NULL);
 	expand_dollar(&enhanced_tokens, env);
+	tmp = enhanced_tokens;
+	enhanced_tokens = get_enhanced_tokens(enhanced_tokens, "*");
+	ft_lstclear(&tmp, free_token);
+	if (enhanced_tokens == NULL)
+		return (NULL);
 	tmp = expand_wildcard(enhanced_tokens);
 	if (tmp == NULL)
 	{
