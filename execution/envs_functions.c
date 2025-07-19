@@ -21,7 +21,7 @@ int	print_envs(char *declare, t_list *list)
 		env = list->content;
 		if (!declare)
 		{
-			if (env->value && ft_strcmp(env->value, ""))
+			if (env->value)
 				printf("%s=%s\n", env->key, env->value);
 		}
 		else if (env->value)

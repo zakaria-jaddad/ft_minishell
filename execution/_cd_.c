@@ -68,9 +68,12 @@ void	reform_path(char **path)
 			return ;
 		}
 	}
+	if (dirs[0] && ft_strcmp(dirs[0], ""))
+	{
+		free(*path);
+		*path = new_path;
+	}
 	free_double_pointer((void **)dirs);
-	free(*path);
-	*path = new_path;
 }
 
 int	cd_helper(char *path, t_list *list)
@@ -78,7 +81,7 @@ int	cd_helper(char *path, t_list *list)
 	char	*cwd;
 
 	if (!path || ft_strcmp(path, "") == 0)
-		return (1);
+		return (free(path), 1);
 	reform_path(&path);
 	if (chdir(path) < 0)
 	{
