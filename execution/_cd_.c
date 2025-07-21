@@ -62,11 +62,7 @@ void	reform_path(char **path)
 		else
 			join_paths(&new_path, dirs[i]);
 		if (access(new_path, F_OK) < 0)
-		{
-			free(new_path);
-			free_double_pointer((void **)dirs);
-			return ;
-		}
+			return (free(new_path), free_double_pointer((void **)dirs));
 	}
 	if (dirs[0] && ft_strcmp(dirs[0], ""))
 	{
