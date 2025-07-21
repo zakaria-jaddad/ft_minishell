@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 12:28:41 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/15 19:50:12 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/21 11:27:39 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,9 @@ void	reform_path(char **path)
 	if (dirs[0] && ft_strcmp(dirs[0], ""))
 	{
 		free(*path);
-		*path = new_path;
+		*path = ft_strdup(new_path);
 	}
+	free(new_path);
 	free_double_pointer((void **)dirs);
 }
 
