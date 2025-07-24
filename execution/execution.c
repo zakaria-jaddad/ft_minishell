@@ -26,7 +26,8 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	if (!args)
 		exit(-1);
 	envs = envs_list_to_double_pointer(env_list);
-	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value && !ft_strchr(args[0], '/'))
+	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value && \
+		!ft_strchr(args[0], '/'))
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
 		path = ft_strdup(args[0]);

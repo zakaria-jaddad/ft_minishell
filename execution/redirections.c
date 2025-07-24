@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:41:29 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/21 02:28:45 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/24 05:41:12 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,11 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 	if (pid_right < 0)
 		return (close(fd[0]), close(fd[1]), waitpid(pid_left, 0, 0),
 			ft_fprintf(2, "fork: error!!\n"), 1);
-	status_x(0,1);
+	status_x(0, 1);
 	if (pid_right == 0)
 		pipe_fork(fd, STDIN_FILENO, t->right, envs);
 	in_pipe(0, 1);
 	fd_cleaner();
-	waitpid(pid_left, NULL, 0);
-	waitpid(pid_right, &status, 0);
-	return (status_x(WEXITSTATUS(status), 1));
+	return (waitpid(pid_left, NULL, 0), waitpid(pid_right, &status, 0), \
+		status_x(WEXITSTATUS(status), 1));
 }
