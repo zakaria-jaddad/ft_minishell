@@ -90,6 +90,7 @@ int	run_in_pipe(t_cmd *t, t_list *envs)
 	if (pid_right < 0)
 		return (close(fd[0]), close(fd[1]), waitpid(pid_left, 0, 0),
 			ft_fprintf(2, "fork: error!!\n"), 1);
+	status_x(0,1);
 	if (pid_right == 0)
 		pipe_fork(fd, STDIN_FILENO, t->right, envs);
 	in_pipe(0, 1);

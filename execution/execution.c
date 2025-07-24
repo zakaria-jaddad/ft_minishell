@@ -6,7 +6,7 @@
 /*   By: mouait-e <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 10:35:57 by mouait-e          #+#    #+#             */
-/*   Updated: 2025/07/17 04:37:25 by mouait-e         ###   ########.fr       */
+/*   Updated: 2025/07/22 23:30:04 by mouait-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 	if (!args)
 		exit(-1);
 	envs = envs_list_to_double_pointer(env_list);
-	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value)
+	if (get_env(env_list, "PATH") && get_env(env_list, "PATH")->value && !ft_strchr(args[0], '/'))
 		path = valid_command(args[0], get_env(env_list, "PATH")->value);
 	else
 		path = ft_strdup(args[0]);
@@ -34,7 +34,7 @@ void	execve_fork(char **args, t_list *env_list, char *path)
 		return (ft_fprintf_putstr_fd(2, "minishell: Command not found\n"),
 			exit(127));
 	if (execve(path, args, envs) < 0)
-		return (free(path), exit(display_execve_error(args[0])));
+		return (free(path), exit(display_execve_error(args[0], 0)));
 	free(path);
 	free_double_pointer((void **)args);
 	free_double_pointer((void **)envs);

@@ -82,7 +82,7 @@ int	cd_helper(char *path, t_list *list)
 	reform_path(&path);
 	if (chdir(path) < 0)
 	{
-		ft_fprintf_putstr_fd(2, "shell: cd: No such file or directory\n");
+		display_execve_error(path, 1);
 		return (free(path), 1);
 	}
 	if (get_env(list, "OLDPWD"))

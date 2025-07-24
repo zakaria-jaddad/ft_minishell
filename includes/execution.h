@@ -44,7 +44,7 @@ char	*run_heredoc(char *dilimiter, int expand, t_list *env_list);
 int		run_redir(t_cmd *t, t_list *envs);
 int		run_in_pipe(t_cmd *t, t_list *envs);
 char	*valid_command(char *cmd, char *path);
-int		display_execve_error(char *command);
+int		display_execve_error(char *command, int builtin);
 int		print_envs(char *declare, t_list *list);
 int		check_arg(char *args);
 int		in_pipe(int val, int modify);
