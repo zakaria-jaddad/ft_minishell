@@ -1,7 +1,7 @@
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-NAME = minishell
-MAIN = minishell.c
+NAME = ft_minishell
+MAIN = ft_minishell.c
 
 LIBFT = ./libft/ft_add_node.c \
 	./libft/ft_atoi.c \
