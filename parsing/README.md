@@ -114,7 +114,7 @@ one way to visulaize that prcedence is using a tree Leaf nodes are numbers, and 
 In order to evalure an arithmetic node, you need to know the numeric valuesof its subtrees, so you have to evaluate those first.
 That means working your way from the leaves up to the root, in a _post-order_ traversal:
 
-![post-order traversal](./media/tree-evaluate.png)
+![post-order traversal](./.media/tree-evaluate.png)
 
 A. Starting with the full tree, evaluate the bottom-most operation, `2 * 3`.
 
